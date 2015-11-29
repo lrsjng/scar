@@ -1,24 +1,4 @@
 const assert = require('assert');
-// const {join} = require('path');
-// const {readFileSync} = require('fs');
-// const {createContext, runInContext} = require('vm');
-
-// const SCAR_PATH = join(__dirname, '../es5/scar.js');
-
-// const lazyLoad = () => {
-//     let content;
-//     if (!content) {
-//         content = readFileSync(SCAR_PATH, {encoding: 'utf-8'});
-//     }
-//     return content;
-// };
-
-// const freshES5 = () => {
-//     const sandbox = {};
-//     createContext(sandbox);
-//     runInContext(lazyLoad(), sandbox);
-//     return sandbox.scar;
-// };
 
 const pto = (timeout, fail) => {
     return new Promise((resolve, reject) => {
@@ -67,7 +47,6 @@ module.exports = {
     pto,
     rejects,
     csl,
-    // freshES5,
     lib: require('../lib'),
     Logger: require('../lib/logger'),
     Test: require('../lib/runner').Test,

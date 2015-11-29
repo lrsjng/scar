@@ -13,6 +13,48 @@ A test runner for Node.js and the browser.
 ~~~
 
 
+## Usage
+
+~~~js
+const {test, assert} = require('scar');
+
+test('passing', () => {
+    assert.equal(1, 1);
+});
+
+test('failing', () => {
+    assert.equal(1, 2);
+});
+
+test.run();
+~~~
+
+
+## Interface
+
+### test
+~~~js
+test(desc, fn, {skip, sync}) // args optional and in any order
+test.run() // run all tests with default reporter => promise
+~~~
+
+### assert
+~~~js
+assert(expr, msg) // !!expr === true
+assert.fail(msg)
+assert.ok(act, msg) // !!act === true
+assert.notOk(act, msg) // !act === true
+assert.equal(act, exp, msg) // act === exp
+assert.notEqual(act, ref, msg) // act !== ref
+assert.throws(fn, exp, msg)
+~~~
+
+### insp
+~~~js
+insp(x) // => string repr of x
+~~~
+
+
 ## License
 The MIT License (MIT)
 
