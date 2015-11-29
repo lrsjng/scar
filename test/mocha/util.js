@@ -2,38 +2,39 @@ const {inspect: insp} = require('util');
 const assert = require('assert');
 const {util} = require('../loader');
 
-const fnA = a1 => {}; // eslint-disable-line no-unused-vars
-const fnB = (b1, b2) => {}; // eslint-disable-line no-unused-vars
-function fnC(c1) {} // eslint-disable-line no-unused-vars
-const obj = {fnD(d1, d2) {}}; // eslint-disable-line no-unused-vars
-
+/* eslint-disable no-unused-vars, no-array-constructor, no-new-object, no-multi-spaces */
+const fnA = a1 => {};
+const fnB = (b1, b2) => {};
+function fnC(c1) {}
+const obj = {fnD(d1, d2) {}};
 
 // fixtures for is{Boolean, String, Array, Fn, PlainObject}
-const IS_FIXTURES = [
-    [undefined, 0, 0, 0, 0, 0],
-    [null, 0, 0, 0, 0, 0],
-    [true, 1, 0, 0, 0, 0],
-    [false, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0],
-    [1, 0, 0, 0, 0, 0],
-    ['', 0, 1, 0, 0, 0],
-    [' ', 0, 1, 0, 0, 0],
-    ['a', 0, 1, 0, 0, 0],
-    [[], 0, 0, 1, 0, 0],
-    [new Array(), 0, 0, 1, 0, 0], // eslint-disable-line no-array-constructor
-    [[0], 0, 0, 1, 0, 0],
-    [fnA, 0, 0, 0, 1, 0],
-    [fnB, 0, 0, 0, 1, 0],
-    [fnC, 0, 0, 0, 1, 0],
-    [obj.fnD, 0, 0, 0, 1, 0],
-    [{}, 0, 0, 0, 0, 1],
-    [new Object(), 0, 0, 0, 0, 1], // eslint-disable-line no-new-object
-    [obj, 0, 0, 0, 0, 1],
-    [{a: 1}, 0, 0, 0, 0, 1],
-    [{b: false}, 0, 0, 0, 0, 1],
-    [/a/, 0, 0, 0, 0, 0],
-    [NaN, 0, 0, 0, 0, 0]
+const FIXTURES = [
+    [undefined,     0, 0, 0, 0, 0],
+    [null,          0, 0, 0, 0, 0],
+    [true,          1, 0, 0, 0, 0],
+    [false,         1, 0, 0, 0, 0],
+    [0,             0, 0, 0, 0, 0],
+    [1,             0, 0, 0, 0, 0],
+    ['',            0, 1, 0, 0, 0],
+    [' ',           0, 1, 0, 0, 0],
+    ['a',           0, 1, 0, 0, 0],
+    [[],            0, 0, 1, 0, 0],
+    [new Array(),   0, 0, 1, 0, 0],
+    [[0],           0, 0, 1, 0, 0],
+    [fnA,           0, 0, 0, 1, 0],
+    [fnB,           0, 0, 0, 1, 0],
+    [fnC,           0, 0, 0, 1, 0],
+    [obj.fnD,       0, 0, 0, 1, 0],
+    [{},            0, 0, 0, 0, 1],
+    [new Object(),  0, 0, 0, 0, 1],
+    [obj,           0, 0, 0, 0, 1],
+    [{a: 1},        0, 0, 0, 0, 1],
+    [{b: false},    0, 0, 0, 0, 1],
+    [/a/,           0, 0, 0, 0, 0],
+    [NaN,           0, 0, 0, 0, 0]
 ];
+/* eslint-enable */
 
 
 describe('util', () => {
@@ -41,7 +42,7 @@ describe('util', () => {
         assert.strictEqual(typeof util, 'object');
     });
 
-    IS_FIXTURES.forEach(x => {
+    FIXTURES.forEach(x => {
         const arg = x[0];
         const exp = x[1] === 1;
         it(`util.isBoolean(${insp(arg).substr(0, 20)}) === ${insp(exp)}`, () => {
@@ -49,7 +50,7 @@ describe('util', () => {
         });
     });
 
-    IS_FIXTURES.forEach(x => {
+    FIXTURES.forEach(x => {
         const arg = x[0];
         const exp = x[2] === 1;
         it(`util.isString(${insp(arg).substr(0, 20)}) === ${insp(exp)}`, () => {
@@ -57,7 +58,7 @@ describe('util', () => {
         });
     });
 
-    IS_FIXTURES.forEach(x => {
+    FIXTURES.forEach(x => {
         const arg = x[0];
         const exp = x[3] === 1;
         it(`util.isArray(${insp(arg).substr(0, 20)}) === ${insp(exp)}`, () => {
@@ -65,7 +66,7 @@ describe('util', () => {
         });
     });
 
-    IS_FIXTURES.forEach(x => {
+    FIXTURES.forEach(x => {
         const arg = x[0];
         const exp = x[4] === 1;
         it(`util.isFn(${insp(arg).substr(0, 20)}) === ${insp(exp)}`, () => {
@@ -73,7 +74,7 @@ describe('util', () => {
         });
     });
 
-    IS_FIXTURES.forEach(x => {
+    FIXTURES.forEach(x => {
         const arg = x[0];
         const exp = x[5] === 1;
         it(`util.isPlainObject(${insp(arg).substr(0, 20)}) === ${insp(exp)}`, () => {
@@ -81,7 +82,7 @@ describe('util', () => {
         });
     });
 
-    IS_FIXTURES.forEach(x => {
+    FIXTURES.forEach(x => {
         const arg = x[0];
         if (typeof arg === 'function') {
             it(`util.asFn(${insp(arg)} === ${insp(arg)}`, () => {

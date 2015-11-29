@@ -1,10 +1,12 @@
 const {test, assert, insp} = require('../../lib');
 const {lib} = require('../loader');
 
-const fnA = a1 => {}; // eslint-disable-line no-unused-vars
-const fnB = (b1, b2) => {}; // eslint-disable-line no-unused-vars
-function fnC(c1) {} // eslint-disable-line no-unused-vars
-const obj = {fnD(d1, d2) {}}; // eslint-disable-line no-unused-vars
+/* eslint-disable no-unused-vars */
+const fnA = a1 => {};
+const fnB = (b1, b2) => {};
+function fnC(c1) {}
+const obj = {fnD(d1, d2) {}};
+/* eslint-enable */
 
 test('insp is function', () => {
     assert.equal(typeof lib.insp, 'function');

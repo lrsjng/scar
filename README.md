@@ -3,7 +3,7 @@
 [![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![npm][npm-img]][npm]  
 [![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![dependencies status][gemnasium-img]][gemnasium] [![build status][travis-img]][travis]
 
-A test runner for Node.js and the browser.
+A test runner for Node.js and the browser. Extensively tested with mocha and itself, 1000+ tests each.
 
 
 ## Install
@@ -32,10 +32,30 @@ test.run();
 
 ## Interface
 
+### scar
+~~~js
+const obj = require('scar') // nodejs
+var obj = window.scar // browser
+~~~
+
+then `obj` is
+
+~~~js
+{
+    Scar, // constructor
+    test, // preconstructed Scar().static()
+    assert, // lightweight assertions
+    insp // lightweight value inspection
+}
+~~~
+
 ### test
 ~~~js
 test(desc, fn, {skip, sync}) // args optional and in any order
+test.skip(desc, fn, {sync}) // implies `skip: true`
+test.sync(desc, fn, {skip}) // implies `sync: true`
 test.run() // run all tests with default reporter => promise
+test.scar // scar instance
 ~~~
 
 ### assert

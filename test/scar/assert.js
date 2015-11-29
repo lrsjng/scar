@@ -1,23 +1,25 @@
 const {test, assert, insp} = require('../../lib');
 const {lib} = require('../loader');
 
+/* eslint-disable no-multi-spaces */
 // assert, ok, notOk
 const FIXTURES = [
-    [undefined, 1, 1, 0],
-    [null, 1, 1, 0],
-    [false, 1, 1, 0],
-    [true, 0, 0, 1],
-    [0, 1, 1, 0],
-    [1, 0, 0, 1],
-    ['', 1, 1, 0],
-    [' ', 0, 0, 1],
-    [[], 0, 0, 1],
-    [[0], 0, 0, 1],
-    [{}, 0, 0, 1],
-    [{a: 0}, 0, 0, 1],
-    [/a/, 0, 0, 1],
-    [() => null, 0, 0, 1]
+    [undefined,   1, 1, 0],
+    [null,        1, 1, 0],
+    [false,       1, 1, 0],
+    [true,        0, 0, 1],
+    [0,           1, 1, 0],
+    [1,           0, 0, 1],
+    ['',          1, 1, 0],
+    [' ',         0, 0, 1],
+    [[],          0, 0, 1],
+    [[0],         0, 0, 1],
+    [{},          0, 0, 1],
+    [{a: 0},      0, 0, 1],
+    [/a/,         0, 0, 1],
+    [() => null,  0, 0, 1]
 ];
+/* eslint-enable */
 
 const THROWS_PASS_FIXTURES = [
     ['a', 'a'],
