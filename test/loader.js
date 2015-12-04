@@ -48,11 +48,10 @@ module.exports = {
     rejects,
     csl,
     lib: require('../lib'),
-    Logger: require('../lib/logger'),
-    Test: require('../lib/runner').Test,
-    TestRunner: require('../lib/runner').TestRunner,
-    TestsRunner: require('../lib/runner').TestsRunner,
+    Err: require('../lib/err'),
     Reporter: require('../lib/reporter'),
     Scar: require('../lib/scar'),
+    Suite: require('../lib/suite'),
+    Test: require('../lib/test'),
     util: require('../lib/util')
 };

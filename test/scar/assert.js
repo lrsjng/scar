@@ -48,7 +48,7 @@ FIXTURES.forEach(x => {
         test(`assert(${insp(arg)}) throws`, () => {
             assert.throws(() => {
                 lib.assert(arg);
-            }, /no error message/i);
+            }, /no message/i);
         });
 
         test(`assert(${insp(arg)}, msg) throws`, () => {

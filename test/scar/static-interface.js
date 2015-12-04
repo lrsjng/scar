@@ -18,66 +18,59 @@ test('test()', () => {
     lib.test();
 });
 
-test.sync('test.run() no tests', () => {
+test('test.run() no tests', () => {
     const testfn = lib.Scar().static();
-    testfn.scar.reporter = noop;
-    return testfn.run();
+    return testfn.run({reporter: noop});
 });
 
-test.sync('test.run() passing', () => {
+test('test.run() passing', () => {
     const testfn = lib.Scar().static();
-    testfn.scar.reporter = noop;
     testfn('passing', noop);
-    return testfn.run();
+    return testfn.run({reporter: noop});
 });
 
-test.sync('test.run() failing', () => {
+test('test.run() failing', () => {
     const testfn = lib.Scar().static();
-    testfn.scar.reporter = noop;
     testfn('failing', () => {
         throw new Error();
     });
-    return testfn.run();
+    return testfn.run({reporter: noop});
 });
 
-test.sync('test.run() skipping', () => {
+test('test.run() skipping', () => {
     const testfn = lib.Scar().static();
-    testfn.scar.reporter = noop;
     testfn.skip('skipping', noop);
-    return testfn.run();
+    return testfn.run({reporter: noop});
 });
 
-test.sync('test.run() sync', () => {
+test('test.run() sync', () => {
     const testfn = lib.Scar().static();
-    testfn.scar.reporter = noop;
     testfn.sync('sync', noop);
-    return testfn.run();
+    return testfn.run({reporter: noop});
 });
 
-test.sync('test.run() all', () => {
+test('test.run() all', () => {
     const testfn = lib.Scar().static();
-    testfn.scar.reporter = noop;
     testfn('passing', noop);
     testfn.skip('skipping', noop);
     testfn.sync('sync', noop);
     testfn('failing', () => {
         throw new Error();
     });
-    return testfn.run();
+    return testfn.run({reporter: noop});
 });
 
 test('test.run() no reporter', () => {
     const testfn = lib.Scar().static();
-    testfn.scar.reporter = null;
     testfn('passing', noop);
-    return testfn.run();
+    return testfn.run({reporter: null});
 });
 
 test('test.run() error in reporter throws', () => {
     const testfn = lib.Scar().static();
-    testfn.scar.reporter = () => {
+    const reporter = () => {
         throw new Error('some error object');
     };
     testfn('passing', noop);
-    return rejects(testfn.run(), /some error object/);
+    return rejects(testfn.run({reporter}), /some error object/);
 });

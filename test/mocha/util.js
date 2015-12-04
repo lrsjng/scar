@@ -89,8 +89,8 @@ describe('util', () => {
                 assert.strictEqual(util.asFn(arg), arg);
             });
         } else {
-            const res = util.asFn(arg);
             it(`util.asFn(${insp(arg)}) === () => ${insp(arg)}`, () => {
+                const res = util.asFn(arg);
                 assert.strictEqual(typeof res, 'function');
                 if (Number.isNaN(arg)) {
                     assert.strictEqual(Number.isNaN(res()), true);

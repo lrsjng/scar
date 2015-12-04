@@ -2,10 +2,10 @@ const {test} = require('../../lib');
 
 require('./lib');
 require('./assert');
+require('./err');
 require('./insp');
+require('./suite');
 require('./test');
-require('./testrunner');
-require('./testsrunner');
 require('./util');
 require('./static-interface');
 

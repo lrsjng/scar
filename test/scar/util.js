@@ -87,8 +87,8 @@ FIXTURES.forEach(x => {
             assert.equal(util.asFn(arg), arg);
         });
     } else {
-        const res = util.asFn(arg);
         test(`util.asFn(${insp(arg)}) === () => ${insp(arg)}`, () => {
+            const res = util.asFn(arg);
             assert.equal(typeof res, 'function');
             if (Number.isNaN(arg)) {
                 assert.equal(Number.isNaN(res()), true);

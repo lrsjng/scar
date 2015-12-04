@@ -54,7 +54,7 @@ then `obj` is
 test(desc, fn, {skip, sync}) // args optional and in any order
 test.skip(desc, fn, {sync}) // implies `skip: true`
 test.sync(desc, fn, {skip}) // implies `sync: true`
-test.run() // run all tests with default reporter => promise
+test.run() // run all tests with default reporter => Promise()
 test.scar // scar instance
 ~~~
 

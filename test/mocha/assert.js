@@ -50,7 +50,7 @@ describe('assert', () => {
             it(`assert(${insp(arg)}) throws`, () => {
                 assert.throws(() => {
                     lib.assert(arg);
-                }, /no error message/i);
+                }, /no message/i);
             });
 
             it(`assert(${insp(arg)}, msg) throws`, () => {
