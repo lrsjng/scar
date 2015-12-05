@@ -9,11 +9,13 @@ A test runner for Node.js and the browser. Extensively tested with mocha and its
 ## Install
 
 ~~~sh
-> npm install scar
+> npm install [-D] scar
 ~~~
 
 
-## Usage
+## Examples
+
+node/webpack/browserify
 
 ~~~js
 const {test, assert} = require('scar');
@@ -26,11 +28,51 @@ test('failing', () => {
     assert.equal(1, 2);
 });
 
-test.run();
+test.cli();
 ~~~
 
 
-## Interface
+pure browser
+
+~~~html
+<!-- optional polyfills for older browsers -->
+<script src="scar.js"></script>
+<script>
+    var test = window.scar.test;
+    var assert = window.scar.assert;
+
+    test('passing', () => {
+        assert.equal(1, 1);
+    });
+
+    test('failing', () => {
+        assert.equal(1, 2);
+    });
+
+    test.cli();
+</script>
+~~~
+
+
+## CLI
+
+~~~
+scar - a test runner for node and the browser
+
+Usage:
+  node your-script.js [opt...] [arg...]
+  your-url.html?opt&...&arg&...
+
+Options:
+  -h: show this help message
+  -t: show test stats
+
+Arguments:
+  all arguments are used as test filters
+~~~
+
+
+## API
 
 ### scar
 ~~~js
@@ -55,6 +97,7 @@ test(desc, fn, {skip, sync}) // args optional and in any order
 test.skip(desc, fn, {sync}) // implies `skip: true`
 test.sync(desc, fn, {skip}) // implies `sync: true`
 test.run() // run all tests with default reporter => Promise()
+test.cli() // run CLI with default reporter => Promise()
 test.scar // scar instance
 ~~~
 

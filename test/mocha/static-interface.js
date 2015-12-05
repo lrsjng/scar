@@ -10,7 +10,7 @@ describe('test', () => {
 
     it('test has the right props', () => {
         const act = Object.keys(lib.test).sort();
-        const exp = ['scar', 'skip', 'sync', 'run'].sort();
+        const exp = ['scar', 'skip', 'sync', 'run', 'cli'].sort();
         assert.strictEqual(act.length, exp.length);
         act.forEach((_, idx) => assert.strictEqual(act[idx], exp[idx]));
     });
