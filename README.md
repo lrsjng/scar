@@ -3,7 +3,8 @@
 [![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![npm][npm-img]][npm]  
 [![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![dependencies status][gemnasium-img]][gemnasium] [![build status][travis-img]][travis]
 
-A test runner for Node.js and the browser. Extensively tested with mocha and itself, 1000+ tests each.
+A test runner for Node.js and the browser. Extensively tested with mocha and
+scar, 1000+ tests each.
 
 
 ## Install
@@ -15,7 +16,13 @@ A test runner for Node.js and the browser. Extensively tested with mocha and its
 
 ## Examples
 
-node/webpack/browserify
+Have a look at the `test` folder, scar itself is tested with mocha and scar.
+For async tests return a promise.
+
+
+### node
+
+works fine with node, webpack+babel, browserify+babel
 
 ~~~js
 const {test, assert} = require('scar');
@@ -32,20 +39,25 @@ test.cli();
 ~~~
 
 
-pure browser
+### browser / ES5
+
+might need additional polyfills to work in older browsers
+
+* Promise
+* Object.assign
+* Array.prototype.every
 
 ~~~html
-<!-- optional polyfills for older browsers -->
 <script src="scar.js"></script>
 <script>
     var test = window.scar.test;
     var assert = window.scar.assert;
 
-    test('passing', () => {
+    test('passing', function () {
         assert.equal(1, 1);
     });
 
-    test('failing', () => {
+    test('failing', function () {
         assert.equal(1, 2);
     });
 

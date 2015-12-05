@@ -12,8 +12,7 @@ describe('Suite', () => {
         assert.ok(inst instanceof Suite);
         assert.strictEqual(Object.keys(inst).length, 8);
         assert.strictEqual(inst.sync, false);
-        assert.ok(Array.isArray(inst.filters));
-        assert.strictEqual(inst.filters.length, 0);
+        assert.strictEqual(inst.filter, null);
         assert.ok(Array.isArray(inst.tests));
         assert.strictEqual(inst.tests.length, 0);
         assert.strictEqual(inst.reporter, null);
@@ -29,8 +28,7 @@ describe('Suite', () => {
         assert.ok(inst instanceof Suite);
         assert.strictEqual(Object.keys(inst).length, 8);
         assert.strictEqual(inst.sync, false);
-        assert.ok(Array.isArray(inst.filters));
-        assert.strictEqual(inst.filters.length, 0);
+        assert.strictEqual(inst.filter, null);
         assert.ok(Array.isArray(inst.tests));
         assert.strictEqual(inst.tests.length, 0);
         assert.strictEqual(inst.reporter, null);
@@ -46,8 +44,7 @@ describe('Suite', () => {
         assert.ok(inst instanceof Suite);
         assert.strictEqual(Object.keys(inst).length, 8);
         assert.strictEqual(inst.sync, true);
-        assert.ok(Array.isArray(inst.filters));
-        assert.strictEqual(inst.filters.length, 0);
+        assert.strictEqual(inst.filter, null);
         assert.ok(Array.isArray(inst.tests));
         assert.strictEqual(inst.tests.length, 0);
         assert.strictEqual(inst.reporter, null);
@@ -64,8 +61,7 @@ describe('Suite', () => {
         assert.ok(inst instanceof Suite);
         assert.strictEqual(Object.keys(inst).length, 9);
         assert.strictEqual(inst.sync, false);
-        assert.ok(Array.isArray(inst.filters));
-        assert.strictEqual(inst.filters.length, 0);
+        assert.strictEqual(inst.filter, null);
         assert.ok(Array.isArray(inst.tests));
         assert.strictEqual(inst.tests.length, 0);
         assert.strictEqual(inst.reporter, null);
@@ -82,8 +78,7 @@ describe('Suite', () => {
         assert.ok(inst instanceof Suite);
         assert.strictEqual(Object.keys(inst).length, 8);
         assert.strictEqual(inst.sync, false);
-        assert.ok(Array.isArray(inst.filters));
-        assert.strictEqual(inst.filters.length, 0);
+        assert.strictEqual(inst.filter, null);
         assert.ok(Array.isArray(inst.tests));
         assert.strictEqual(inst.tests.length, 0);
         assert.strictEqual(inst.reporter, null);
@@ -112,8 +107,7 @@ describe('Suite', () => {
         assert.ok(inst instanceof Suite);
         assert.strictEqual(Object.keys(inst).length, 8);
         assert.strictEqual(inst.sync, false);
-        assert.ok(Array.isArray(inst.filters));
-        assert.strictEqual(inst.filters.length, 0);
+        assert.strictEqual(inst.filter, null);
         assert.ok(Array.isArray(inst.tests));
         assert.strictEqual(inst.tests.length, 1);
         assert.strictEqual(inst.reporter, null);
@@ -148,8 +142,7 @@ describe('Suite', () => {
         assert.ok(inst instanceof Suite);
         assert.strictEqual(Object.keys(inst).length, 8);
         assert.strictEqual(inst.sync, false);
-        assert.ok(Array.isArray(inst.filters));
-        assert.strictEqual(inst.filters.length, 0);
+        assert.strictEqual(inst.filter, null);
         assert.ok(Array.isArray(inst.tests));
         assert.strictEqual(inst.tests.length, 3);
         assert.strictEqual(inst.reporter, null);
@@ -186,8 +179,7 @@ describe('Suite', () => {
         assert.ok(inst instanceof Suite);
         assert.strictEqual(Object.keys(inst).length, 8);
         assert.strictEqual(inst.sync, true);
-        assert.ok(Array.isArray(inst.filters));
-        assert.strictEqual(inst.filters.length, 0);
+        assert.strictEqual(inst.filter, null);
         assert.ok(Array.isArray(inst.tests));
         assert.strictEqual(inst.tests.length, 1);
         assert.strictEqual(inst.reporter, null);

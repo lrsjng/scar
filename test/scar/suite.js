@@ -11,8 +11,7 @@ test('Suite()', () => {
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 8);
     assert.equal(inst.sync, false);
-    assert.ok(Array.isArray(inst.filters));
-    assert.equal(inst.filters.length, 0);
+    assert.equal(inst.filter, null);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -28,8 +27,7 @@ test('Suite([], {})', () => {
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 8);
     assert.equal(inst.sync, false);
-    assert.ok(Array.isArray(inst.filters));
-    assert.equal(inst.filters.length, 0);
+    assert.equal(inst.filter, null);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -45,8 +43,7 @@ test('Suite([], {sync})', () => {
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 8);
     assert.equal(inst.sync, true);
-    assert.ok(Array.isArray(inst.filters));
-    assert.equal(inst.filters.length, 0);
+    assert.equal(inst.filter, null);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -63,8 +60,7 @@ test('Suite([], {...})', () => {
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
-    assert.ok(Array.isArray(inst.filters));
-    assert.equal(inst.filters.length, 0);
+    assert.equal(inst.filter, null);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -81,8 +77,7 @@ test('Suite().run()', () => {
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 8);
     assert.equal(inst.sync, false);
-    assert.ok(Array.isArray(inst.filters));
-    assert.equal(inst.filters.length, 0);
+    assert.equal(inst.filter, null);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -111,8 +106,7 @@ test('Suite([test]).run()', () => {
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 8);
     assert.equal(inst.sync, false);
-    assert.ok(Array.isArray(inst.filters));
-    assert.equal(inst.filters.length, 0);
+    assert.equal(inst.filter, null);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 1);
     assert.equal(inst.reporter, null);
@@ -147,8 +141,7 @@ test('Suite([...]).run()', () => {
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 8);
     assert.equal(inst.sync, false);
-    assert.ok(Array.isArray(inst.filters));
-    assert.equal(inst.filters.length, 0);
+    assert.equal(inst.filter, null);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 3);
     assert.equal(inst.reporter, null);
@@ -185,8 +178,7 @@ test('Suite([test], {sync}).run()', () => {
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 8);
     assert.equal(inst.sync, true);
-    assert.ok(Array.isArray(inst.filters));
-    assert.equal(inst.filters.length, 0);
+    assert.equal(inst.filter, null);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 1);
     assert.equal(inst.reporter, null);
