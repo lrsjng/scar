@@ -4,7 +4,7 @@
 [![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![dependencies status][gemnasium-img]][gemnasium] [![build status][travis-img]][travis]
 
 A test runner for Node.js and the browser. Extensively tested with mocha and
-scar, 1000+ tests each.
+scar itself.
 
 
 ## Install
@@ -16,7 +16,7 @@ scar, 1000+ tests each.
 
 ## Examples
 
-Have a look at the `test` folder, scar itself is tested with mocha and scar.
+Have a look at folder `test/scar`, scar is tested with scar too.
 For async tests return a promise.
 
 

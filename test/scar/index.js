@@ -9,4 +9,4 @@ require('./test');
 require('./util');
 require('./static-interface');
 
-test.cli({sync: true});
+test.cli();
