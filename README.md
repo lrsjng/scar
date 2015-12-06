@@ -121,7 +121,10 @@ assert.ok(act, msg) // !!act === true
 assert.notOk(act, msg) // !act === true
 assert.equal(act, exp, msg) // act === exp
 assert.notEqual(act, ref, msg) // act !== ref
+assert.deepEqual(act, exp, msg) // act === exp for all but Array and plain Object
+assert.notDeepEqual(act, ref, msg) // !deepEqual()
 assert.throws(fn, exp, msg)
+assert.rejects(thenable, exp, msg) // => Promise
 ~~~
 
 ### insp
