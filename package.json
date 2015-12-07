@@ -1,6 +1,6 @@
 {
   "name": "scar",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "A test runner for Node.js and the browser.",
   "homepage": "https://larsjung.de/scar/",
   "bugs": "https://github.com/lrsjng/scar/issues",
@@ -15,12 +15,14 @@
     "test:mocha": "mocha --compilers js:babel-core/register test/tests-mocha.js",
     "test:scar": "node -r babel-core/register test/tests-scar.js",
     "test": "npm run -s test:mocha && npm run -s test:scar",
+    "check": "npm run -s lint && npm run -s test",
     "cover:mocha": "babel-node node_modules/isparta/bin/isparta cover --dir coverage/mocha --report text --report html node_modules/mocha/bin/_mocha -- --reporter dot test/tests-mocha.js",
     "cover:scar": "babel-node node_modules/isparta/bin/isparta cover --dir coverage/scar --report text --report html test/tests-scar.js",
     "cover": "npm run -s cover:mocha && npm run -s cover:scar",
     "ghu": "node -r babel-core/register ghu.js",
     "build": "npm run -s ghu build",
-    "prepublish": "npm run -s lint && npm run -s test && npm run -s build"
+    "precommit": "npm run -s check",
+    "prepublish": "npm run -s check && npm run -s build"
   },
   "main": "es5/scar.js",
   "dependencies": {},
