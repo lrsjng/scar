@@ -28,7 +28,7 @@ test('Test()', () => {
     assert.equal(inst.fn, null);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -46,7 +46,7 @@ test('Test(desc)', () => {
     assert.equal(inst.fn, null);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -64,7 +64,7 @@ test('Test(fn)', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -83,7 +83,7 @@ test('Test(desc, fn)', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -102,7 +102,7 @@ test('Test(fn, desc)', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -119,7 +119,7 @@ test('Test({})', () => {
     assert.equal(inst.fn, null);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -138,7 +138,7 @@ test('Test({desc})', () => {
     assert.equal(inst.fn, null);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -157,7 +157,7 @@ test('Test({fn})', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -177,7 +177,7 @@ test('Test({desc, fn})', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -198,7 +198,7 @@ test('Test({desc, fn, ...})', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -220,7 +220,7 @@ test('Test(desc, fn, {...})', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -242,7 +242,7 @@ test('Test(desc, fn, {...}, ...)', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -264,7 +264,7 @@ test('Test(fn, desc, {...})', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -286,7 +286,7 @@ test('Test(desc, {...}, fn)', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -308,7 +308,7 @@ test('Test(fn, {...}, desc)', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -330,7 +330,7 @@ test('Test({...}, desc, fn)', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
@@ -352,7 +352,7 @@ test('Test({...}, fn, desc)', () => {
     assert.equal(inst.fn, fn);
     assert.equal(inst.skip, false);
     assert.equal(inst.sync, false);
-    assert.equal(inst.timeout, 1000);
+    assert.equal(inst.timeout, null);
     assert.equal(inst.status, Test.WAITING);
     assert.equal(inst.err, null);
     assert.equal(inst.starttime, null);
