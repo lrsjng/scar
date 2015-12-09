@@ -362,6 +362,24 @@ describe('Test', () => {
         assert.strictEqual(inst.other, other);
     });
 
+    it('Test({timeout: 0})', () => {
+        const timeout = 0;
+        const inst = Test({timeout});
+        assert.ok(inst);
+        assert.ok(inst instanceof Test);
+        assert.strictEqual(Object.keys(inst).length, 10);
+        assert.strictEqual(inst.desc, '[No Description]');
+        assert.strictEqual(inst.fn, null);
+        assert.strictEqual(inst.skip, false);
+        assert.strictEqual(inst.sync, false);
+        assert.strictEqual(inst.timeout, timeout);
+        assert.strictEqual(inst.status, Test.WAITING);
+        assert.strictEqual(inst.err, null);
+        assert.strictEqual(inst.starttime, null);
+        assert.strictEqual(inst.duration, null);
+        assert.strictEqual(inst.promise, null);
+    });
+
     it('Test(...).run() no tests', () => {
         const inst = Test();
         return inst.run().then(() => {

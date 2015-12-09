@@ -361,6 +361,24 @@ test('Test({...}, fn, desc)', () => {
     assert.equal(inst.other, other);
 });
 
+test('Test({timeout: 0})', () => {
+    const timeout = 0;
+    const inst = Test({timeout});
+    assert.ok(inst);
+    assert.ok(inst instanceof Test);
+    assert.equal(Object.keys(inst).length, 10);
+    assert.equal(inst.desc, '[No Description]');
+    assert.equal(inst.fn, null);
+    assert.equal(inst.skip, false);
+    assert.equal(inst.sync, false);
+    assert.equal(inst.timeout, timeout);
+    assert.equal(inst.status, Test.WAITING);
+    assert.equal(inst.err, null);
+    assert.equal(inst.starttime, null);
+    assert.equal(inst.duration, null);
+    assert.equal(inst.promise, null);
+});
+
 test('Test(...).run() no tests', () => {
     const inst = Test();
     return inst.run().then(() => {
