@@ -59,13 +59,15 @@ const DEEP_FIXTURES = [
 const ERROR_MATCH_FIXTURES = [
     ['a', 'a'],
     ['a', /a/],
-    [new Error('some message'), /some message/]
+    [new Error('some message'), /some message/],
+    ['a', err => assert.equal(err, 'a')]
 ];
 
 const ERROR_NO_MATCH_FIXTURES = [
     ['ab', 'a'],
     ['a', /ab/],
-    [new Error('some message'), 'some message']
+    [new Error('some message'), 'some message'],
+    ['a', err => assert.equal(err, 'ab')]
 ];
 
 const MESSAGE = 'test message';
