@@ -27,8 +27,8 @@ const csl = (() => {
     const log = console.log.bind(console);
     const alt = () => {};
 
-    const block = () => console.log = alt;
-    const release = () => console.log = log;
+    const block = () => {console.log = alt;};
+    const release = () => {console.log = log;};
 
     const thenRelease = x => {
         Promise.resolve(x).then(release, release);

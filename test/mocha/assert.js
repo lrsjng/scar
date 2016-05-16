@@ -110,7 +110,7 @@ describe('assert', () => {
         assert.strictEqual(typeof lib.assert.fail, 'function');
     });
 
-    it(`assert.fail(msg) throws`, () => {
+    it('assert.fail(msg) throws', () => {
         assert.throws(() => {
             lib.assert.fail(MESSAGE);
         }, MESSAGE_RE);
@@ -324,7 +324,7 @@ describe('assert', () => {
         });
     });
 
-    it(`assert.throws(fn=>Error) does not throw`, () => {
+    it('assert.throws(fn=>Error) does not throw', () => {
         lib.assert.throws(() => {throw new Error();});
     });
 
@@ -344,7 +344,7 @@ describe('assert', () => {
         });
     });
 
-    it(`assert.throws(fn) throws`, () => {
+    it('assert.throws(fn) throws', () => {
         assert.throws(() => {
             lib.assert.throws(() => {});
         });
@@ -370,7 +370,7 @@ describe('assert', () => {
         });
     });
 
-    it(`assert.rejects(Promise.reject(new Error())) resolves`, () => {
+    it('assert.rejects(Promise.reject(new Error())) resolves', () => {
         return lib.assert.rejects(Promise.reject(new Error()));
     });
 
@@ -393,19 +393,19 @@ describe('assert', () => {
         );
     };
 
-    it(`assert.rejects() rejects`, () => {
+    it('assert.rejects() rejects', () => {
         return flip(lib.assert.rejects());
     });
 
-    it(`assert.rejects(Promise.resolve()) rejects`, () => {
+    it('assert.rejects(Promise.resolve()) rejects', () => {
         return flip(lib.assert.rejects(Promise.resolve()));
     });
 
-    it(`assert.rejects(false) rejects`, () => {
+    it('assert.rejects(false) rejects', () => {
         return flip(lib.assert.rejects(false));
     });
 
-    it(`assert.rejects(null) rejects`, () => {
+    it('assert.rejects(null) rejects', () => {
         return flip(lib.assert.rejects(null));
     });
 

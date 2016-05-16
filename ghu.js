@@ -1,5 +1,5 @@
 const {resolve, join} = require('path');
-const {default: ghu, mapfn, read, remove, uglify, webpack, wrap, write} = require('ghu');
+const {ghu, mapfn, read, remove, uglify, webpack, wrap, write} = require('ghu');
 
 const ROOT = resolve(__dirname);
 const LIB = join(ROOT, 'lib');
