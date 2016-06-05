@@ -32,7 +32,10 @@ ghu.task('build:scar', runtime => {
                 {
                     include: [LIB],
                     loader: 'babel',
-                    query: {cacheDirectory: true}
+                    query: {
+                        cacheDirectory: true,
+                        presets: ['es2015']
+                    }
                 }
             ]
         }
@@ -52,7 +55,10 @@ ghu.task('build:tests', () => {
                 {
                     include: [LIB, TEST],
                     loader: 'babel',
-                    query: {cacheDirectory: true}
+                    query: {
+                        cacheDirectory: true,
+                        presets: ['es2015']
+                    }
                 }
             ]
         }

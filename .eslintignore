@@ -1,4 +1,5 @@
-**/build/**
-**/coverage/**
-**/es5/**
-**/node_modules/**
+build/**
+coverage/**
+es5/**
+local/**
+node_modules/**

@@ -8,7 +8,7 @@ describe('lib', () => {
 
     it('lib has the right props', () => {
         const act = Object.keys(lib).sort();
-        const exp = ['Scar', 'assert', 'insp', 'test'].sort();
+        const exp = ['Scar', 'assert', 'insp', 'test', 'uniq'].sort();
         assert.strictEqual(act.length, exp.length);
         act.forEach((_, idx) => assert.strictEqual(act[idx], exp[idx]));
     });
