@@ -18,7 +18,7 @@ ghu.before(runtime => {
 });
 
 ghu.task('clean', 'delete build folder', () => {
-    return remove(BUILD, DIST);
+    return remove(`${BUILD}, ${DIST}`);
 });
 
 ghu.task('build:scar', runtime => {
@@ -31,7 +31,7 @@ ghu.task('build:scar', runtime => {
             loaders: [
                 {
                     include: [LIB],
-                    loader: 'babel',
+                    loader: 'babel-loader',
                     query: {
                         cacheDirectory: true,
                         presets: ['es2015']
@@ -54,7 +54,7 @@ ghu.task('build:tests', () => {
             loaders: [
                 {
                     include: [LIB, TEST],
-                    loader: 'babel',
+                    loader: 'babel-loader',
                     query: {
                         cacheDirectory: true,
                         presets: ['es2015']
@@ -66,17 +66,17 @@ ghu.task('build:tests', () => {
 
     return read(`${TEST}: tests-scar.js, tests-mocha.js`)
         .then(webpack(webpackConfig, {showStats: false}))
-        .then(write(mapfn.p(TEST, `${BUILD}`), {overwrite: true}));
+        .then(write(mapfn.p(TEST, BUILD), {overwrite: true}));
 });
 
 ghu.task('copy:pages', () => {
     return read(`${TEST}/*.html`)
-        .then(write(mapfn.p(`${TEST}`, `${BUILD}`), {overwrite: true}));
+        .then(write(mapfn.p(TEST, BUILD), {overwrite: true}));
 });
 
 ghu.task('copy:vendor', () => {
     return read(`${ROOT}/node_modules/mocha: mocha.js, mocha.css`)
-        .then(write(mapfn.p(`${ROOT}/node_modules/mocha`, `${BUILD}`), {overwrite: true}));
+        .then(write(mapfn.p(`${ROOT}/node_modules/mocha`, BUILD), {overwrite: true}));
 });
 
 ghu.task('build', ['clean', 'build:scar', 'build:tests', 'copy:pages', 'copy:vendor']);
