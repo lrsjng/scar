@@ -4,4 +4,4 @@
 
   rules:
     max-nested-callbacks: [1, 5]
-    max-statements: [1, 35]
+    max-statements: [1, 30]
