@@ -1,5 +1,5 @@
 const {test, assert} = require('../../lib');
-const {rejects, Test, Suite} = require('../loader');
+const {Test, Suite} = require('../loader');
 
 test('Suite is function', () => {
     assert.equal(typeof Suite, 'function');
@@ -176,7 +176,7 @@ test('Suite([...]).run() rejects if error in reporter', () => {
     inst.reporter = () => {
         throw new Error('some error object');
     };
-    return rejects(inst.run(), /some error object/);
+    return assert.rejects(inst.run(), /some error object/);
 });
 
 test('Suite([test], {sync}).run()', () => {

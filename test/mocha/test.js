@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {pto, Test} = require('../loader');
+const {Test, promisedTimeout} = require('../loader');
 
 const noop = () => null;
 
@@ -397,7 +397,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() passing async', () => {
-        const inst = Test(() => pto(10));
+        const inst = Test(() => promisedTimeout(10));
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);
@@ -417,7 +417,7 @@ describe('Test', () => {
 
     it('Test(...).run() failing async', () => {
         const err = new Error();
-        const inst = Test(() => pto(10, err));
+        const inst = Test(() => promisedTimeout(10, err));
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.FAILED);
             assert.strictEqual(inst.err, err);
@@ -433,7 +433,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() skip passing async', () => {
-        const inst = Test(() => pto(10), {skip: true});
+        const inst = Test(() => promisedTimeout(10), {skip: true});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.SKIPPED);
             assert.strictEqual(inst.err, null);
@@ -453,7 +453,7 @@ describe('Test', () => {
 
     it('Test(...).run() skip failing async', () => {
         const err = new Error();
-        const inst = Test(() => pto(10, err), {skip: true});
+        const inst = Test(() => promisedTimeout(10, err), {skip: true});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.SKIPPED);
             assert.strictEqual(inst.err, null);
@@ -469,7 +469,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() not timed out', () => {
-        const inst = Test(() => pto(10), {timeout: 100});
+        const inst = Test(() => promisedTimeout(10), {timeout: 100});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);
@@ -477,7 +477,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() timed out', () => {
-        const inst = Test(() => pto(100), {timeout: 10});
+        const inst = Test(() => promisedTimeout(100), {timeout: 10});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.FAILED);
             assert.ok(inst.err);
@@ -487,7 +487,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() no timeout', () => {
-        const inst = Test(() => pto(10), {timeout: 0});
+        const inst = Test(() => promisedTimeout(10), {timeout: 0});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);

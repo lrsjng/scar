@@ -1,5 +1,5 @@
 const {test, assert} = require('../../lib');
-const {lib, rejects} = require('../loader');
+const {lib} = require('../loader');
 
 const noop = () => {};
 
@@ -86,5 +86,5 @@ test('test.run() error in reporter throws', () => {
         throw new Error('some error object');
     };
     testfn('passing', noop);
-    return rejects(testfn.run({reporter}), /some error object/);
+    return assert.rejects(testfn.run({reporter}), /some error object/);
 });
