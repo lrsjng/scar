@@ -1,4 +1,4 @@
-/*! scar v0.14.0 - https://larsjung.de/scar/ */
+/*! scar v0.15.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -79,7 +79,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Reporter = __webpack_require__(5);
 	var Cli = __webpack_require__(9);
 
-	var Scar = module.exports = function () {
+	var Scar = function Scar() {
 	    return Object.assign(Object.create(Scar.prototype), {
 	        tests: []
 	    });
@@ -133,6 +133,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	};
 
+	module.exports = Scar;
+
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
@@ -149,7 +151,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var asFn = _require.asFn;
 
 
-	var Test = module.exports = function () {
+	var Test = function Test() {
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	        args[_key] = arguments[_key];
 	    }
@@ -232,46 +234,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	};
 
+	module.exports = Test;
+
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
 
-	var EX = module.exports = {};
-
-	EX.isBoolean = function (x) {
+	var isBoolean = function isBoolean(x) {
 	    return typeof x === 'boolean';
 	};
-	var isNumber = EX.isNumber = function (x) {
+	var isNumber = function isNumber(x) {
 	    return typeof x === 'number';
 	};
-	EX.isString = function (x) {
+	var isString = function isString(x) {
 	    return typeof x === 'string';
 	};
-	EX.isArray = function (x) {
+	var isArray = function isArray(x) {
 	    return Array.isArray(x);
 	};
-	var isFn = EX.isFn = function (x) {
+	var isFn = function isFn(x) {
 	    return typeof x === 'function';
 	};
-	EX.isPlainObject = function (x) {
+	var isPlainObject = function isPlainObject(x) {
 	    return Object.prototype.toString.call(x) === '[object Object]';
 	}; // eslint-disable-line prefer-reflect
 
-	EX.asFn = function (x) {
+	var asFn = function asFn(x) {
 	    return isFn(x) ? x : function () {
 	        return x;
 	    };
 	};
 
-	var runSequential = EX.runSequential = function (fns) {
+	var runSequential = function runSequential(fns) {
 	    return fns.reduce(function (promise, fn) {
 	        return promise.then(fn);
 	    }, Promise.resolve());
 	};
 
-	EX.runConcurrent = function (fns, max) {
+	var runConcurrent = function runConcurrent(fns, max) {
 	    if (!isNumber(max) || max < 2) {
 	        return runSequential(fns);
 	    }
@@ -307,6 +309,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	};
 
+	module.exports = {
+	    isBoolean: isBoolean,
+	    isNumber: isNumber,
+	    isString: isString,
+	    isArray: isArray,
+	    isFn: isFn,
+	    isPlainObject: isPlainObject,
+	    asFn: asFn,
+	    runSequential: runSequential,
+	    runConcurrent: runConcurrent
+	};
+
 /***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
@@ -328,7 +342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return !test.sync;
 	};
 
-	var Suite = module.exports = function () {
+	var Suite = function Suite() {
 	    var tests = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 	    var options = arguments[1];
 
@@ -426,6 +440,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	};
 
+	module.exports = Suite;
+
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
@@ -448,7 +464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var setFavIcon = _require.setFavIcon;
 
 
-	var Reporter = module.exports = function () {
+	var Reporter = function Reporter() {
 	    var inst = Object.assign(Object.create(Reporter.prototype), {
 	        log: console.log.bind(console),
 	        callback: function callback() {
@@ -514,6 +530,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        setFavIcon(suite.failedCount ? 'RED' : 'GREEN');
 	    }
 	};
+
+	module.exports = Reporter;
 
 /***/ },
 /* 7 */
@@ -617,7 +635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return prefix + str.replace(/\n/g, '\n' + prefix);
 	};
 
-	var Err = module.exports = function () {
+	var Err = function Err() {
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	        args[_key] = arguments[_key];
 	    }
@@ -670,6 +688,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	});
 
+	module.exports = Err;
+
 /***/ },
 /* 8 */
 /***/ function(module, exports) {
@@ -715,7 +735,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	}();
 
-	module.exports = { setTitle: setTitle, setFavIcon: setFavIcon };
+	module.exports = {
+	    setTitle: setTitle,
+	    setFavIcon: setFavIcon
+	};
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
@@ -739,7 +762,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	};
 
-	var Cli = module.exports = function () {
+	var Cli = function Cli() {
 	    return Object.assign(Object.create(Cli.prototype), {
 	        log: console.log.bind(console)
 	    });
@@ -799,6 +822,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    }
 	};
+
+	module.exports = Cli;
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
@@ -885,7 +910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	};
 
-	var assert = module.exports = function (expr, msg) {
+	var assert = function assert(expr, msg) {
 	    raise({ expr: expr, msg: msg });
 	};
 
@@ -930,6 +955,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	assert.throws = function (fn, exp, msg) {
+	    raise({ expr: typeof fn === 'function', msg: 'assert.throws(): first arg must be a function' });
 	    var val = NO_ERROR;
 
 	    try {
@@ -944,12 +970,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	assert.rejects = function (promise, exp, msg) {
+	    raise({ expr: promise && typeof promise.then === 'function', msg: 'assert.rejects(): first arg must be a thenable' });
+
 	    return Promise.resolve(promise).then(function (val) {
 	        raise(checkError(false, val, exp, msg), 2);
 	    }, function (err) {
 	        raise(checkError(true, err, exp, msg), 2);
 	    });
 	};
+
+	module.exports = assert;
 
 /***/ },
 /* 11 */
@@ -965,7 +995,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var isPlainObject = _require.isPlainObject;
 
 
-	var insp = module.exports = function (x) {
+	var insp = function insp(x) {
 	    if (isString(x)) {
 	        return '\'' + x + '\'';
 	    }
@@ -984,6 +1014,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return String(x);
 	};
+
+	module.exports = insp;
 
 /***/ },
 /* 12 */

@@ -1,2 +1,2 @@
 require('./assert');
-require('./static-interface');
+require('./test');

@@ -326,6 +326,24 @@ test('assert.throws(fn=>Error) does not throw', () => {
     lib.assert.throws(() => {throw new Error();});
 });
 
+test('assert.throws() throws', () => {
+    assert.throws(() => {
+        lib.assert.throws();
+    }, /function/);
+});
+
+test('assert.throws(false) throws', () => {
+    assert.throws(() => {
+        lib.assert.throws(false);
+    }, /function/);
+});
+
+test('assert.throws(null) throws', () => {
+    assert.throws(() => {
+        lib.assert.throws(null);
+    }, /function/);
+});
+
 ERROR_MATCH_FIXTURES.forEach(x => {
     const [err, exp] = x;
 
@@ -392,19 +410,25 @@ const flip = promise => {
 };
 
 test('assert.rejects() rejects', () => {
-    return flip(lib.assert.rejects());
+    assert.throws(() => {
+        lib.assert.rejects();
+    }, /thenable/);
+});
+
+test('assert.rejects(false) rejects', () => {
+    assert.throws(() => {
+        lib.assert.rejects(false);
+    }, /thenable/);
+});
+
+test('assert.rejects(null) rejects', () => {
+    assert.throws(() => {
+        lib.assert.rejects(null);
+    }, /thenable/);
 });
 
 test('assert.rejects(Promise.resolve()) rejects', () => {
     return flip(lib.assert.rejects(Promise.resolve()));
-});
-
-test('assert.rejects(false) rejects', () => {
-    return flip(lib.assert.rejects(false));
-});
-
-test('assert.rejects(null) rejects', () => {
-    return flip(lib.assert.rejects(null));
 });
 
 ERROR_NO_MATCH_FIXTURES.forEach(x => {

@@ -29,11 +29,23 @@ test('test.run() passing', () => {
     return testfn.run({reporter: noop});
 });
 
+test('test.run() passing async', () => {
+    const testfn = lib.Scar().static();
+    testfn('passing async', () => Promise.resolve());
+    return testfn.run({reporter: noop});
+});
+
 test('test.run() failing', () => {
     const testfn = lib.Scar().static();
     testfn('failing', () => {
         throw new Error();
     });
+    return testfn.run({reporter: noop});
+});
+
+test('test.run() failing async', () => {
+    const testfn = lib.Scar().static();
+    testfn('failing async', () => Promise.reject());
     return testfn.run({reporter: noop});
 });
 
@@ -57,6 +69,8 @@ test('test.run() all', () => {
     testfn('failing', () => {
         throw new Error();
     });
+    testfn('passing async', () => Promise.resolve());
+    testfn('failing async', () => Promise.reject());
     return testfn.run({reporter: noop});
 });
 
