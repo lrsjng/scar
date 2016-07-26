@@ -1,4 +1,4 @@
-/*! scar v0.15.1 - https://larsjung.de/scar/ */
+/*! scar v0.15.3 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
