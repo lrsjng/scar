@@ -1,4 +1,4 @@
-/*! scar v0.15.3 - https://larsjung.de/scar/ */
+/*! scar v0.16.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -72,7 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	var Test = __webpack_require__(2);
 	var Suite = __webpack_require__(4);
@@ -114,13 +114,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    cli: function cli(options) {
 	        var _this = this;
 
-	        // take time to load page
-	        return new Promise(function (resolve) {
-	            return setTimeout(resolve, 10);
-	        }).then(function () {
-	            return Cli().run(_this, options);
-	        });
-	        // return Cli().run(this, options);
+	        if (global.window) {
+	            return new Promise(function (resolve) {
+	                global.window.addEventListener('load', function () {
+	                    return resolve();
+	                });
+	            }).then(function () {
+	                return Cli().run(_this, options);
+	            });
+	        }
+	        return Cli().run(this, options);
 	    },
 	    static: function _static() {
 	        return Object.assign(this.test.bind(this), {
@@ -134,6 +137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	module.exports = Scar;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 2 */
@@ -257,19 +261,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	var isFn = function isFn(x) {
 	    return typeof x === 'function';
 	};
-	var isPlainObject = function isPlainObject(x) {
-	    return Object.prototype.toString.call(x) === '[object Object]';
-	}; // eslint-disable-line prefer-reflect
-
 	var asFn = function asFn(x) {
 	    return isFn(x) ? x : function () {
 	        return x;
 	    };
 	};
+	var isPlainObject = function isPlainObject(x) {
+	    return Object.prototype.toString.call(x) === '[object Object]';
+	}; // eslint-disable-line prefer-reflect
 
 	var runSequential = function runSequential(fns) {
-	    return fns.reduce(function (promise, fn) {
-	        return promise.then(fn);
+	    return fns.reduce(function (p, fn) {
+	        return p.then(fn);
 	    }, Promise.resolve());
 	};
 
@@ -501,7 +504,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return new Promise(function (resolve) {
 	            return setTimeout(function () {
 	                return resolve();
-	            }, 10);
+	            }, 100);
 	        });
 	    },
 	    afterTest: function afterTest(suite, test) {
@@ -699,38 +702,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	var noop = function noop() {
 	    return null;
 	};
-	var DOC = !!global.window && global.document;
+	var doc = global.window && global.window.document;
 
-	var setTitle = !DOC ? noop : function (title) {
-	    DOC.title = title;
+	var setTitle = !doc ? noop : function (title) {
+	    doc.title = title;
 	};
 
-	var setFavIcon = function () {
-	    if (!DOC) {
-	        return noop;
-	    }
-
-	    var ICON = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
-	    var PRESETS = {
-	        RED: ICON.replace('*', 'Y0VbWlewAAAB1JREFUOMtj/OJs9p+BAsDEQCEYNWDUgFEDBosBABZOAow9yV0y'),
-	        GREEN: ICON.replace('*', 'kM+i8BKgAAAB1JREFUOMtj9Fkf8J+BAsDEQCEYNWDUgFEDBosBAIuhAmqCXURi'),
-	        GREY: ICON.replace('*', 'kjUf48cwAAAB1JREFUOMtjDA0N/c9AAWBioBCMGjBqwKgBg8UAAFduAh79mcom')
+	var setFavIcon = !doc ? noop : function () {
+	    var head = doc.querySelector('head');
+	    var rel = 'shortcut icon';
+	    var iconTpl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
+	    var presets = {
+	        RED: iconTpl.replace('*', 'Y0VbWlewAAAB1JREFUOMtj/OJs9p+BAsDEQCEYNWDUgFEDBosBABZOAow9yV0y'),
+	        GREEN: iconTpl.replace('*', 'kM+i8BKgAAAB1JREFUOMtj9Fkf8J+BAsDEQCEYNWDUgFEDBosBAIuhAmqCXURi'),
+	        GREY: iconTpl.replace('*', 'kjUf48cwAAAB1JREFUOMtjDA0N/c9AAWBioBCMGjBqwKgBg8UAAFduAh79mcom')
 	    };
 
-	    var head = DOC.head || DOC.getElementsByTagName('head')[0];
-	    var rel = 'shortcut icon';
-
 	    return function (href) {
-	        if (PRESETS.hasOwnProperty(href)) {
-	            href = PRESETS[href];
-	        }
-	        var iconEl = DOC.querySelector('link[rel="' + rel + '"]');
-	        var link = DOC.createElement('link');
-	        link.rel = rel;
-	        link.href = href;
+	        var iconEl = doc.querySelector('link[rel="' + rel + '"]');
 	        if (iconEl) {
 	            head.removeChild(iconEl);
 	        }
+
+	        var link = doc.createElement('link');
+	        link.rel = rel;
+	        link.href = presets.hasOwnProperty(href) ? presets[href] : href;
 	        head.appendChild(link);
 	    };
 	}();
@@ -749,7 +745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Err = __webpack_require__(7);
 
-	var HELP = '\n\n  scar - a test runner for node and the browser\n\n  Usage:\n    [node] your-script.js [opt...] [arg...]\n    your-url.html?opt&...&arg&...\n\n  Options:\n    -h: show this help message\n    -t: show test stats\n\n  Arguments:\n    all arguments are used as test filters\n\n';
+	var HELP = '\n  scar - a test runner for node and the browser\n\n  Usage:\n    node tests.js [opt...] [arg...]\n    tests.html?opt&...&arg&...\n\n  Options:\n    -h: show this help message\n    -s: show test stats\n\n  Arguments:\n    all arguments are used as test filters\n\n';
 
 	var createFilterFn = function createFilterFn(filters) {
 	    if (!filters || !filters.length) {
@@ -836,7 +832,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var insp = __webpack_require__(11);
 	var Err = __webpack_require__(7);
-	var NO_ERROR = {};
 
 	var getType = function getType(x) {
 	    return Object.prototype.toString.call(x); // eslint-disable-line prefer-reflect
@@ -895,11 +890,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return null;
 	    }
 
-	    if (act !== exp) {
-	        return { act: act, exp: exp, msg: msg || 'expected error ' + insp(act) + ' to be ' + insp(exp) };
+	    if (act === exp) {
+	        return null;
 	    }
 
-	    return null;
+	    return { act: act, exp: exp, msg: msg || 'expected error ' + insp(act) + ' to be ' + insp(exp) };
 	};
 
 	var raise = function raise(props) {
@@ -956,7 +951,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	assert.throws = function (fn, exp, msg) {
 	    raise({ expr: typeof fn === 'function', msg: 'assert.throws(): first arg must be a function' });
-	    var val = NO_ERROR;
+
+	    var none = {};
+	    var val = none;
 
 	    try {
 	        val = fn();
@@ -964,7 +961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        raise(checkError(true, err, exp, msg));
 	    }
 
-	    if (val !== NO_ERROR) {
+	    if (val !== none) {
 	        raise(checkError(false, val, exp, msg));
 	    }
 	};
@@ -973,9 +970,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    raise({ expr: promise && typeof promise.then === 'function', msg: 'assert.rejects(): first arg must be a thenable' });
 
 	    return Promise.resolve(promise).then(function (val) {
-	        raise(checkError(false, val, exp, msg), 2);
+	        return raise(checkError(false, val, exp, msg), 2);
 	    }, function (err) {
-	        raise(checkError(true, err, exp, msg), 2);
+	        return raise(checkError(true, err, exp, msg), 2);
 	    });
 	};
 
@@ -1019,15 +1016,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 12 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var asFn = function asFn(x) {
-	    return typeof x === 'function' ? x : function () {
-	        return x;
-	    };
-	};
+	var _require = __webpack_require__(3);
+
+	var asFn = _require.asFn;
+
 
 	var spy = function spy(fn) {
 	    var calls = [];
@@ -1077,11 +1073,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var isId = function isId(sequence) {
 	    return RE_ID.test(sequence);
 	};
-
 	var obj = function obj() {
 	    return { _uniq_id: id() };
 	};
-
 	var path = function path() {
 	    var ext = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
 	    return '_uniq_path/' + id() + ext;
