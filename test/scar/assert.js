@@ -2,22 +2,22 @@ const {test, assert, insp} = require('../../lib');
 const {lib} = require('../loader');
 
 /* eslint-disable no-multi-spaces */
-// assert, ok, notOk
+// value, truthy
 const FIXTURES = [
-    [undefined,   1, 1, 0],
-    [null,        1, 1, 0],
-    [false,       1, 1, 0],
-    [true,        0, 0, 1],
-    [0,           1, 1, 0],
-    [1,           0, 0, 1],
-    ['',          1, 1, 0],
-    [' ',         0, 0, 1],
-    [[],          0, 0, 1],
-    [[0],         0, 0, 1],
-    [{},          0, 0, 1],
-    [{a: 0},      0, 0, 1],
-    [/a/,         0, 0, 1],
-    [() => null,  0, 0, 1]
+    [undefined,   0],
+    [null,        0],
+    [false,       0],
+    [true,        1],
+    [0,           0],
+    [1,           1],
+    ['',          0],
+    [' ',         1],
+    [[],          1],
+    [[0],         1],
+    [{},          1],
+    [{a: 0},      1],
+    [/a/,         1],
+    [() => null,  1]
 ];
 
 // value, group
@@ -73,326 +73,191 @@ const ERROR_NO_MATCH_FIXTURES = [
 const MESSAGE = 'test message';
 const MESSAGE_RE = /test message/;
 
-test('assert() is function', () => {
+
+// assert
+test('assert is function', () => {
     assert.equal(typeof lib.assert, 'function');
 });
 
-FIXTURES.forEach(x => {
-    const arg = x[0];
-    const throws = x[1];
-
-    if (throws) {
-        test(`assert(${insp(arg)}) throws`, () => {
-            assert.throws(() => {
-                lib.assert(arg);
-            }, /no message/i);
-        });
-
-        test(`assert(${insp(arg)}, msg) throws`, () => {
-            assert.throws(() => {
-                lib.assert(arg, MESSAGE);
-            }, MESSAGE_RE);
-        });
-    } else {
+FIXTURES.forEach(([arg, truthy]) => {
+    if (truthy) {
         test(`assert(${insp(arg)}) does not throw`, () => {
             lib.assert(arg);
-        });
-
-        test(`assert(${insp(arg)}, msg) does not throw`, () => {
             lib.assert(arg, MESSAGE);
+        });
+    } else {
+        test(`assert(${insp(arg)}) throws`, () => {
+            assert.throws(() => {lib.assert(arg);}, /no message/i);
+            assert.throws(() => {lib.assert(arg, MESSAGE);}, MESSAGE_RE);
         });
     }
 });
 
+
+// fail
 test('assert.fail is function', () => {
     assert.equal(typeof lib.assert.fail, 'function');
 });
 
 test('assert.fail(msg) throws', () => {
-    assert.throws(() => {
-        lib.assert.fail(MESSAGE);
-    }, MESSAGE_RE);
+    assert.throws(() => {lib.assert.fail(MESSAGE);}, MESSAGE_RE);
 });
 
-FIXTURES.forEach(x => {
-    const arg = x[0];
-
+FIXTURES.forEach(([arg,]) => { // eslint-disable-line comma-dangle,comma-spacing
     test(`assert.fail(${insp(arg)}) throws`, () => {
-        assert.throws(() => {
-            lib.assert.fail(arg);
-        });
+        assert.throws(() => {lib.assert.fail(arg);});
     });
 });
 
+
+// ok, notOk
 test('assert.ok is function', () => {
     assert.equal(typeof lib.assert.ok, 'function');
-});
-
-FIXTURES.forEach(x => {
-    const arg = x[0];
-    const throws = x[2];
-
-    if (throws) {
-        test(`assert.ok(${insp(arg)}) throws`, () => {
-            assert.throws(() => {
-                lib.assert.ok(arg);
-            }, /expected .*? to be truthy/i);
-        });
-
-        test(`assert.ok(${insp(arg)}, msg) throws`, () => {
-            assert.throws(() => {
-                lib.assert.ok(arg, MESSAGE);
-            }, MESSAGE_RE);
-        });
-    } else {
-        test(`assert.ok(${insp(arg)}) does not throw`, () => {
-            lib.assert.ok(arg);
-        });
-
-        test(`assert.ok(${insp(arg)}, msg) does not throw`, () => {
-            lib.assert.ok(arg, MESSAGE);
-        });
-    }
 });
 
 test('assert.notOk is function', () => {
     assert.equal(typeof lib.assert.notOk, 'function');
 });
 
-FIXTURES.forEach(x => {
-    const arg = x[0];
-    const throws = x[3];
-
-    if (throws) {
-        test(`assert.notOk(${insp(arg)}) throws`, () => {
-            assert.throws(() => {
-                lib.assert.notOk(arg);
-            }, /expected .*? to be falsy/i);
+FIXTURES.forEach(([arg, truthy]) => {
+    if (truthy) {
+        test(`assert.ok(${insp(arg)}) does not throw`, () => {
+            lib.assert.ok(arg);
+            lib.assert.ok(arg, MESSAGE);
         });
-
-        test(`assert.notOk(${insp(arg)}, msg) throws`, () => {
-            assert.throws(() => {
-                lib.assert.notOk(arg, MESSAGE);
-            }, MESSAGE_RE);
+        test(`assert.notOk(${insp(arg)}) throws`, () => {
+            assert.throws(() => {lib.assert.notOk(arg);}, /expected .*? to be falsy/i);
+            assert.throws(() => {lib.assert.notOk(arg, MESSAGE);}, MESSAGE_RE);
         });
     } else {
+        test(`assert.ok(${insp(arg)}) throws`, () => {
+            assert.throws(() => {lib.assert.ok(arg);}, /expected .*? to be truthy/i);
+            assert.throws(() => {lib.assert.ok(arg, MESSAGE);}, MESSAGE_RE);
+        });
         test(`assert.notOk(${insp(arg)}) does not throw`, () => {
             lib.assert.notOk(arg);
-        });
-
-        test(`assert.notOk(${insp(arg)}, msg) does not throw`, () => {
             lib.assert.notOk(arg, MESSAGE);
         });
     }
 });
 
+
+// equal, notEqual
 test('assert.equal is function', () => {
     assert.equal(typeof lib.assert.equal, 'function');
-});
-
-FIXTURES.forEach(x => {
-    const arg = x[0];
-
-    FIXTURES.forEach(y => {
-        const arg2 = y[0];
-
-        if (arg === arg2) {
-            test(`assert.equal(${insp(arg)}, ${insp(arg2)}) does not throw`, () => {
-                lib.assert.equal(arg, arg2);
-            });
-
-            test(`assert.equal(${insp(arg)}, ${insp(arg2)}, msg) does not throw`, () => {
-                lib.assert.equal(arg, arg2, MESSAGE);
-            });
-        } else {
-            test(`assert.equal(${insp(arg)}, ${insp(arg2)}) throws`, () => {
-                assert.throws(() => {
-                    lib.assert.equal(arg, arg2);
-                }, /expected .*? to equal .*?/i);
-            });
-
-            test(`assert.equal(${insp(arg)}, ${insp(arg2)}, msg) throws`, () => {
-                assert.throws(() => {
-                    lib.assert.equal(arg, arg2, MESSAGE);
-                }, MESSAGE_RE);
-            });
-        }
-    });
 });
 
 test('assert.notEqual is function', () => {
     assert.equal(typeof lib.assert.notEqual, 'function');
 });
 
-FIXTURES.forEach(x => {
-    const arg = x[0];
-
-    FIXTURES.forEach(y => {
-        const arg2 = y[0];
-
-        if (arg !== arg2) {
-            test(`assert.notEqual(${insp(arg)}, ${insp(arg2)}) does not throw`, () => {
-                lib.assert.notEqual(arg, arg2);
+FIXTURES.forEach(([arg1,]) => { // eslint-disable-line comma-dangle,comma-spacing
+    FIXTURES.forEach(([arg2,]) => { // eslint-disable-line comma-dangle,comma-spacing
+        if (arg1 === arg2) {
+            test(`assert.equal(${insp(arg1)}, ${insp(arg2)}) does not throw`, () => {
+                lib.assert.equal(arg1, arg2);
+                lib.assert.equal(arg1, arg2, MESSAGE);
             });
-
-            test(`assert.notEqual(${insp(arg)}, ${insp(arg2)}, msg) does not throw`, () => {
-                lib.assert.notEqual(arg, arg2, MESSAGE);
+            test(`assert.notEqual(${insp(arg1)}, ${insp(arg2)}) throws`, () => {
+                assert.throws(() => {lib.assert.notEqual(arg1, arg2);}, /expected .*? not to equal .*?/i);
+                assert.throws(() => {lib.assert.notEqual(arg1, arg2, MESSAGE);}, MESSAGE_RE);
             });
         } else {
-            test(`assert.notEqual(${insp(arg)}, ${insp(arg2)}) throws`, () => {
-                assert.throws(() => {
-                    lib.assert.notEqual(arg, arg2);
-                }, /expected .*? not to equal .*?/i);
+            test(`assert.equal(${insp(arg1)}, ${insp(arg2)}) throws`, () => {
+                assert.throws(() => {lib.assert.equal(arg1, arg2);}, /expected .*? to equal .*?/i);
+                assert.throws(() => {lib.assert.equal(arg1, arg2, MESSAGE);}, MESSAGE_RE);
             });
-
-            test(`assert.notEqual(${insp(arg)}, ${insp(arg2)}, msg) throws`, () => {
-                assert.throws(() => {
-                    lib.assert.notEqual(arg, arg2, MESSAGE);
-                }, MESSAGE_RE);
+            test(`assert.notEqual(${insp(arg1)}, ${insp(arg2)}) does not throw`, () => {
+                lib.assert.notEqual(arg1, arg2);
+                lib.assert.notEqual(arg1, arg2, MESSAGE);
             });
         }
     });
 });
 
+
+// deepEqual, notDeepEqual
 test('assert.deepEqual is function', () => {
     assert.equal(typeof lib.assert.deepEqual, 'function');
-});
-
-DEEP_FIXTURES.forEach(x => {
-    const [arg1, group1] = x;
-
-    DEEP_FIXTURES.forEach(y => {
-        const [arg2, group2] = y;
-
-        if (group1 === group2) {
-            test(`assert.deepEqual(${insp(arg1)}, ${insp(arg2)}) does not throw`, () => {
-                lib.assert.deepEqual(arg1, arg2);
-            });
-
-            test(`assert.deepEqual(${insp(arg1)}, ${insp(arg2)}, msg) does not throw`, () => {
-                lib.assert.deepEqual(arg1, arg2, MESSAGE);
-            });
-        } else {
-            test(`assert.deepEqual(${insp(arg1)}, ${insp(arg2)}) throws`, () => {
-                assert.throws(() => {
-                    lib.assert.deepEqual(arg1, arg2);
-                }, /expected .*? to deeply equal .*?/i);
-            });
-
-            test(`assert.deepEqual(${insp(arg1)}, ${insp(arg2)}, msg) throws`, () => {
-                assert.throws(() => {
-                    lib.assert.deepEqual(arg1, arg2, MESSAGE);
-                }, MESSAGE_RE);
-            });
-        }
-    });
 });
 
 test('assert.notDeepEqual is function', () => {
     assert.equal(typeof lib.assert.notDeepEqual, 'function');
 });
 
-DEEP_FIXTURES.forEach(x => {
-    const [arg1, group1] = x;
-
-    DEEP_FIXTURES.forEach(y => {
-        const [arg2, group2] = y;
-
-        if (group1 !== group2) {
-            test(`assert.notDeepEqual(${insp(arg1)}, ${insp(arg2)}) does not throw`, () => {
-                lib.assert.notDeepEqual(arg1, arg2);
+DEEP_FIXTURES.forEach(([arg1, group1]) => {
+    DEEP_FIXTURES.forEach(([arg2, group2]) => {
+        if (group1 === group2) {
+            test(`assert.deepEqual(${insp(arg1)}, ${insp(arg2)}) does not throw`, () => {
+                lib.assert.deepEqual(arg1, arg2);
+                lib.assert.deepEqual(arg1, arg2, MESSAGE);
             });
-
-            test(`assert.notDeepEqual(${insp(arg1)}, ${insp(arg2)}, msg) does not throw`, () => {
-                lib.assert.notDeepEqual(arg1, arg2, MESSAGE);
+            test(`assert.notDeepEqual(${insp(arg1)}, ${insp(arg2)}) throws`, () => {
+                assert.throws(() => {lib.assert.notDeepEqual(arg1, arg2);}, /expected .*? not to deeply equal .*?/i);
+                assert.throws(() => {lib.assert.notDeepEqual(arg1, arg2, MESSAGE);}, MESSAGE_RE);
             });
         } else {
-            test(`assert.notDeepEqual(${insp(arg1)}, ${insp(arg2)}) throws`, () => {
-                assert.throws(() => {
-                    lib.assert.notDeepEqual(arg1, arg2);
-                }, /expected .*? not to deeply equal .*?/i);
+            test(`assert.deepEqual(${insp(arg1)}, ${insp(arg2)}) throws`, () => {
+                assert.throws(() => {lib.assert.deepEqual(arg1, arg2);}, /expected .*? to deeply equal .*?/i);
+                assert.throws(() => {lib.assert.deepEqual(arg1, arg2, MESSAGE);}, MESSAGE_RE);
             });
-
-            test(`assert.notDeepEqual(${insp(arg1)}, ${insp(arg2)}, msg) throws`, () => {
-                assert.throws(() => {
-                    lib.assert.notDeepEqual(arg1, arg2, MESSAGE);
-                }, MESSAGE_RE);
+            test(`assert.notDeepEqual(${insp(arg1)}, ${insp(arg2)}) does not throw`, () => {
+                lib.assert.notDeepEqual(arg1, arg2);
+                lib.assert.notDeepEqual(arg1, arg2, MESSAGE);
             });
         }
     });
 });
 
-test('assert.throws(fn=>Error) does not throw', () => {
+
+// throws
+test('assert.throws is function', () => {
+    assert.equal(typeof lib.assert.throws, 'function');
+});
+
+test('assert.throws() accepts only functions as first arg', () => {
+    assert.throws(() => {lib.assert.throws();}, /function/);
+    assert.throws(() => {lib.assert.throws(false);}, /function/);
+    assert.throws(() => {lib.assert.throws(null);}, /function/);
+});
+
+test('assert.throws(<fn>) throws', () => {
+    assert.throws(() => {lib.assert.throws(() => null);});
+});
+
+test('assert.throws(<throwing fn>) does not throw', () => {
     lib.assert.throws(() => {throw new Error();});
 });
 
-test('assert.throws() throws', () => {
-    assert.throws(() => {
-        lib.assert.throws();
-    }, /function/);
-});
-
-test('assert.throws(false) throws', () => {
-    assert.throws(() => {
-        lib.assert.throws(false);
-    }, /function/);
-});
-
-test('assert.throws(null) throws', () => {
-    assert.throws(() => {
-        lib.assert.throws(null);
-    }, /function/);
-});
-
-ERROR_MATCH_FIXTURES.forEach(x => {
-    const [err, exp] = x;
-
+ERROR_MATCH_FIXTURES.forEach(([err, exp]) => {
     test(`assert.throws(fn=>${insp(err)}, ${insp(exp)}) does not throw`, () => {
-        lib.assert.throws(() => {
-            throw err;
-        }, exp);
-    });
-
-    test(`assert.throws(fn=>${insp(err)}, ${insp(exp)}, msg) does not throw`, () => {
-        lib.assert.throws(() => {
-            throw err;
-        }, exp, MESSAGE);
+        lib.assert.throws(() => {throw err;}, exp);
+        lib.assert.throws(() => {throw err;}, exp, MESSAGE);
     });
 });
 
-test('assert.throws(fn) throws', () => {
-    assert.throws(() => {
-        lib.assert.throws(() => {});
-    });
-});
-
-ERROR_NO_MATCH_FIXTURES.forEach(x => {
-    const [err, exp] = x;
-
+ERROR_NO_MATCH_FIXTURES.forEach(([err, exp]) => {
     test(`assert.throws(fn=>${insp(err)}, ${insp(exp)}) throws`, () => {
-        assert.throws(() => {
-            lib.assert.throws(() => {
-                throw err;
-            }, exp);
-        });
-    });
-
-    test(`assert.throws(fn=>${insp(err)}, ${insp(exp)}, msg) throws`, () => {
-        assert.throws(() => {
-            lib.assert.throws(() => {
-                throw err;
-            }, exp, MESSAGE);
-        });
+        assert.throws(() => {lib.assert.throws(() => {throw err;}, exp);});
+        assert.throws(() => {lib.assert.throws(() => {throw err;}, exp, MESSAGE);});
     });
 });
 
-test('assert.rejects(Promise.reject(new Error())) resolves', () => {
-    return lib.assert.rejects(Promise.reject(new Error()));
+
+// rejects
+test('assert.rejects is function', () => {
+    assert.equal(typeof lib.assert.rejects, 'function');
 });
 
-ERROR_MATCH_FIXTURES.forEach(x => {
-    const [err, exp] = x;
+test('assert.rejects(Promise.resolve()) rejects', () => {
+    return assert.rejects(lib.assert.rejects(Promise.resolve()));
+});
 
+test('assert.rejects(Promise.reject()) resolves', () => {
+    return lib.assert.rejects(Promise.reject());
+});
+
+ERROR_MATCH_FIXTURES.forEach(([err, exp]) => {
     test(`assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}) resolves`, () => {
         return lib.assert.rejects(Promise.reject(err), exp);
     });
@@ -402,43 +267,12 @@ ERROR_MATCH_FIXTURES.forEach(x => {
     });
 });
 
-const flip = promise => {
-    return promise.then(
-        () => {throw new Error('should reject');},
-        () => {/* consume error */}
-    );
-};
-
-test('assert.rejects() rejects', () => {
-    assert.throws(() => {
-        lib.assert.rejects();
-    }, /thenable/);
-});
-
-test('assert.rejects(false) rejects', () => {
-    assert.throws(() => {
-        lib.assert.rejects(false);
-    }, /thenable/);
-});
-
-test('assert.rejects(null) rejects', () => {
-    assert.throws(() => {
-        lib.assert.rejects(null);
-    }, /thenable/);
-});
-
-test('assert.rejects(Promise.resolve()) rejects', () => {
-    return flip(lib.assert.rejects(Promise.resolve()));
-});
-
-ERROR_NO_MATCH_FIXTURES.forEach(x => {
-    const [err, exp] = x;
-
+ERROR_NO_MATCH_FIXTURES.forEach(([err, exp]) => {
     test(`assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}) rejects`, () => {
-        return flip(lib.assert.rejects(Promise.reject(err), exp));
+        return assert.rejects(lib.assert.rejects(Promise.reject(err), exp));
     });
 
     test(`assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}, msg) rejects`, () => {
-        return flip(lib.assert.rejects(Promise.reject(err), exp, MESSAGE));
+        return assert.rejects(lib.assert.rejects(Promise.reject(err), exp, MESSAGE));
     });
 });
