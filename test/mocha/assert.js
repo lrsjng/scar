@@ -76,7 +76,10 @@ const ERROR_NO_MATCH_FIXTURES = [
 const MESSAGE = 'test message';
 const MESSAGE_RE = /test message/;
 
-describe('assert', () => {
+describe('assert', function () { // eslint-disable-line func-names
+    this.timeout(5000);
+
+
     // assert
     it('assert()', () => {
         assert.strictEqual(typeof lib.assert, 'function', 'is function');
