@@ -21,7 +21,7 @@ const FIXTURES = [
 ];
 
 // value, group
-const DEEP_FIXTURES = [
+const DEEP_EQUAL_FIXTURES = [
     [undefined,             0],
     [null,                  1],
     [false,                 2],
@@ -75,7 +75,7 @@ const MESSAGE_RE = /test message/;
 
 
 // assert
-test('assert(...)', () => {
+test('assert()', () => {
     assert.equal(typeof lib.assert, 'function', 'is function');
 
     FIXTURES.forEach(([arg, truthy], idx) => {
@@ -91,7 +91,7 @@ test('assert(...)', () => {
 
 
 // fail
-test('assert.fail(...)', () => {
+test('assert.fail()', () => {
     assert.equal(typeof lib.assert.fail, 'function', 'is function');
     assert.throws(() => {lib.assert.fail(MESSAGE);}, MESSAGE_RE, '(msg) expected to throw');
 
@@ -103,7 +103,7 @@ test('assert.fail(...)', () => {
 
 
 // ok, notOk
-test('assert.ok(...)', () => {
+test('assert.ok()', () => {
     assert.equal(typeof lib.assert.ok, 'function', 'is function');
 
     FIXTURES.forEach(([arg, truthy], idx) => {
@@ -117,7 +117,7 @@ test('assert.ok(...)', () => {
     });
 });
 
-test('assert.notOk(...)', () => {
+test('assert.notOk()', () => {
     assert.equal(typeof lib.assert.notOk, 'function', 'is function');
 
     FIXTURES.forEach(([arg, truthy], idx) => {
@@ -133,7 +133,7 @@ test('assert.notOk(...)', () => {
 
 
 // equal, notEqual
-test('assert.equal(...)', () => {
+test('assert.equal()', () => {
     assert.equal(typeof lib.assert.equal, 'function', 'is function');
 
     FIXTURES.forEach(([arg1,], idx1) => { // eslint-disable-line comma-dangle,comma-spacing
@@ -149,7 +149,7 @@ test('assert.equal(...)', () => {
     });
 });
 
-test('assert.notEqual(...)', () => {
+test('assert.notEqual()', () => {
     assert.equal(typeof lib.assert.notEqual, 'function', 'is function');
 
     FIXTURES.forEach(([arg1,], idx1) => { // eslint-disable-line comma-dangle,comma-spacing
@@ -167,11 +167,11 @@ test('assert.notEqual(...)', () => {
 
 
 // deepEqual, notDeepEqual
-test('assert.deepEqual(...)', () => {
+test('assert.deepEqual()', () => {
     assert.equal(typeof lib.assert.deepEqual, 'function', 'is function');
 
-    DEEP_FIXTURES.forEach(([arg1, group1], idx1) => {
-        DEEP_FIXTURES.forEach(([arg2, group2], idx2) => {
+    DEEP_EQUAL_FIXTURES.forEach(([arg1, group1], idx1) => {
+        DEEP_EQUAL_FIXTURES.forEach(([arg2, group2], idx2) => {
             const msg = `FIX[${idx1}, ${idx2}]: (${insp(arg1)}, ${insp(arg2)}) expected `;
             if (group1 === group2) {
                 lib.assert.deepEqual(arg1, arg2, msg + 'not to throw');
@@ -183,11 +183,11 @@ test('assert.deepEqual(...)', () => {
     });
 });
 
-test('assert.notDeepEqual(...)', () => {
+test('assert.notDeepEqual()', () => {
     assert.equal(typeof lib.assert.notDeepEqual, 'function', 'is function');
 
-    DEEP_FIXTURES.forEach(([arg1, group1], idx1) => {
-        DEEP_FIXTURES.forEach(([arg2, group2], idx2) => {
+    DEEP_EQUAL_FIXTURES.forEach(([arg1, group1], idx1) => {
+        DEEP_EQUAL_FIXTURES.forEach(([arg2, group2], idx2) => {
             const msg = `FIX[${idx1}, ${idx2}]: (${insp(arg1)}, ${insp(arg2)}) expected `;
             if (group1 !== group2) {
                 lib.assert.notDeepEqual(arg1, arg2, msg + 'not to throw');
@@ -201,7 +201,7 @@ test('assert.notDeepEqual(...)', () => {
 
 
 // throws
-test('assert.throws(...)', () => {
+test('assert.throws()', () => {
     assert.equal(typeof lib.assert.throws, 'function', 'is function');
 
     assert.throws(() => {lib.assert.throws();}, /function/, '() expected to throw');
@@ -227,7 +227,7 @@ test('assert.throws(...)', () => {
 
 
 // rejects
-test('assert.rejects(...)', () => {
+test('assert.rejects()', () => {
     assert.equal(typeof lib.assert.rejects, 'function', 'is function');
 });
 

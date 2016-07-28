@@ -3,19 +3,17 @@ const {Test, promisedTimeout} = require('../loader');
 
 const noop = () => null;
 
-test('Test is function', () => {
+test('Test()', () => {
     assert.equal(typeof Test, 'function');
-});
 
-[
-    'WAITING',
-    'PENDING',
-    'PASSED',
-    'FAILED',
-    'SKIPPED'
-].forEach(status => {
-    test(`Test.${status} === '${status}'`, () => {
-        assert.equal(Test[status], status);
+    [
+        'WAITING',
+        'PENDING',
+        'PASSED',
+        'FAILED',
+        'SKIPPED'
+    ].forEach(status => {
+        assert.equal(Test[status], status, `[${status}]`);
     });
 });
 

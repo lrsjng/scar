@@ -3,19 +3,12 @@ const {lib} = require('../loader');
 
 const noop = () => {};
 
-test('test is function', () => {
+test('test()', () => {
     assert.equal(typeof lib.test, 'function');
-});
-
-test('test has the right props', () => {
     const act = Object.keys(lib.test).sort();
     const exp = ['scar', 'skip', 'sync', 'run', 'cli'].sort();
-    assert.equal(act.length, exp.length);
-    act.forEach((_, idx) => assert.equal(act[idx], exp[idx]));
-});
-
-test('test()', () => {
-    lib.test();
+    assert.deepEqual(act, exp);
+    assert.equal(lib.test(), undefined);
 });
 
 test('test.run() no tests', () => {

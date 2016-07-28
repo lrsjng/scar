@@ -2,17 +2,10 @@ const {test, assert} = require('../../lib');
 const {lib} = require('../loader');
 const spy = lib.spy;
 
-test('spy is function', () => {
-    assert.equal(typeof spy, 'function');
-});
-
-test('spy() returns a function', () => {
-    assert.equal(typeof spy(), 'function');
-});
-
-test('spy() has prop calls[] of length 0', () => {
-    assert.ok(Array.isArray(spy().calls));
-    assert.equal(spy().calls.length, 0);
+test('spy()', () => {
+    assert.equal(typeof spy, 'function', 'is function');
+    assert.equal(typeof spy(), 'function', '() -> function');
+    assert.deepEqual(spy().calls, [], '() ->  {calls: []}');
 });
 
 test('spy()() adds call to calls[]', () => {
