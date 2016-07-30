@@ -1,5 +1,5 @@
-const {test, assert} = require('../../lib');
-const {lib} = require('../loader');
+const {test, assert} = require('../../../lib');
+const {lib} = require('../../loader');
 const uniq = lib.uniq;
 
 test('uniq', () => {

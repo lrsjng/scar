@@ -1,5 +1,5 @@
-const {test, assert, insp} = require('../../lib');
-const {lib} = require('../loader');
+const {test, assert, insp} = require('../../../lib');
+const {lib} = require('../../loader');
 
 /* eslint-disable no-unused-vars */
 const fnA = a1 => {};
