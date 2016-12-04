@@ -3,7 +3,7 @@
 [![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![npm][npm-img]][npm]  
 [![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![dependencies status][gemnasium-img]][gemnasium] [![build status][travis-img]][travis]
 
-A test runner for Node.js and the browser. Extensively tested with mocha and
+Test runner for Node.js and the browser. Extensively tested with mocha and
 scar itself.
 
 

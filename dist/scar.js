@@ -1,4 +1,4 @@
-/*! scar v0.17.0 - https://larsjung.de/scar/ */
+/*! scar v0.18.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -147,13 +147,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var _require = __webpack_require__(3);
-
-	var isString = _require.isString;
-	var isNumber = _require.isNumber;
-	var isFn = _require.isFn;
-	var asFn = _require.asFn;
-
+	var _require = __webpack_require__(3),
+	    isString = _require.isString,
+	    isNumber = _require.isNumber,
+	    isFn = _require.isFn,
+	    asFn = _require.asFn;
 
 	var Test = function Test() {
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -330,11 +328,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _require = __webpack_require__(3);
-
-	var asFn = _require.asFn;
-	var runSequential = _require.runSequential;
-	var runConcurrent = _require.runConcurrent;
+	var _require = __webpack_require__(3),
+	    asFn = _require.asFn,
+	    runSequential = _require.runSequential,
+	    runConcurrent = _require.runConcurrent;
 
 	var Test = __webpack_require__(2);
 
@@ -346,7 +343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var Suite = function Suite() {
-	    var tests = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var tests = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	    var options = arguments[1];
 
 	    return Object.assign(Object.create(Suite.prototype), {
@@ -461,11 +458,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Err = __webpack_require__(7);
 
-	var _require = __webpack_require__(8);
-
-	var setTitle = _require.setTitle;
-	var setFavIcon = _require.setFavIcon;
-
+	var _require = __webpack_require__(8),
+	    setTitle = _require.setTitle,
+	    setFavIcon = _require.setFavIcon;
 
 	var Reporter = function Reporter() {
 	    var inst = Object.assign(Object.create(Reporter.prototype), {
@@ -679,8 +674,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    constructor: Err,
 
 	    format: function format() {
-	        var prefix = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
-	        var short = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+	        var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	        var short = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
 	        var str = this.name + ': ' + this.message + '\n';
 	        str += indent(formatFrames(this.filteredFrames, short), '  at ');
@@ -779,7 +774,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return [];
 	    },
 	    parseArgs: function parseArgs() {
-	        var args = arguments.length <= 0 || arguments[0] === undefined ? this.getArgs() : arguments[0];
+	        var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.getArgs();
 
 	        return {
 	            showHelp: args.indexOf('-h') >= 0,
@@ -828,7 +823,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var insp = __webpack_require__(11);
 	var Err = __webpack_require__(7);
@@ -898,7 +893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var raise = function raise(props) {
-	    var drop = arguments.length <= 1 || arguments[1] === undefined ? 3 : arguments[1];
+	    var drop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
 
 	    if (props && !props.expr) {
 	        throw Err(props.msg, props, drop);
@@ -914,37 +909,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	assert.ok = function (act) {
-	    var msg = arguments.length <= 1 || arguments[1] === undefined ? 'expected ' + insp(act) + ' to be truthy' : arguments[1];
+	    var msg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'expected ' + insp(act) + ' to be truthy';
 
 	    raise({ expr: !!act, act: act, msg: msg });
 	};
 
 	assert.notOk = function (act) {
-	    var msg = arguments.length <= 1 || arguments[1] === undefined ? 'expected ' + insp(act) + ' to be falsy' : arguments[1];
+	    var msg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'expected ' + insp(act) + ' to be falsy';
 
 	    raise({ expr: !act, act: act, msg: msg });
 	};
 
 	assert.equal = function (act, exp) {
-	    var msg = arguments.length <= 2 || arguments[2] === undefined ? 'expected ' + insp(act) + ' to equal ' + insp(exp) : arguments[2];
+	    var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'expected ' + insp(act) + ' to equal ' + insp(exp);
 
 	    raise({ expr: act === exp, act: act, exp: exp, msg: msg });
 	};
 
 	assert.notEqual = function (act, ref) {
-	    var msg = arguments.length <= 2 || arguments[2] === undefined ? 'expected ' + insp(act) + ' not to equal ' + insp(ref) : arguments[2];
+	    var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'expected ' + insp(act) + ' not to equal ' + insp(ref);
 
 	    raise({ expr: act !== ref, act: act, ref: ref, msg: msg });
 	};
 
 	assert.deepEqual = function (act, exp) {
-	    var msg = arguments.length <= 2 || arguments[2] === undefined ? 'expected ' + insp(act) + ' to deeply equal ' + insp(exp) : arguments[2];
+	    var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'expected ' + insp(act) + ' to deeply equal ' + insp(exp);
 
 	    raise({ expr: deepEqual(act, exp), act: act, exp: exp, msg: msg });
 	};
 
 	assert.notDeepEqual = function (act, ref) {
-	    var msg = arguments.length <= 2 || arguments[2] === undefined ? 'expected ' + insp(act) + ' not to deeply equal ' + insp(ref) : arguments[2];
+	    var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'expected ' + insp(act) + ' not to deeply equal ' + insp(ref);
 
 	    raise({ expr: !deepEqual(act, ref), act: act, ref: ref, msg: msg });
 	};
@@ -984,13 +979,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _require = __webpack_require__(3);
-
-	var isString = _require.isString;
-	var isFn = _require.isFn;
-	var isArray = _require.isArray;
-	var isPlainObject = _require.isPlainObject;
-
+	var _require = __webpack_require__(3),
+	    isString = _require.isString,
+	    isFn = _require.isFn,
+	    isArray = _require.isArray,
+	    isPlainObject = _require.isPlainObject;
 
 	var insp = function insp(x) {
 	    if (isString(x)) {
@@ -1020,10 +1013,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _require = __webpack_require__(3);
-
-	var asFn = _require.asFn;
-
+	var _require = __webpack_require__(3),
+	    asFn = _require.asFn;
 
 	var spy = function spy(fn) {
 	    var calls = [];
@@ -1077,7 +1068,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return { _uniq_id: id() };
 	};
 	var path = function path() {
-	    var ext = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+	    var ext = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 	    return '_uniq_path/' + id() + ext;
 	};
 
