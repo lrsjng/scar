@@ -6,6 +6,8 @@ const fnA = a1 => {};
 const fnB = (b1, b2) => {};
 function fnC(c1) {}
 const obj = {fnD(d1, d2) {}};
+const circular = {a: 1};
+circular.b = circular;
 /* eslint-enable */
 
 test('insp()', () => {
@@ -32,9 +34,10 @@ test('insp()', () => {
         [{a: 1, b: 'x'}, "{a: 1, b: 'x'}"],
         // [fnA, 'function fnA(a1)'],
         // [fnB, 'function fnB(b1, b2)'],
-        [fnC, 'function fnC(c1)']
+        [fnC, 'function fnC(c1)'],
         // [obj.fnD, 'function fnD(d1, d2)'],
         // [obj, '{fnD: function fnD(d1, d2)}']
+        [circular, '{a: 1, b: [circular]}']
     ].forEach(([arg, exp], idx) => {
         const msg = `[#${idx}] (${insp(arg).substr(0, 20)}) -> ${insp(exp)}`;
         assert.equal(lib.insp(arg), exp, msg);
