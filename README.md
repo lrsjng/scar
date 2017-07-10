@@ -3,14 +3,13 @@
 [![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![npm][npm-img]][npm]  
 [![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![dependencies status][gemnasium-img]][gemnasium] [![build status][travis-img]][travis]
 
-Test runner for Node.js and the browser. Extensively tested with mocha and
-scar itself.
+Test runner for Node.js and the browser.
 
 
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2016 Lars Jung (https://larsjung.de)
+Copyright (c) 2017 Lars Jung (https://larsjung.de)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
