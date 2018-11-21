@@ -482,7 +482,7 @@ describe('Test', () => {
             assert.strictEqual(inst.status, Test.FAILED);
             assert.ok(inst.err);
             assert.ok(inst.err.message);
-            assert.ok(/Timeout/.test(inst.err.message));
+            assert.ok((/Timeout/).test(inst.err.message));
         });
     });
 

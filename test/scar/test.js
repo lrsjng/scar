@@ -479,7 +479,7 @@ test('Test(...).run() timed out', () => {
         assert.equal(inst.status, Test.FAILED);
         assert.ok(inst.err);
         assert.ok(inst.err.message);
-        assert.ok(/Timeout/.test(inst.err.message));
+        assert.ok((/Timeout/).test(inst.err.message));
     });
 });
 
