@@ -1,4 +1,4 @@
-/*! scar v1.1.0 - https://larsjung.de/scar/ */
+/*! scar v1.2.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -74,6 +74,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 	var Test = __webpack_require__(2);
 	var Suite = __webpack_require__(4);
 	var Reporter = __webpack_require__(5);
@@ -96,14 +98,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            args[_key] = arguments[_key];
 	        }
 
-	        this.test.apply(this, args.concat([{ skip: true }]));
+	        this.test.apply(this, _toConsumableArray(args).concat([{ skip: true }]));
 	    },
 	    sync: function sync() {
 	        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	            args[_key2] = arguments[_key2];
 	        }
 
-	        this.test.apply(this, args.concat([{ sync: true }]));
+	        this.test.apply(this, _toConsumableArray(args).concat([{ sync: true }]));
 	    },
 	    run: function run(options) {
 	        options = Object.assign({
@@ -456,6 +458,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 	var Err = __webpack_require__(7);
 
 	var _require = __webpack_require__(8),
@@ -481,7 +485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                args[_key - 1] = arguments[_key];
 	            }
 
-	            return this[type].apply(this, args);
+	            return this[type].apply(this, _toConsumableArray(args));
 	        }
 	        return null;
 	    },

@@ -34,7 +34,7 @@ ghu.task('build:scar', runtime => {
                     loader: 'babel-loader',
                     query: {
                         cacheDirectory: true,
-                        presets: ['es2015']
+                        presets: ['env']
                     }
                 }
             ]
@@ -61,7 +61,7 @@ ghu.task('build:tests', () => {
                     loader: 'babel-loader',
                     query: {
                         cacheDirectory: true,
-                        presets: ['es2015']
+                        presets: ['env']
                     }
                 }
             ]
