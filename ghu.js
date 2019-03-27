@@ -35,7 +35,7 @@ ghu.task('build:scar', runtime => {
                     loader: 'babel-loader',
                     query: {
                         cacheDirectory: true,
-                        presets: ['env']
+                        presets: ['@babel/preset-env']
                     }
                 }
             ]
@@ -63,7 +63,7 @@ ghu.task('build:tests', () => {
                     loader: 'babel-loader',
                     query: {
                         cacheDirectory: true,
-                        presets: ['env']
+                        presets: ['@babel/preset-env']
                     }
                 }
             ]
