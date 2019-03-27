@@ -23,12 +23,13 @@ ghu.task('clean', 'delete build folder', () => {
 
 ghu.task('build:scar', runtime => {
     const webpackConfig = {
+        mode: 'none',
         output: {
             library: 'scar',
             libraryTarget: 'umd'
         },
         module: {
-            loaders: [
+            rules: [
                 {
                     include: [LIB],
                     loader: 'babel-loader',
@@ -54,8 +55,9 @@ ghu.task('build:scar', runtime => {
 
 ghu.task('build:tests', () => {
     const webpackConfig = {
+        mode: 'none',
         module: {
-            loaders: [
+            rules: [
                 {
                     include: [LIB, TEST],
                     loader: 'babel-loader',
