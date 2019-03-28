@@ -1,6 +1,6 @@
 {
   "name": "scar",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Test runner for Node.js and the browser.",
   "homepage": "https://larsjung.de/scar/",
   "bugs": "https://github.com/lrsjng/scar/issues",

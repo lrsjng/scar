@@ -1,14 +1,14 @@
-/*! scar v1.3.0 - https://larsjung.de/scar/ */
+/*! scar v1.4.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define([], factory);
+		define("scar", [], factory);
 	else if(typeof exports === 'object')
 		exports["scar"] = factory();
 	else
 		root["scar"] = factory();
-})(window, function() {
+})((typeof self !== 'undefined' ? self : this), function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};

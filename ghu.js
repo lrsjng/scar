@@ -26,7 +26,9 @@ ghu.task('build:scar', runtime => {
         mode: 'none',
         output: {
             library: 'scar',
-            libraryTarget: 'umd'
+            libraryTarget: 'umd',
+            umdNamedDefine: true,
+            globalObject: '(typeof self !== \'undefined\' ? self : this)'
         },
         module: {
             rules: [
