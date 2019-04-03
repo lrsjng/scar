@@ -22,30 +22,8 @@ ghu.task('clean', 'delete build folder', () => {
 });
 
 ghu.task('build:scar', runtime => {
-    const webpackConfig = {
-        mode: 'none',
-        output: {
-            library: 'scar',
-            libraryTarget: 'umd',
-            umdNamedDefine: true,
-            globalObject: '(typeof self !== \'undefined\' ? self : this)'
-        },
-        module: {
-            rules: [
-                {
-                    include: [LIB],
-                    loader: 'babel-loader',
-                    query: {
-                        cacheDirectory: true,
-                        presets: ['@babel/preset-env']
-                    }
-                }
-            ]
-        }
-    };
-
     return read(`${LIB}/index.js`)
-        .then(webpack(webpackConfig, {showStats: false}))
+        .then(webpack(webpack.cfg_umd('scar', [LIB]), {showStats: false}))
         .then(wrap(runtime.commentJs))
         .then(write(`${BUILD}/scar-${runtime.pkg.version}.js`, {overwrite: true}))
         .then(write(`${DIST}/scar.js`, {overwrite: true}))
@@ -56,25 +34,9 @@ ghu.task('build:scar', runtime => {
 });
 
 ghu.task('build:tests', () => {
-    const webpackConfig = {
-        mode: 'none',
-        module: {
-            rules: [
-                {
-                    include: [LIB, TEST],
-                    loader: 'babel-loader',
-                    query: {
-                        cacheDirectory: true,
-                        presets: ['@babel/preset-env']
-                    }
-                }
-            ]
-        }
-    };
-
     return Promise.all([
         read(`${TEST}: index*.js`)
-            .then(webpack(webpackConfig, {showStats: false}))
+            .then(webpack(webpack.cfg([LIB, TEST]), {showStats: false}))
             .then(write(mapfn.p(TEST, `${BUILD}/test`), {overwrite: true})),
 
         read(`${TEST}: *.html, *.css`)

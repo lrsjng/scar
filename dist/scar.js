@@ -1,4 +1,4 @@
-/*! scar v1.4.0 - https://larsjung.de/scar/ */
+/*! scar v1.5.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -103,7 +103,7 @@ var Scar = __webpack_require__(1);
 
 module.exports = {
   Scar: Scar,
-  test: Scar().static(),
+  test: Scar()["static"](),
   assert: __webpack_require__(11),
   insp: __webpack_require__(12),
   spy: __webpack_require__(13),
@@ -172,7 +172,7 @@ Scar.prototype = {
 
     return Cli().run(this, options);
   },
-  static: function _static() {
+  "static": function _static() {
     return Object.assign(this.test.bind(this), {
       scar: this,
       skip: this.skip.bind(this),
@@ -309,7 +309,7 @@ Test.prototype = {
       return null;
     }).then(function () {
       _this2.status = _this2.skip ? Test.SKIPPED : Test.PASSED;
-    }).catch(function (err) {
+    })["catch"](function (err) {
       _this2.status = Test.FAILED;
       _this2.err = err;
     }).then(function () {
@@ -373,7 +373,7 @@ var runConcurrent = function runConcurrent(fns, max) {
     var next = 0;
 
     var runFn = function runFn(fn) {
-      return Promise.resolve().then(fn).catch(function () {
+      return Promise.resolve().then(fn)["catch"](function () {
         return null;
       }).then(function () {
         pending -= 1;
@@ -651,10 +651,8 @@ var LINE_PATTERNS = [{
 var RE_MARKER = /__TRACE_MARKER__$|^process\._tickCallback$/;
 
 var parseStackLine = function parseStackLine(line) {
-  var _arr = LINE_PATTERNS;
-
-  for (var _i = 0; _i < _arr.length; _i++) {
-    var pattern = _arr[_i];
+  for (var _i = 0, _LINE_PATTERNS = LINE_PATTERNS; _i < _LINE_PATTERNS.length; _i++) {
+    var pattern = _LINE_PATTERNS[_i];
     var match = pattern.re.exec(line);
 
     if (match) {
@@ -689,16 +687,16 @@ var filterFrames = function filterFrames(frames, drop) {
   });
 };
 
-var formatFrame = function formatFrame(frame, short) {
-  var loc = [short ? frame.basename : frame.url, frame.line, frame.column].filter(function (x) {
+var formatFrame = function formatFrame(frame, _short) {
+  var loc = [_short ? frame.basename : frame.url, frame.line, frame.column].filter(function (x) {
     return x;
   }).join(':');
   return frame.method ? "".concat(frame.method, " - ").concat(loc) : loc;
 };
 
-var formatFrames = function formatFrames(frames, short) {
+var formatFrames = function formatFrames(frames, _short2) {
   return frames.map(function (frame) {
-    return formatFrame(frame, short);
+    return formatFrame(frame, _short2);
   }).join('\n');
 };
 
@@ -734,10 +732,8 @@ var Err = function Err() {
         error: arg
       };
 
-      var _arr2 = ['name', 'message', 'stack', 'drop'].concat(_toConsumableArray(Object.keys(arg)));
-
-      for (var _i2 = 0; _i2 < _arr2.length; _i2++) {
-        var prop = _arr2[_i2];
+      for (var _i2 = 0, _arr = ['name', 'message', 'stack', 'drop'].concat(_toConsumableArray(Object.keys(arg))); _i2 < _arr.length; _i2++) {
+        var prop = _arr[_i2];
 
         if (arg[prop] !== undefined) {
           obj[prop] = arg[prop];
@@ -758,9 +754,11 @@ Err.prototype = Object.assign(Object.create(Error.prototype), {
   constructor: Err,
   format: function format() {
     var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-    var short = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+    var _short3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
     var str = "".concat(this.name, ": ").concat(this.message, "\n");
-    str += indent(formatFrames(this.filteredFrames, short), '  at ');
+    str += indent(formatFrames(this.filteredFrames, _short3), '  at ');
     return indent(str, prefix);
   },
   toString: function toString() {
@@ -876,7 +874,7 @@ Cli.prototype = {
           if (global.process && suite.failedCount) {
             global.process.exit(1);
           }
-        }).catch(function (err) {
+        })["catch"](function (err) {
           _this.log("\n".concat(Err(err).format('  '), "\n"));
 
           if (global.process) {
@@ -1061,7 +1059,7 @@ assert.notDeepEqual = function (act, ref) {
   });
 };
 
-assert.throws = function (fn, exp, msg) {
+assert["throws"] = function (fn, exp, msg) {
   raise({
     expr: typeof fn === 'function',
     msg: 'assert.throws(): first arg must be a function'
