@@ -1,11 +1,11 @@
-const promisedTimeout = (timeout, fail) => {
+const promised_timeout = (timeout, fail) => {
     return new Promise((resolve, reject) => {
-        setTimeout(() => fail ? reject(fail) : resolve('promisedTimeout.resolve'), timeout);
+        setTimeout(() => fail ? reject(fail) : resolve('promised_timeout.resolve'), timeout);
     });
 };
 
 module.exports = {
-    promisedTimeout,
+    promised_timeout,
     lib: require('../lib'),
     Err: require('../lib/err'),
     Reporter: require('../lib/reporter'),

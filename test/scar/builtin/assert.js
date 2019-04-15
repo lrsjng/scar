@@ -95,7 +95,7 @@ test('assert.fail()', () => {
     assert.equal(typeof lib.assert.fail, 'function', 'is function');
     assert.throws(() => {lib.assert.fail(MESSAGE);}, MESSAGE_RE, '(msg) expected to throw');
 
-    FIXTURES.forEach(([arg, truthy], idx) => {
+    FIXTURES.forEach(([arg, truthy], idx) => { // eslint-disable-line no-unused-vars
         const msg = `FIX[${idx}]: (${insp(arg)}) expected to throw`;
         assert.throws(() => {lib.assert.fail(arg);}, undefined, msg);
     });

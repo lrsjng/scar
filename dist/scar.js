@@ -1,4 +1,4 @@
-/*! scar v1.5.0 - https://larsjung.de/scar/ */
+/*! scar v1.6.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -224,10 +224,10 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 var _require = __webpack_require__(4),
-    isString = _require.isString,
-    isNumber = _require.isNumber,
-    isFn = _require.isFn,
-    asFn = _require.asFn;
+    is_str = _require.is_str,
+    is_num = _require.is_num,
+    is_fn = _require.is_fn,
+    as_fn = _require.as_fn;
 
 var Test = function Test() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -241,13 +241,13 @@ var Test = function Test() {
     sync: false,
     timeout: null
   }].concat(_toConsumableArray(args.map(function (arg) {
-    if (isString(arg)) {
+    if (is_str(arg)) {
       return {
         desc: arg
       };
     }
 
-    if (isFn(arg)) {
+    if (is_fn(arg)) {
       return {
         fn: arg
       };
@@ -269,7 +269,7 @@ Test.PASSED = 'PASSED';
 Test.FAILED = 'FAILED';
 Test.SKIPPED = 'SKIPPED';
 
-var promisedTimeout = function promisedTimeout(millis) {
+var promised_timeout = function promised_timeout(millis) {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       return reject(new Error("Timeout (".concat(millis, "ms)")));
@@ -280,17 +280,17 @@ var promisedTimeout = function promisedTimeout(millis) {
 Test.prototype = {
   constructor: Test,
   __TRACE_MARKER__: function __TRACE_MARKER__() {
-    return asFn(this.fn)();
+    return as_fn(this.fn)();
   },
-  runFn: function runFn() {
+  run_fn: function run_fn() {
     var _this = this;
 
     var promise = Promise.resolve().then(function () {
       return _this.__TRACE_MARKER__();
     });
 
-    if (isNumber(this.timeout) && this.timeout > 0) {
-      return Promise.race([promise, promisedTimeout(this.timeout)]);
+    if (is_num(this.timeout) && this.timeout > 0) {
+      return Promise.race([promise, promised_timeout(this.timeout)]);
     }
 
     return promise;
@@ -303,7 +303,7 @@ Test.prototype = {
       _this2.status = Test.PENDING;
 
       if (!_this2.skip) {
-        return _this2.runFn();
+        return _this2.run_fn();
       }
 
       return null;
@@ -324,46 +324,46 @@ module.exports = Test;
 /* 4 */
 /***/ (function(module, exports) {
 
-var isBoolean = function isBoolean(x) {
+var is_bool = function is_bool(x) {
   return typeof x === 'boolean';
 };
 
-var isNumber = function isNumber(x) {
+var is_num = function is_num(x) {
   return typeof x === 'number';
 };
 
-var isString = function isString(x) {
+var is_str = function is_str(x) {
   return typeof x === 'string';
 };
 
-var isArray = function isArray(x) {
+var is_arr = function is_arr(x) {
   return Array.isArray(x);
 };
 
-var isFn = function isFn(x) {
+var is_fn = function is_fn(x) {
   return typeof x === 'function';
 };
 
-var asFn = function asFn(x) {
-  return isFn(x) ? x : function () {
+var as_fn = function as_fn(x) {
+  return is_fn(x) ? x : function () {
     return x;
   };
 };
 
-var isPlainObject = function isPlainObject(x) {
+var is_plain_obj = function is_plain_obj(x) {
   return Object.prototype.toString.call(x) === '[object Object]';
 }; // eslint-disable-line prefer-reflect
 
 
-var runSequential = function runSequential(fns) {
+var run_seq = function run_seq(fns) {
   return fns.reduce(function (p, fn) {
     return p.then(fn);
   }, Promise.resolve());
 };
 
-var runConcurrent = function runConcurrent(fns, max) {
-  if (!isNumber(max) || max < 2) {
-    return runSequential(fns);
+var run_conc = function run_conc(fns, max) {
+  if (!is_num(max) || max < 2) {
+    return run_seq(fns);
   }
 
   return new Promise(function (resolve) {
@@ -372,7 +372,7 @@ var runConcurrent = function runConcurrent(fns, max) {
     var pending = 0;
     var next = 0;
 
-    var runFn = function runFn(fn) {
+    var run_fn = function run_fn(fn) {
       return Promise.resolve().then(fn)["catch"](function () {
         return null;
       }).then(function () {
@@ -386,7 +386,7 @@ var runConcurrent = function runConcurrent(fns, max) {
         var fn = fns[next];
         next += 1;
         pending += 1;
-        runFn(fn).then(check);
+        run_fn(fn).then(check);
       }
 
       if (settled === total) {
@@ -399,15 +399,15 @@ var runConcurrent = function runConcurrent(fns, max) {
 };
 
 module.exports = {
-  isBoolean: isBoolean,
-  isNumber: isNumber,
-  isString: isString,
-  isArray: isArray,
-  isFn: isFn,
-  isPlainObject: isPlainObject,
-  asFn: asFn,
-  runSequential: runSequential,
-  runConcurrent: runConcurrent
+  is_bool: is_bool,
+  is_num: is_num,
+  is_str: is_str,
+  is_arr: is_arr,
+  is_fn: is_fn,
+  is_plain_obj: is_plain_obj,
+  as_fn: as_fn,
+  run_seq: run_seq,
+  run_conc: run_conc
 };
 
 /***/ }),
@@ -415,17 +415,17 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var _require = __webpack_require__(4),
-    asFn = _require.asFn,
-    runSequential = _require.runSequential,
-    runConcurrent = _require.runConcurrent;
+    as_fn = _require.as_fn,
+    run_seq = _require.run_seq,
+    run_conc = _require.run_conc;
 
 var Test = __webpack_require__(3);
 
-var isSync = function isSync(test) {
+var is_sync = function is_sync(test) {
   return !!test.sync;
 };
 
-var isAsync = function isAsync(test) {
+var is_async = function is_async(test) {
   return !test.sync;
 };
 
@@ -436,7 +436,7 @@ var Suite = function Suite() {
     sync: false,
     reporter: null,
     filter: null,
-    maxConcurrent: 100
+    max_conc: 100
   }, options, {
     tests: tests,
     status: Test.WAITING,
@@ -448,11 +448,11 @@ var Suite = function Suite() {
 
 Suite.prototype = {
   constructor: Suite,
-  runTest: function runTest(test) {
+  run_test: function run_test(test) {
     var _this = this;
 
     return Promise.resolve().then(function () {
-      return asFn(_this.reporter)('beforeTest', _this, test);
+      return as_fn(_this.reporter)('beforeTest', _this, test);
     }).then(function () {
       _this.runCount += 1;
       test.runIdx = _this.runCount;
@@ -473,7 +473,7 @@ Suite.prototype = {
         test.failedIdx = _this.failedCount;
       }
     }).then(function () {
-      return asFn(_this.reporter)('afterTest', _this, test);
+      return as_fn(_this.reporter)('after_test', _this, test);
     });
   },
   run: function run() {
@@ -485,7 +485,7 @@ Suite.prototype = {
       });
 
       _this2.total = _this2.tests.length;
-      _this2.filteredTests = _this2.tests.filter(asFn(_this2.filter || true));
+      _this2.filteredTests = _this2.tests.filter(as_fn(_this2.filter || true));
       _this2.filteredTotal = _this2.filteredTests.length;
       _this2.runCount = 0;
       _this2.settledCount = 0;
@@ -493,30 +493,30 @@ Suite.prototype = {
       _this2.failedCount = 0;
       _this2.skippedCount = 0;
     }).then(function () {
-      return asFn(_this2.reporter)('beforeAll', _this2);
+      return as_fn(_this2.reporter)('before_all', _this2);
     }).then(function () {
       _this2.starttime = Date.now();
       _this2.status = Test.PENDING;
 
       var testToFn = function testToFn(test) {
         return function () {
-          return _this2.runTest(test);
+          return _this2.run_test(test);
         };
       };
 
       var tests = _this2.filteredTests;
-      var syncTests = _this2.sync ? tests : tests.filter(isSync);
-      var asyncTests = _this2.sync ? [] : tests.filter(isAsync);
+      var syncTests = _this2.sync ? tests : tests.filter(is_sync);
+      var asyncTests = _this2.sync ? [] : tests.filter(is_async);
       var syncFns = syncTests.map(testToFn);
       var asyncFns = asyncTests.map(testToFn);
-      return runSequential(syncFns).then(function () {
-        return runConcurrent(asyncFns, _this2.maxConcurrent);
+      return run_seq(syncFns).then(function () {
+        return run_conc(asyncFns, _this2.max_conc);
       });
     }).then(function () {
       _this2.status = _this2.failedCount ? Test.FAILED : Test.PASSED;
       _this2.duration = Date.now() - _this2.starttime;
     }).then(function () {
-      return asFn(_this2.reporter)('afterAll', _this2);
+      return as_fn(_this2.reporter)('after_all', _this2);
     }).then(function () {
       return _this2;
     });
@@ -538,8 +538,8 @@ module.exports = __webpack_require__(7);
 var Err = __webpack_require__(8);
 
 var _require = __webpack_require__(9),
-    setTitle = _require.setTitle,
-    setFavIcon = _require.setFavIcon;
+    set_title = _require.set_title,
+    set_fav_icon = _require.set_fav_icon;
 
 var Reporter = function Reporter() {
   var inst = Object.assign(Object.create(Reporter.prototype), {
@@ -554,7 +554,7 @@ var Reporter = function Reporter() {
 Reporter.prototype = {
   constructor: Reporter,
   handle: function handle(type) {
-    if (['beforeAll', 'afterTest', 'afterAll'].indexOf(type) >= 0) {
+    if (['before_all', 'after_test', 'after_all'].indexOf(type) >= 0) {
       for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
         args[_key - 1] = arguments[_key];
       }
@@ -564,7 +564,7 @@ Reporter.prototype = {
 
     return null;
   },
-  beforeAll: function beforeAll(suite) {
+  before_all: function before_all(suite) {
     var str = 'running ';
 
     if (suite.filteredTotal !== suite.total) {
@@ -573,8 +573,8 @@ Reporter.prototype = {
 
     str += "".concat(suite.total, " tests\n ");
     this.log(str);
-    setTitle("running ".concat(suite.filteredTotal, " tests..."));
-    setFavIcon('GREY'); // take time to update icon
+    set_title("running ".concat(suite.filteredTotal, " tests..."));
+    set_fav_icon('GREY'); // take time to update icon
 
     return new Promise(function (resolve) {
       return setTimeout(function () {
@@ -582,11 +582,11 @@ Reporter.prototype = {
       }, 100);
     });
   },
-  afterTest: function afterTest(suite, test) {
+  after_test: function after_test(suite, test) {
     var status = test.status === 'PASSED' ? ' ok ' : test.status === 'SKIPPED' ? 'skip' : 'FAIL';
     this.log(" ".concat(status, " ").concat(test.desc));
   },
-  afterAll: function afterAll(suite) {
+  after_all: function after_all(suite) {
     var _this = this;
 
     suite.tests.filter(function (test) {
@@ -608,8 +608,8 @@ Reporter.prototype = {
 
     resume += "".concat(suite.passedCount, " passed (").concat(suite.duration, "ms)");
     this.log(resume);
-    setTitle(resume);
-    setFavIcon(suite.failedCount ? 'RED' : 'GREEN');
+    set_title(resume);
+    set_fav_icon(suite.failedCount ? 'RED' : 'GREEN');
   }
 };
 module.exports = Reporter;
@@ -650,7 +650,7 @@ var LINE_PATTERNS = [{
 }];
 var RE_MARKER = /__TRACE_MARKER__$|^process\._tickCallback$/;
 
-var parseStackLine = function parseStackLine(line) {
+var parse_stack_line = function parse_stack_line(line) {
   for (var _i = 0, _LINE_PATTERNS = LINE_PATTERNS; _i < _LINE_PATTERNS.length; _i++) {
     var pattern = _LINE_PATTERNS[_i];
     var match = pattern.re.exec(line);
@@ -669,16 +669,16 @@ var parseStackLine = function parseStackLine(line) {
   return null;
 };
 
-var parseStack = function parseStack(sequence) {
+var parse_stack = function parse_stack(sequence) {
   var lines = sequence.split('\n');
   return lines.map(function (line) {
-    return parseStackLine(line);
+    return parse_stack_line(line);
   }).filter(function (x) {
     return x;
   });
 };
 
-var filterFrames = function filterFrames(frames, drop) {
+var filter_frames = function filter_frames(frames, drop) {
   frames = frames.slice(Number(drop) || 0);
   var dropFrame = false;
   return frames.filter(function (frame) {
@@ -687,16 +687,16 @@ var filterFrames = function filterFrames(frames, drop) {
   });
 };
 
-var formatFrame = function formatFrame(frame, _short) {
+var format_frame = function format_frame(frame, _short) {
   var loc = [_short ? frame.basename : frame.url, frame.line, frame.column].filter(function (x) {
     return x;
   }).join(':');
   return frame.method ? "".concat(frame.method, " - ").concat(loc) : loc;
 };
 
-var formatFrames = function formatFrames(frames, _short2) {
+var format_frames = function format_frames(frames, _short2) {
   return frames.map(function (frame) {
-    return formatFrame(frame, _short2);
+    return format_frame(frame, _short2);
   }).join('\n');
 };
 
@@ -745,8 +745,8 @@ var Err = function Err() {
 
     return null;
   }))));
-  inst.frames = parseStack(inst.stack);
-  inst.filteredFrames = filterFrames(inst.frames, inst.drop);
+  inst.frames = parse_stack(inst.stack);
+  inst.filteredFrames = filter_frames(inst.frames, inst.drop);
   return inst;
 };
 
@@ -758,7 +758,7 @@ Err.prototype = Object.assign(Object.create(Error.prototype), {
     var _short3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
     var str = "".concat(this.name, ": ").concat(this.message, "\n");
-    str += indent(formatFrames(this.filteredFrames, _short3), '  at ');
+    str += indent(format_frames(this.filteredFrames, _short3), '  at ');
     return indent(str, prefix);
   },
   toString: function toString() {
@@ -776,34 +776,34 @@ module.exports = Err;
 };
 
 var doc = global.window && global.window.document;
-var setTitle = !doc ? noop : function (title) {
+var set_title = !doc ? noop : function (title) {
   doc.title = title;
 };
-var setFavIcon = !doc ? noop : function () {
+var set_fav_icon = !doc ? noop : function () {
+  var ICON_TPL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
+  var PRESETS = {
+    RED: ICON_TPL.replace('*', 'Y0VbWlewAAAB1JREFUOMtj/OJs9p+BAsDEQCEYNWDUgFEDBosBABZOAow9yV0y'),
+    GREEN: ICON_TPL.replace('*', 'kM+i8BKgAAAB1JREFUOMtj9Fkf8J+BAsDEQCEYNWDUgFEDBosBAIuhAmqCXURi'),
+    GREY: ICON_TPL.replace('*', 'kjUf48cwAAAB1JREFUOMtjDA0N/c9AAWBioBCMGjBqwKgBg8UAAFduAh79mcom')
+  };
   var head = doc.querySelector('head');
   var rel = 'shortcut icon';
-  var iconTpl = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
-  var presets = {
-    RED: iconTpl.replace('*', 'Y0VbWlewAAAB1JREFUOMtj/OJs9p+BAsDEQCEYNWDUgFEDBosBABZOAow9yV0y'),
-    GREEN: iconTpl.replace('*', 'kM+i8BKgAAAB1JREFUOMtj9Fkf8J+BAsDEQCEYNWDUgFEDBosBAIuhAmqCXURi'),
-    GREY: iconTpl.replace('*', 'kjUf48cwAAAB1JREFUOMtjDA0N/c9AAWBioBCMGjBqwKgBg8UAAFduAh79mcom')
-  };
   return function (href) {
-    var iconEl = doc.querySelector("link[rel=\"".concat(rel, "\"]"));
+    var old_el = doc.querySelector("link[rel=\"".concat(rel, "\"]"));
 
-    if (iconEl) {
-      head.removeChild(iconEl);
+    if (old_el) {
+      head.removeChild(old_el);
     }
 
-    var link = doc.createElement('link');
-    link.rel = rel;
-    link.href = presets.hasOwnProperty(href) ? presets[href] : href;
-    head.appendChild(link);
+    var el = doc.createElement('link');
+    el.rel = rel;
+    el.href = PRESETS.hasOwnProperty(href) ? PRESETS[href] : href;
+    head.appendChild(el);
   };
 }();
 module.exports = {
-  setTitle: setTitle,
-  setFavIcon: setFavIcon
+  set_title: set_title,
+  set_fav_icon: set_fav_icon
 };
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
@@ -815,7 +815,7 @@ module.exports = {
 
 var HELP = "\n  scar - a test runner for node and the browser\n\n  Usage:\n    node tests.js [opt...] [arg...]\n    tests.html?opt&...&arg&...\n\n  Options:\n    -h: show this help message\n    -s: show test stats\n\n  Arguments:\n    all arguments are used as test filters\n\n";
 
-var createFilterFn = function createFilterFn(filters) {
+var create_filter_fn = function create_filter_fn(filters) {
   if (!filters || !filters.length) {
     return null;
   }
@@ -835,7 +835,7 @@ var Cli = function Cli() {
 
 Cli.prototype = {
   constructor: Cli,
-  getArgs: function getArgs() {
+  get_args: function get_args() {
     if (global.process) {
       return global.process.argv.slice(2);
     }
@@ -846,8 +846,8 @@ Cli.prototype = {
 
     return [];
   },
-  parseArgs: function parseArgs() {
-    var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.getArgs();
+  parse_args: function parse_args() {
+    var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get_args();
     return {
       showHelp: args.indexOf('-h') >= 0,
       showStats: args.indexOf('-s') >= 0,
@@ -860,7 +860,7 @@ Cli.prototype = {
     var _this = this;
 
     return Promise.resolve().then(function () {
-      var cliopts = _this.parseArgs();
+      var cliopts = _this.parse_args();
 
       if (cliopts.showHelp) {
         _this.log(HELP);
@@ -868,7 +868,7 @@ Cli.prototype = {
         _this.log("\n  ".concat(scar.tests.length, " tests defined\n \n"));
       } else {
         options = Object.assign({}, options, {
-          filter: createFilterFn(cliopts.filters)
+          filter: create_filter_fn(cliopts.filters)
         });
         return scar.run(options).then(function (suite) {
           if (global.process && suite.failedCount) {
@@ -900,11 +900,12 @@ var insp = __webpack_require__(12);
 
 var Err = __webpack_require__(8);
 
-var getType = function getType(x) {
-  return Object.prototype.toString.call(x); // eslint-disable-line prefer-reflect
-};
+var get_type = function get_type(x) {
+  return Object.prototype.toString.call(x);
+}; // eslint-disable-line prefer-reflect
 
-var deepEqual = function deepEqual(a, b) {
+
+var deep_equal = function deep_equal(a, b) {
   if (a === b || Number.isNaN(a) && Number.isNaN(b)) {
     return true;
   }
@@ -915,29 +916,29 @@ var deepEqual = function deepEqual(a, b) {
     return a === b;
   }
 
-  type = getType(a);
+  type = get_type(a);
 
-  if (type !== getType(b)) {
+  if (type !== get_type(b)) {
     return false;
   }
 
   if (type === '[object Array]') {
     return a.length === b.length && a.every(function (_, idx) {
-      return deepEqual(a[idx], b[idx]);
+      return deep_equal(a[idx], b[idx]);
     });
   }
 
   if (type === '[object Object]') {
     var keys = Object.keys(a);
-    return deepEqual(keys.sort(), Object.keys(b).sort()) && keys.every(function (key) {
-      return deepEqual(a[key], b[key]);
+    return deep_equal(keys.sort(), Object.keys(b).sort()) && keys.every(function (key) {
+      return deep_equal(a[key], b[key]);
     });
   }
 
   return false;
 };
 
-var checkError = function checkError(isError, act, exp, msg) {
+var check_err = function check_err(isError, act, exp, msg) {
   if (!isError) {
     return {
       act: act,
@@ -1042,7 +1043,7 @@ assert.notEqual = function (act, ref) {
 assert.deepEqual = function (act, exp) {
   var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " to deeply equal ").concat(insp(exp));
   raise({
-    expr: deepEqual(act, exp),
+    expr: deep_equal(act, exp),
     act: act,
     exp: exp,
     msg: msg
@@ -1052,7 +1053,7 @@ assert.deepEqual = function (act, exp) {
 assert.notDeepEqual = function (act, ref) {
   var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " not to deeply equal ").concat(insp(ref));
   raise({
-    expr: !deepEqual(act, ref),
+    expr: !deep_equal(act, ref),
     act: act,
     ref: ref,
     msg: msg
@@ -1070,11 +1071,11 @@ assert["throws"] = function (fn, exp, msg) {
   try {
     val = fn();
   } catch (err) {
-    raise(checkError(true, err, exp, msg));
+    raise(check_err(true, err, exp, msg));
   }
 
   if (val !== none) {
-    raise(checkError(false, val, exp, msg));
+    raise(check_err(false, val, exp, msg));
   }
 };
 
@@ -1084,9 +1085,9 @@ assert.rejects = function (promise, exp, msg) {
     msg: 'assert.rejects(): first arg must be a thenable'
   });
   return Promise.resolve(promise).then(function (val) {
-    return raise(checkError(false, val, exp, msg), 2);
+    return raise(check_err(false, val, exp, msg), 2);
   }, function (err) {
-    return raise(checkError(true, err, exp, msg), 2);
+    return raise(check_err(true, err, exp, msg), 2);
   });
 };
 
@@ -1097,10 +1098,10 @@ module.exports = assert;
 /***/ (function(module, exports, __webpack_require__) {
 
 var _require = __webpack_require__(4),
-    isString = _require.isString,
-    isFn = _require.isFn,
-    isArray = _require.isArray,
-    isPlainObject = _require.isPlainObject;
+    is_str = _require.is_str,
+    is_fn = _require.is_fn,
+    is_arr = _require.is_arr,
+    is_plain_obj = _require.is_plain_obj;
 
 var insp = function insp(x) {
   var visited = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
@@ -1111,21 +1112,21 @@ var insp = function insp(x) {
 
   visited.push(x);
 
-  if (isString(x)) {
+  if (is_str(x)) {
     return "'".concat(x, "'");
   }
 
-  if (isFn(x)) {
+  if (is_fn(x)) {
     return String(x).split(')')[0] + ')';
   }
 
-  if (isArray(x)) {
+  if (is_arr(x)) {
     return '[' + Array.from(x, function (el) {
       return insp(el, visited);
     }).join(', ') + ']';
   }
 
-  if (isPlainObject(x)) {
+  if (is_plain_obj(x)) {
     return '{' + Object.keys(x).map(function (key) {
       return "".concat(key, ": ").concat(insp(x[key], visited));
     }).join(', ') + '}';
@@ -1141,7 +1142,7 @@ module.exports = insp;
 /***/ (function(module, exports, __webpack_require__) {
 
 var _require = __webpack_require__(4),
-    asFn = _require.asFn;
+    as_fn = _require.as_fn;
 
 var spy = function spy(fn) {
   var calls = [];
@@ -1157,7 +1158,7 @@ var spy = function spy(fn) {
       args: Array.from(arguments)
     };
     calls.push(call);
-    call.ret = asFn(fn)(call, calls);
+    call.ret = as_fn(fn)(call, calls);
     call.done = Date.now();
     return call.ret;
   }

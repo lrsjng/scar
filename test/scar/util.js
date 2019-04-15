@@ -40,71 +40,71 @@ test('util', () => {
     assert.equal(typeof util, 'object', 'is object');
 });
 
-test('util.isBoolean()', () => {
-    assert.equal(typeof util.isBoolean, 'function', 'is function');
+test('util.is_bool()', () => {
+    assert.equal(typeof util.is_bool, 'function', 'is function');
 
     FIXTURES.forEach((x, idx) => {
         const arg = x[0];
         const exp = x[1] === 1;
         const msg = `FIX[${idx}]: expected (${insp(arg).substr(0, 20)}) -> ${insp(exp)}`;
-        assert.equal(util.isBoolean(arg), exp, msg);
+        assert.equal(util.is_bool(arg), exp, msg);
     });
 });
 
-test('util.isString()', () => {
-    assert.equal(typeof util.isString, 'function', 'is function');
+test('util.is_str()', () => {
+    assert.equal(typeof util.is_str, 'function', 'is function');
 
     FIXTURES.forEach((x, idx) => {
         const arg = x[0];
         const exp = x[2] === 1;
         const msg = `FIX[${idx}]: expected (${insp(arg).substr(0, 20)}) -> ${insp(exp)}`;
-        assert.equal(util.isString(arg), exp, msg);
+        assert.equal(util.is_str(arg), exp, msg);
     });
 });
 
-test('util.isArray()', () => {
-    assert.equal(typeof util.isArray, 'function', 'is function');
+test('util.is_arr()', () => {
+    assert.equal(typeof util.is_arr, 'function', 'is function');
 
     FIXTURES.forEach((x, idx) => {
         const arg = x[0];
         const exp = x[3] === 1;
         const msg = `FIX[${idx}]: expected (${insp(arg).substr(0, 20)}) -> ${insp(exp)}`;
-        assert.equal(util.isArray(arg), exp, msg);
+        assert.equal(util.is_arr(arg), exp, msg);
     });
 });
 
-test('util.isFn()', () => {
-    assert.equal(typeof util.isFn, 'function', 'is function');
+test('util.is_fn()', () => {
+    assert.equal(typeof util.is_fn, 'function', 'is function');
 
     FIXTURES.forEach((x, idx) => {
         const arg = x[0];
         const exp = x[4] === 1;
         const msg = `FIX[${idx}]: expected (${insp(arg).substr(0, 20)}) -> ${insp(exp)}`;
-        assert.equal(util.isFn(arg), exp, msg);
+        assert.equal(util.is_fn(arg), exp, msg);
     });
 });
 
-test('util.isPlainObject()', () => {
-    assert.equal(typeof util.isPlainObject, 'function', 'is function');
+test('util.is_plain_obj()', () => {
+    assert.equal(typeof util.is_plain_obj, 'function', 'is function');
 
     FIXTURES.forEach((x, idx) => {
         const arg = x[0];
         const exp = x[5] === 1;
         const msg = `FIX[${idx}]: expected (${insp(arg).substr(0, 20)}) -> ${insp(exp)}`;
-        assert.equal(util.isPlainObject(arg), exp, msg);
+        assert.equal(util.is_plain_obj(arg), exp, msg);
     });
 });
 
-test('util.asFn()', () => {
-    assert.equal(typeof util.asFn, 'function', 'is function');
+test('util.as_fn()', () => {
+    assert.equal(typeof util.as_fn, 'function', 'is function');
 
     FIXTURES.forEach(([arg,], idx) => { // eslint-disable-line comma-dangle,comma-spacing
         if (typeof arg === 'function') {
             const msg = `FIX[${idx}]: expected (${insp(arg)}) -> ${insp(arg)}`;
-            assert.equal(util.asFn(arg), arg, msg);
+            assert.equal(util.as_fn(arg), arg, msg);
         } else {
             const msg = `FIX[${idx}]: expected (${insp(arg)}) -> () => ${insp(arg)}`;
-            const res = util.asFn(arg);
+            const res = util.as_fn(arg);
             assert.equal(typeof res, 'function', msg);
             if (Number.isNaN(arg)) {
                 assert.equal(Number.isNaN(res()), true, msg);

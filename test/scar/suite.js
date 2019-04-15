@@ -12,7 +12,7 @@ test('Suite()', () => {
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
-    assert.equal(inst.maxConcurrent, 100);
+    assert.equal(inst.max_conc, 100);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -29,7 +29,7 @@ test('Suite([], {})', () => {
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
-    assert.equal(inst.maxConcurrent, 100);
+    assert.equal(inst.max_conc, 100);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -46,7 +46,7 @@ test('Suite([], {sync})', () => {
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, true);
     assert.equal(inst.filter, null);
-    assert.equal(inst.maxConcurrent, 100);
+    assert.equal(inst.max_conc, 100);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -64,7 +64,7 @@ test('Suite([], {...})', () => {
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
-    assert.equal(inst.maxConcurrent, 100);
+    assert.equal(inst.max_conc, 100);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -82,7 +82,7 @@ test('Suite().run()', () => {
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
-    assert.equal(inst.maxConcurrent, 100);
+    assert.equal(inst.max_conc, 100);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 0);
     assert.equal(inst.reporter, null);
@@ -112,7 +112,7 @@ test('Suite([test]).run()', () => {
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
-    assert.equal(inst.maxConcurrent, 100);
+    assert.equal(inst.max_conc, 100);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 1);
     assert.equal(inst.reporter, null);
@@ -148,7 +148,7 @@ test('Suite([...]).run()', () => {
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
-    assert.equal(inst.maxConcurrent, 100);
+    assert.equal(inst.max_conc, 100);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 3);
     assert.equal(inst.reporter, null);
@@ -186,7 +186,7 @@ test('Suite([test], {sync}).run()', () => {
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, true);
     assert.equal(inst.filter, null);
-    assert.equal(inst.maxConcurrent, 100);
+    assert.equal(inst.max_conc, 100);
     assert.ok(Array.isArray(inst.tests));
     assert.equal(inst.tests.length, 1);
     assert.equal(inst.reporter, null);

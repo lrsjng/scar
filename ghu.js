@@ -13,7 +13,6 @@ ghu.before(runtime => {
     runtime.pkg = require('./package.json');
     runtime.comment = `${runtime.pkg.name} v${runtime.pkg.version} - ${runtime.pkg.homepage}`;
     runtime.commentJs = `/*! ${runtime.comment} */\n`;
-
     console.log(runtime.comment);
 });
 
