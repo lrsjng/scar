@@ -12,24 +12,24 @@ test('test()', () => {
 });
 
 test('test.run() no tests', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     return testfn.run({reporter: noop});
 });
 
 test('test.run() passing', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     testfn('passing', noop);
     return testfn.run({reporter: noop});
 });
 
 test('test.run() passing async', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     testfn('passing async', () => Promise.resolve());
     return testfn.run({reporter: noop});
 });
 
 test('test.run() failing', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     testfn('failing', () => {
         throw new Error();
     });
@@ -37,25 +37,25 @@ test('test.run() failing', () => {
 });
 
 test('test.run() failing async', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     testfn('failing async', () => Promise.reject());
     return testfn.run({reporter: noop});
 });
 
 test('test.run() skipping', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     testfn.skip('skipping', noop);
     return testfn.run({reporter: noop});
 });
 
 test('test.run() sync', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     testfn.sync('sync', noop);
     return testfn.run({reporter: noop});
 });
 
 test('test.run() all', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     testfn('passing', noop);
     testfn.skip('skipping', noop);
     testfn.sync('sync', noop);
@@ -68,13 +68,13 @@ test('test.run() all', () => {
 });
 
 test('test.run() no reporter', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     testfn('passing', noop);
     return testfn.run({reporter: null});
 });
 
 test('test.run() error in reporter throws', () => {
-    const testfn = lib.Scar().static();
+    const testfn = (new lib.Scar()).static();
     const reporter = () => {
         throw new Error('some error object');
     };

@@ -103,7 +103,7 @@ var Scar = __webpack_require__(1);
 
 module.exports = {
   Scar: Scar,
-  test: Scar()["static"](),
+  test: new Scar()["static"](),
   assert: __webpack_require__(11),
   insp: __webpack_require__(12),
   spy: __webpack_require__(13),
@@ -114,7 +114,19 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var Test = __webpack_require__(3);
+/* WEBPACK VAR INJECTION */(function(global) {function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Test = __webpack_require__(3);
 
 var Suite = __webpack_require__(5);
 
@@ -122,66 +134,87 @@ var Reporter = __webpack_require__(6);
 
 var Cli = __webpack_require__(10);
 
-var Scar = function Scar() {
-  return Object.assign(Object.create(Scar.prototype), {
-    tests: []
-  });
-};
+var Scar =
+/*#__PURE__*/
+function () {
+  function Scar() {
+    _classCallCheck(this, Scar);
 
-Scar.prototype = {
-  constructor: Scar,
-  test: function test() {
-    this.tests.push(Test.apply(void 0, arguments));
-  },
-  skip: function skip() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    this.tests = [];
+  }
+
+  _createClass(Scar, [{
+    key: "test",
+    value: function test() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      this.tests.push(_construct(Test, args));
     }
+  }, {
+    key: "skip",
+    value: function skip() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
 
-    this.test.apply(this, args.concat([{
-      skip: true
-    }]));
-  },
-  sync: function sync() {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
+      this.test.apply(this, args.concat([{
+        skip: true
+      }]));
     }
+  }, {
+    key: "sync",
+    value: function sync() {
+      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
+      }
 
-    this.test.apply(this, args.concat([{
-      sync: true
-    }]));
-  },
-  run: function run(options) {
-    options = Object.assign({
-      reporter: Reporter().callback
-    }, options);
-    return Suite(this.tests, options).run();
-  },
-  cli: function cli(options) {
-    var _this = this;
+      this.test.apply(this, args.concat([{
+        sync: true
+      }]));
+    }
+  }, {
+    key: "run",
+    value: function run(options) {
+      options = Object.assign({
+        reporter: new Reporter().callback
+      }, options);
+      return new Suite(this.tests, options).run();
+    }
+  }, {
+    key: "cli",
+    value: function cli(options) {
+      var _this = this;
 
-    if (global.window) {
-      return new Promise(function (resolve) {
-        global.window.addEventListener('load', function () {
-          return resolve();
+      if (global.window) {
+        return new Promise(function (resolve) {
+          global.window.addEventListener('load', function () {
+            return resolve();
+          });
+        }).then(function () {
+          return new Cli().run(_this, options);
         });
-      }).then(function () {
-        return Cli().run(_this, options);
+      }
+
+      return new Cli().run(this, options);
+    }
+  }, {
+    key: "static",
+    value: function _static() {
+      return Object.assign(this.test.bind(this), {
+        scar: this,
+        skip: this.skip.bind(this),
+        sync: this.sync.bind(this),
+        run: this.run.bind(this),
+        cli: this.cli.bind(this)
       });
     }
+  }]);
 
-    return Cli().run(this, options);
-  },
-  "static": function _static() {
-    return Object.assign(this.test.bind(this), {
-      scar: this,
-      skip: this.skip.bind(this),
-      sync: this.sync.bind(this),
-      run: this.run.bind(this),
-      cli: this.cli.bind(this)
-    });
-  }
-};
+  return Scar;
+}();
+
 module.exports = Scar;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
@@ -223,51 +256,17 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 var _require = __webpack_require__(4),
     is_str = _require.is_str,
     is_num = _require.is_num,
     is_fn = _require.is_fn,
     as_fn = _require.as_fn;
-
-var Test = function Test() {
-  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
-  return Object.assign.apply(Object, [Object.create(Test.prototype), {
-    desc: '[No Description]',
-    fn: null,
-    skip: false,
-    sync: false,
-    timeout: null
-  }].concat(_toConsumableArray(args.map(function (arg) {
-    if (is_str(arg)) {
-      return {
-        desc: arg
-      };
-    }
-
-    if (is_fn(arg)) {
-      return {
-        fn: arg
-      };
-    }
-
-    return arg;
-  })), [{
-    status: Test.WAITING,
-    err: null,
-    starttime: null,
-    duration: null,
-    promise: null
-  }]));
-};
-
-Test.WAITING = 'WAITING';
-Test.PENDING = 'PENDING';
-Test.PASSED = 'PASSED';
-Test.FAILED = 'FAILED';
-Test.SKIPPED = 'SKIPPED';
 
 var promised_timeout = function promised_timeout(millis) {
   return new Promise(function (resolve, reject) {
@@ -277,47 +276,99 @@ var promised_timeout = function promised_timeout(millis) {
   });
 };
 
-Test.prototype = {
-  constructor: Test,
-  __TRACE_MARKER__: function __TRACE_MARKER__() {
-    return as_fn(this.fn)();
-  },
-  run_fn: function run_fn() {
-    var _this = this;
+var Test =
+/*#__PURE__*/
+function () {
+  function Test() {
+    _classCallCheck(this, Test);
 
-    var promise = Promise.resolve().then(function () {
-      return _this.__TRACE_MARKER__();
-    });
-
-    if (is_num(this.timeout) && this.timeout > 0) {
-      return Promise.race([promise, promised_timeout(this.timeout)]);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
-    return promise;
-  },
-  run: function run() {
-    var _this2 = this;
-
-    this.promise = this.promise || Promise.resolve().then(function () {
-      _this2.starttime = Date.now();
-      _this2.status = Test.PENDING;
-
-      if (!_this2.skip) {
-        return _this2.run_fn();
+    Object.assign.apply(Object, [this, {
+      desc: '[No Description]',
+      fn: null,
+      skip: false,
+      sync: false,
+      timeout: null
+    }].concat(_toConsumableArray(args.map(function (arg) {
+      if (is_str(arg)) {
+        return {
+          desc: arg
+        };
       }
 
-      return null;
-    }).then(function () {
-      _this2.status = _this2.skip ? Test.SKIPPED : Test.PASSED;
-    })["catch"](function (err) {
-      _this2.status = Test.FAILED;
-      _this2.err = err;
-    }).then(function () {
-      _this2.duration = Date.now() - _this2.starttime;
-    });
-    return this.promise;
+      if (is_fn(arg)) {
+        return {
+          fn: arg
+        };
+      }
+
+      return arg;
+    })), [{
+      status: Test.WAITING,
+      err: null,
+      starttime: null,
+      duration: null,
+      promise: null
+    }]));
   }
-};
+
+  _createClass(Test, [{
+    key: "__TRACE_MARKER__",
+    value: function __TRACE_MARKER__() {
+      return as_fn(this.fn)();
+    }
+  }, {
+    key: "run_fn",
+    value: function run_fn() {
+      var _this = this;
+
+      var promise = Promise.resolve().then(function () {
+        return _this.__TRACE_MARKER__();
+      });
+
+      if (is_num(this.timeout) && this.timeout > 0) {
+        return Promise.race([promise, promised_timeout(this.timeout)]);
+      }
+
+      return promise;
+    }
+  }, {
+    key: "run",
+    value: function run() {
+      var _this2 = this;
+
+      this.promise = this.promise || Promise.resolve().then(function () {
+        _this2.starttime = Date.now();
+        _this2.status = Test.PENDING;
+
+        if (!_this2.skip) {
+          return _this2.run_fn();
+        }
+
+        return null;
+      }).then(function () {
+        _this2.status = _this2.skip ? Test.SKIPPED : Test.PASSED;
+      })["catch"](function (err) {
+        _this2.status = Test.FAILED;
+        _this2.err = err;
+      }).then(function () {
+        _this2.duration = Date.now() - _this2.starttime;
+      });
+      return this.promise;
+    }
+  }]);
+
+  return Test;
+}();
+
+Test.WAITING = 'WAITING';
+Test.PENDING = 'PENDING';
+Test.PASSED = 'PASSED';
+Test.FAILED = 'FAILED';
+Test.SKIPPED = 'SKIPPED';
 module.exports = Test;
 
 /***/ }),
@@ -414,6 +465,12 @@ module.exports = {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 var _require = __webpack_require__(4),
     as_fn = _require.as_fn,
     run_seq = _require.run_seq,
@@ -429,100 +486,112 @@ var is_async = function is_async(test) {
   return !test.sync;
 };
 
-var Suite = function Suite() {
-  var tests = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var options = arguments.length > 1 ? arguments[1] : undefined;
-  return Object.assign(Object.create(Suite.prototype), {
-    sync: false,
-    reporter: null,
-    filter: null,
-    max_conc: 100
-  }, options, {
-    tests: tests,
-    status: Test.WAITING,
-    starttime: null,
-    duration: null,
-    promise: null
-  });
-};
+var Suite =
+/*#__PURE__*/
+function () {
+  function Suite() {
+    var tests = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 ? arguments[1] : undefined;
 
-Suite.prototype = {
-  constructor: Suite,
-  run_test: function run_test(test) {
-    var _this = this;
+    _classCallCheck(this, Suite);
 
-    return Promise.resolve().then(function () {
-      return as_fn(_this.reporter)('beforeTest', _this, test);
-    }).then(function () {
-      _this.runCount += 1;
-      test.runIdx = _this.runCount;
-    }).then(function () {
-      return test.run();
-    }).then(function () {
-      _this.settledCount += 1;
-      test.settledIdx = _this.settledCount;
-
-      if (test.status === Test.PASSED) {
-        _this.passedCount += 1;
-        test.passedIdx = _this.passedCount;
-      } else if (test.status === Test.SKIPPED) {
-        _this.skippedCount += 1;
-        test.skippedIdx = _this.skippedCount;
-      } else {
-        _this.failedCount += 1;
-        test.failedIdx = _this.failedCount;
-      }
-    }).then(function () {
-      return as_fn(_this.reporter)('after_test', _this, test);
+    Object.assign(this, {
+      sync: false,
+      reporter: null,
+      filter: null,
+      max_conc: 100
+    }, options, {
+      tests: tests,
+      status: Test.WAITING,
+      starttime: null,
+      duration: null,
+      promise: null
     });
-  },
-  run: function run() {
-    var _this2 = this;
-
-    this.promise = this.promise || Promise.resolve().then(function () {
-      _this2.tests.forEach(function (test, idx) {
-        test.defIdx = idx + 1;
-      });
-
-      _this2.total = _this2.tests.length;
-      _this2.filteredTests = _this2.tests.filter(as_fn(_this2.filter || true));
-      _this2.filteredTotal = _this2.filteredTests.length;
-      _this2.runCount = 0;
-      _this2.settledCount = 0;
-      _this2.passedCount = 0;
-      _this2.failedCount = 0;
-      _this2.skippedCount = 0;
-    }).then(function () {
-      return as_fn(_this2.reporter)('before_all', _this2);
-    }).then(function () {
-      _this2.starttime = Date.now();
-      _this2.status = Test.PENDING;
-
-      var testToFn = function testToFn(test) {
-        return function () {
-          return _this2.run_test(test);
-        };
-      };
-
-      var tests = _this2.filteredTests;
-      var syncTests = _this2.sync ? tests : tests.filter(is_sync);
-      var asyncTests = _this2.sync ? [] : tests.filter(is_async);
-      var syncFns = syncTests.map(testToFn);
-      var asyncFns = asyncTests.map(testToFn);
-      return run_seq(syncFns).then(function () {
-        return run_conc(asyncFns, _this2.max_conc);
-      });
-    }).then(function () {
-      _this2.status = _this2.failedCount ? Test.FAILED : Test.PASSED;
-      _this2.duration = Date.now() - _this2.starttime;
-    }).then(function () {
-      return as_fn(_this2.reporter)('after_all', _this2);
-    }).then(function () {
-      return _this2;
-    });
-    return this.promise;
   }
-};
+
+  _createClass(Suite, [{
+    key: "run_test",
+    value: function run_test(test) {
+      var _this = this;
+
+      return Promise.resolve().then(function () {
+        return as_fn(_this.reporter)('beforeTest', _this, test);
+      }).then(function () {
+        _this.runCount += 1;
+        test.runIdx = _this.runCount;
+      }).then(function () {
+        return test.run();
+      }).then(function () {
+        _this.settledCount += 1;
+        test.settledIdx = _this.settledCount;
+
+        if (test.status === Test.PASSED) {
+          _this.passedCount += 1;
+          test.passedIdx = _this.passedCount;
+        } else if (test.status === Test.SKIPPED) {
+          _this.skippedCount += 1;
+          test.skippedIdx = _this.skippedCount;
+        } else {
+          _this.failedCount += 1;
+          test.failedIdx = _this.failedCount;
+        }
+      }).then(function () {
+        return as_fn(_this.reporter)('after_test', _this, test);
+      });
+    }
+  }, {
+    key: "run",
+    value: function run() {
+      var _this2 = this;
+
+      this.promise = this.promise || Promise.resolve().then(function () {
+        _this2.tests.forEach(function (test, idx) {
+          test.defIdx = idx + 1;
+        });
+
+        _this2.total = _this2.tests.length;
+        _this2.filteredTests = _this2.tests.filter(as_fn(_this2.filter || true));
+        _this2.filteredTotal = _this2.filteredTests.length;
+        _this2.runCount = 0;
+        _this2.settledCount = 0;
+        _this2.passedCount = 0;
+        _this2.failedCount = 0;
+        _this2.skippedCount = 0;
+      }).then(function () {
+        return as_fn(_this2.reporter)('before_all', _this2);
+      }).then(function () {
+        _this2.starttime = Date.now();
+        _this2.status = Test.PENDING;
+
+        var testToFn = function testToFn(test) {
+          return function () {
+            return _this2.run_test(test);
+          };
+        };
+
+        var tests = _this2.filteredTests;
+        var syncTests = _this2.sync ? tests : tests.filter(is_sync);
+        var asyncTests = _this2.sync ? [] : tests.filter(is_async);
+        var syncFns = syncTests.map(testToFn);
+        var asyncFns = asyncTests.map(testToFn);
+        return run_seq(syncFns).then(function () {
+          return run_conc(asyncFns, _this2.max_conc);
+        });
+      }).then(function () {
+        _this2.status = _this2.failedCount ? Test.FAILED : Test.PASSED;
+        _this2.duration = Date.now() - _this2.starttime;
+      }).then(function () {
+        return as_fn(_this2.reporter)('after_all', _this2);
+      }).then(function () {
+        return _this2;
+      });
+      return this.promise;
+    }
+  }]);
+
+  return Suite;
+}();
+
 module.exports = Suite;
 
 /***/ }),
@@ -535,83 +604,105 @@ module.exports = __webpack_require__(7);
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 var Err = __webpack_require__(8);
 
 var _require = __webpack_require__(9),
     set_title = _require.set_title,
     set_fav_icon = _require.set_fav_icon;
 
-var Reporter = function Reporter() {
-  var inst = Object.assign(Object.create(Reporter.prototype), {
-    log: console.log.bind(console),
-    callback: function callback() {
-      return inst.handle.apply(inst, arguments);
-    }
-  });
-  return inst;
-};
-
-Reporter.prototype = {
-  constructor: Reporter,
-  handle: function handle(type) {
-    if (['before_all', 'after_test', 'after_all'].indexOf(type) >= 0) {
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
-
-      return this[type].apply(this, args);
-    }
-
-    return null;
-  },
-  before_all: function before_all(suite) {
-    var str = 'running ';
-
-    if (suite.filteredTotal !== suite.total) {
-      str += "".concat(suite.filteredTotal, " of ");
-    }
-
-    str += "".concat(suite.total, " tests\n ");
-    this.log(str);
-    set_title("running ".concat(suite.filteredTotal, " tests..."));
-    set_fav_icon('GREY'); // take time to update icon
-
-    return new Promise(function (resolve) {
-      return setTimeout(function () {
-        return resolve();
-      }, 100);
-    });
-  },
-  after_test: function after_test(suite, test) {
-    var status = test.status === 'PASSED' ? ' ok ' : test.status === 'SKIPPED' ? 'skip' : 'FAIL';
-    this.log(" ".concat(status, " ").concat(test.desc));
-  },
-  after_all: function after_all(suite) {
+var Reporter =
+/*#__PURE__*/
+function () {
+  function Reporter() {
     var _this = this;
 
-    suite.tests.filter(function (test) {
-      return test.status === 'FAILED';
-    }).forEach(function (test) {
-      var err = Err(test.err);
+    _classCallCheck(this, Reporter);
 
-      _this.log("\n[".concat(test.failedIdx, "] ").concat(test.desc, "\n").concat(err.format()));
+    Object.assign(this, {
+      log: console.log.bind(console),
+      callback: function callback() {
+        return _this.handle.apply(_this, arguments);
+      }
     });
-    var resume = '\n';
-
-    if (suite.failedCount) {
-      resume += "".concat(suite.failedCount, " failed, ");
-    }
-
-    if (suite.skippedCount) {
-      resume += "".concat(suite.skippedCount, " skipped, ");
-    }
-
-    resume += "".concat(suite.passedCount, " passed (").concat(suite.duration, "ms)");
-    this.log(resume);
-    set_title(resume);
-    set_fav_icon(suite.failedCount ? 'RED' : 'GREEN');
   }
-};
+
+  _createClass(Reporter, [{
+    key: "handle",
+    value: function handle(type) {
+      if (['before_all', 'after_test', 'after_all'].indexOf(type) >= 0) {
+        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          args[_key - 1] = arguments[_key];
+        }
+
+        return this[type].apply(this, args);
+      }
+
+      return null;
+    }
+  }, {
+    key: "before_all",
+    value: function before_all(suite) {
+      var str = 'running ';
+
+      if (suite.filteredTotal !== suite.total) {
+        str += "".concat(suite.filteredTotal, " of ");
+      }
+
+      str += "".concat(suite.total, " tests\n ");
+      this.log(str);
+      set_title("running ".concat(suite.filteredTotal, " tests..."));
+      set_fav_icon('GREY'); // take time to update icon
+
+      return new Promise(function (resolve) {
+        return setTimeout(function () {
+          return resolve();
+        }, 100);
+      });
+    }
+  }, {
+    key: "after_test",
+    value: function after_test(suite, test) {
+      var status = test.status === 'PASSED' ? ' ok ' : test.status === 'SKIPPED' ? 'skip' : 'FAIL';
+      this.log(" ".concat(status, " ").concat(test.desc));
+    }
+  }, {
+    key: "after_all",
+    value: function after_all(suite) {
+      var _this2 = this;
+
+      suite.tests.filter(function (test) {
+        return test.status === 'FAILED';
+      }).forEach(function (test) {
+        var err = Err(test.err);
+
+        _this2.log("\n[".concat(test.failedIdx, "] ").concat(test.desc, "\n").concat(err.format()));
+      });
+      var resume = '\n';
+
+      if (suite.failedCount) {
+        resume += "".concat(suite.failedCount, " failed, ");
+      }
+
+      if (suite.skippedCount) {
+        resume += "".concat(suite.skippedCount, " skipped, ");
+      }
+
+      resume += "".concat(suite.passedCount, " passed (").concat(suite.duration, "ms)");
+      this.log(resume);
+      set_title(resume);
+      set_fav_icon(suite.failedCount ? 'RED' : 'GREEN');
+    }
+  }]);
+
+  return Reporter;
+}();
+
 module.exports = Reporter;
 
 /***/ }),
@@ -811,7 +902,13 @@ module.exports = {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var Err = __webpack_require__(8);
+/* WEBPACK VAR INJECTION */(function(global) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Err = __webpack_require__(8);
 
 var HELP = "\n  scar - a test runner for node and the browser\n\n  Usage:\n    node tests.js [opt...] [arg...]\n    tests.html?opt&...&arg&...\n\n  Options:\n    -h: show this help message\n    -s: show test stats\n\n  Arguments:\n    all arguments are used as test filters\n\n";
 
@@ -827,66 +924,79 @@ var create_filter_fn = function create_filter_fn(filters) {
   };
 };
 
-var Cli = function Cli() {
-  return Object.assign(Object.create(Cli.prototype), {
-    log: console.log.bind(console)
-  });
-};
+var Cli =
+/*#__PURE__*/
+function () {
+  function Cli() {
+    _classCallCheck(this, Cli);
 
-Cli.prototype = {
-  constructor: Cli,
-  get_args: function get_args() {
-    if (global.process) {
-      return global.process.argv.slice(2);
-    }
-
-    if (global.window) {
-      return global.window.location.href.split(/[\?&]+/).slice(1);
-    }
-
-    return [];
-  },
-  parse_args: function parse_args() {
-    var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get_args();
-    return {
-      showHelp: args.indexOf('-h') >= 0,
-      showStats: args.indexOf('-s') >= 0,
-      filters: args.filter(function (arg) {
-        return arg.length > 0 && arg[0] !== '-';
-      })
-    };
-  },
-  run: function run(scar, options) {
-    var _this = this;
-
-    return Promise.resolve().then(function () {
-      var cliopts = _this.parse_args();
-
-      if (cliopts.showHelp) {
-        _this.log(HELP);
-      } else if (cliopts.showStats) {
-        _this.log("\n  ".concat(scar.tests.length, " tests defined\n \n"));
-      } else {
-        options = Object.assign({}, options, {
-          filter: create_filter_fn(cliopts.filters)
-        });
-        return scar.run(options).then(function (suite) {
-          if (global.process && suite.failedCount) {
-            global.process.exit(1);
-          }
-        })["catch"](function (err) {
-          _this.log("\n".concat(Err(err).format('  '), "\n"));
-
-          if (global.process) {
-            global.process.exit(2);
-          }
-        });
-      }
-
-      return null;
+    Object.assign(this, {
+      log: console.log.bind(console)
     });
   }
-};
+
+  _createClass(Cli, [{
+    key: "get_args",
+    value: function get_args() {
+      if (global.process) {
+        return global.process.argv.slice(2);
+      }
+
+      if (global.window) {
+        return global.window.location.href.split(/[\?&]+/).slice(1);
+      }
+
+      return [];
+    }
+  }, {
+    key: "parse_args",
+    value: function parse_args() {
+      var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get_args();
+      return {
+        showHelp: args.indexOf('-h') >= 0,
+        showStats: args.indexOf('-s') >= 0,
+        filters: args.filter(function (arg) {
+          return arg.length > 0 && arg[0] !== '-';
+        })
+      };
+    }
+  }, {
+    key: "run",
+    value: function run(scar, options) {
+      var _this = this;
+
+      return Promise.resolve().then(function () {
+        var cliopts = _this.parse_args();
+
+        if (cliopts.showHelp) {
+          _this.log(HELP);
+        } else if (cliopts.showStats) {
+          _this.log("\n  ".concat(scar.tests.length, " tests defined\n \n"));
+        } else {
+          options = Object.assign({}, options, {
+            filter: create_filter_fn(cliopts.filters)
+          });
+          return scar.run(options).then(function (suite) {
+            if (global.process && suite.failedCount) {
+              global.process.exit(1);
+            }
+          })["catch"](function (err) {
+            _this.log("\n".concat(Err(err).format('  '), "\n"));
+
+            if (global.process) {
+              global.process.exit(2);
+            }
+          });
+        }
+
+        return null;
+      });
+    }
+  }]);
+
+  return Cli;
+}();
+
 module.exports = Cli;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 

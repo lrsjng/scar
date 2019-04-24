@@ -21,7 +21,7 @@ describe('Test', () => {
     });
 
     it('Test()', () => {
-        const inst = Test();
+        const inst = new Test();
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -39,7 +39,7 @@ describe('Test', () => {
 
     it('Test(desc)', () => {
         const desc = 'some desc';
-        const inst = Test(desc);
+        const inst = new Test(desc);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -57,7 +57,7 @@ describe('Test', () => {
 
     it('Test(fn)', () => {
         const fn = () => null;
-        const inst = Test(fn);
+        const inst = new Test(fn);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -76,7 +76,7 @@ describe('Test', () => {
     it('Test(desc, fn)', () => {
         const desc = 'some desc';
         const fn = () => null;
-        const inst = Test(desc, fn);
+        const inst = new Test(desc, fn);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -95,7 +95,7 @@ describe('Test', () => {
     it('Test(fn, desc)', () => {
         const desc = 'some desc';
         const fn = () => null;
-        const inst = Test(fn, desc);
+        const inst = new Test(fn, desc);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -112,7 +112,7 @@ describe('Test', () => {
     });
 
     it('Test({})', () => {
-        const inst = Test({});
+        const inst = new Test({});
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -131,7 +131,7 @@ describe('Test', () => {
     it('Test({desc})', () => {
         const desc = 'some desc';
         const obj = {desc};
-        const inst = Test(obj);
+        const inst = new Test(obj);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -150,7 +150,7 @@ describe('Test', () => {
     it('Test({fn})', () => {
         const fn = () => null;
         const obj = {fn};
-        const inst = Test(obj);
+        const inst = new Test(obj);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -170,7 +170,7 @@ describe('Test', () => {
         const desc = 'some desc';
         const fn = () => null;
         const obj = {desc, fn};
-        const inst = Test(obj);
+        const inst = new Test(obj);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -191,7 +191,7 @@ describe('Test', () => {
         const fn = () => null;
         const other = {};
         const obj = {desc, fn, other};
-        const inst = Test(obj);
+        const inst = new Test(obj);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 11);
@@ -213,7 +213,7 @@ describe('Test', () => {
         const fn = () => null;
         const other = {};
         const obj = {other};
-        const inst = Test(desc, fn, obj);
+        const inst = new Test(desc, fn, obj);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 11);
@@ -235,7 +235,7 @@ describe('Test', () => {
         const fn = () => null;
         const other = {};
         const obj = {other};
-        const inst = Test(desc, fn, obj, true);
+        const inst = new Test(desc, fn, obj, true);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 11);
@@ -257,7 +257,7 @@ describe('Test', () => {
         const fn = () => null;
         const other = {};
         const obj = {other};
-        const inst = Test(fn, desc, obj);
+        const inst = new Test(fn, desc, obj);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 11);
@@ -279,7 +279,7 @@ describe('Test', () => {
         const fn = () => null;
         const other = {};
         const obj = {other};
-        const inst = Test(desc, obj, fn);
+        const inst = new Test(desc, obj, fn);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 11);
@@ -301,7 +301,7 @@ describe('Test', () => {
         const fn = () => null;
         const other = {};
         const obj = {other};
-        const inst = Test(fn, obj, desc);
+        const inst = new Test(fn, obj, desc);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 11);
@@ -323,7 +323,7 @@ describe('Test', () => {
         const fn = () => null;
         const other = {};
         const obj = {other};
-        const inst = Test(obj, desc, fn);
+        const inst = new Test(obj, desc, fn);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 11);
@@ -345,7 +345,7 @@ describe('Test', () => {
         const fn = () => null;
         const other = {};
         const obj = {other};
-        const inst = Test(obj, fn, desc);
+        const inst = new Test(obj, fn, desc);
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 11);
@@ -364,7 +364,7 @@ describe('Test', () => {
 
     it('Test({timeout: 0})', () => {
         const timeout = 0;
-        const inst = Test({timeout});
+        const inst = new Test({timeout});
         assert.ok(inst);
         // assert.ok(inst instanceof Test);
         assert.strictEqual(Object.keys(inst).length, 10);
@@ -381,7 +381,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() no tests', () => {
-        const inst = Test();
+        const inst = new Test();
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);
@@ -389,7 +389,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() passing', () => {
-        const inst = Test(noop);
+        const inst = new Test(noop);
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);
@@ -397,7 +397,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() passing async', () => {
-        const inst = Test(() => promised_timeout(10));
+        const inst = new Test(() => promised_timeout(10));
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);
@@ -406,7 +406,7 @@ describe('Test', () => {
 
     it('Test(...).run() failing', () => {
         const err = new Error();
-        const inst = Test(() => {
+        const inst = new Test(() => {
             throw err;
         });
         return inst.run().then(() => {
@@ -417,7 +417,7 @@ describe('Test', () => {
 
     it('Test(...).run() failing async', () => {
         const err = new Error();
-        const inst = Test(() => promised_timeout(10, err));
+        const inst = new Test(() => promised_timeout(10, err));
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.FAILED);
             assert.strictEqual(inst.err, err);
@@ -425,7 +425,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() skip passing', () => {
-        const inst = Test(noop, {skip: true});
+        const inst = new Test(noop, {skip: true});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.SKIPPED);
             assert.strictEqual(inst.err, null);
@@ -433,7 +433,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() skip passing async', () => {
-        const inst = Test(() => promised_timeout(10), {skip: true});
+        const inst = new Test(() => promised_timeout(10), {skip: true});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.SKIPPED);
             assert.strictEqual(inst.err, null);
@@ -442,7 +442,7 @@ describe('Test', () => {
 
     it('Test(...).run() skip failing', () => {
         const err = new Error();
-        const inst = Test(() => {
+        const inst = new Test(() => {
             throw err;
         }, {skip: true});
         return inst.run().then(() => {
@@ -453,7 +453,7 @@ describe('Test', () => {
 
     it('Test(...).run() skip failing async', () => {
         const err = new Error();
-        const inst = Test(() => promised_timeout(10, err), {skip: true});
+        const inst = new Test(() => promised_timeout(10, err), {skip: true});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.SKIPPED);
             assert.strictEqual(inst.err, null);
@@ -461,7 +461,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() sync', () => {
-        const inst = Test(noop, {sync: true});
+        const inst = new Test(noop, {sync: true});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);
@@ -469,7 +469,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() not timed out', () => {
-        const inst = Test(() => promised_timeout(10), {timeout: 100});
+        const inst = new Test(() => promised_timeout(10), {timeout: 100});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);
@@ -477,7 +477,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() timed out', () => {
-        const inst = Test(() => promised_timeout(100), {timeout: 10});
+        const inst = new Test(() => promised_timeout(100), {timeout: 10});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.FAILED);
             assert.ok(inst.err);
@@ -487,7 +487,7 @@ describe('Test', () => {
     });
 
     it('Test(...).run() no timeout', () => {
-        const inst = Test(() => promised_timeout(10), {timeout: 0});
+        const inst = new Test(() => promised_timeout(10), {timeout: 0});
         return inst.run().then(() => {
             assert.strictEqual(inst.status, Test.PASSED);
             assert.strictEqual(inst.err, null);

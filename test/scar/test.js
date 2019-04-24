@@ -18,7 +18,7 @@ test('Test()', () => {
 });
 
 test('Test()', () => {
-    const inst = Test();
+    const inst = new Test();
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -36,7 +36,7 @@ test('Test()', () => {
 
 test('Test(desc)', () => {
     const desc = 'some desc';
-    const inst = Test(desc);
+    const inst = new Test(desc);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -54,7 +54,7 @@ test('Test(desc)', () => {
 
 test('Test(fn)', () => {
     const fn = () => null;
-    const inst = Test(fn);
+    const inst = new Test(fn);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -73,7 +73,7 @@ test('Test(fn)', () => {
 test('Test(desc, fn)', () => {
     const desc = 'some desc';
     const fn = () => null;
-    const inst = Test(desc, fn);
+    const inst = new Test(desc, fn);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -92,7 +92,7 @@ test('Test(desc, fn)', () => {
 test('Test(fn, desc)', () => {
     const desc = 'some desc';
     const fn = () => null;
-    const inst = Test(fn, desc);
+    const inst = new Test(fn, desc);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -109,7 +109,7 @@ test('Test(fn, desc)', () => {
 });
 
 test('Test({})', () => {
-    const inst = Test({});
+    const inst = new Test({});
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -128,7 +128,7 @@ test('Test({})', () => {
 test('Test({desc})', () => {
     const desc = 'some desc';
     const obj = {desc};
-    const inst = Test(obj);
+    const inst = new Test(obj);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -147,7 +147,7 @@ test('Test({desc})', () => {
 test('Test({fn})', () => {
     const fn = () => null;
     const obj = {fn};
-    const inst = Test(obj);
+    const inst = new Test(obj);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -167,7 +167,7 @@ test('Test({desc, fn})', () => {
     const desc = 'some desc';
     const fn = () => null;
     const obj = {desc, fn};
-    const inst = Test(obj);
+    const inst = new Test(obj);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -188,7 +188,7 @@ test('Test({desc, fn, ...})', () => {
     const fn = () => null;
     const other = {};
     const obj = {desc, fn, other};
-    const inst = Test(obj);
+    const inst = new Test(obj);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
@@ -210,7 +210,7 @@ test('Test(desc, fn, {...})', () => {
     const fn = () => null;
     const other = {};
     const obj = {other};
-    const inst = Test(desc, fn, obj);
+    const inst = new Test(desc, fn, obj);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
@@ -232,7 +232,7 @@ test('Test(desc, fn, {...}, ...)', () => {
     const fn = () => null;
     const other = {};
     const obj = {other};
-    const inst = Test(desc, fn, obj, true);
+    const inst = new Test(desc, fn, obj, true);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
@@ -254,7 +254,7 @@ test('Test(fn, desc, {...})', () => {
     const fn = () => null;
     const other = {};
     const obj = {other};
-    const inst = Test(fn, desc, obj);
+    const inst = new Test(fn, desc, obj);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
@@ -276,7 +276,7 @@ test('Test(desc, {...}, fn)', () => {
     const fn = () => null;
     const other = {};
     const obj = {other};
-    const inst = Test(desc, obj, fn);
+    const inst = new Test(desc, obj, fn);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
@@ -298,7 +298,7 @@ test('Test(fn, {...}, desc)', () => {
     const fn = () => null;
     const other = {};
     const obj = {other};
-    const inst = Test(fn, obj, desc);
+    const inst = new Test(fn, obj, desc);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
@@ -320,7 +320,7 @@ test('Test({...}, desc, fn)', () => {
     const fn = () => null;
     const other = {};
     const obj = {other};
-    const inst = Test(obj, desc, fn);
+    const inst = new Test(obj, desc, fn);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
@@ -342,7 +342,7 @@ test('Test({...}, fn, desc)', () => {
     const fn = () => null;
     const other = {};
     const obj = {other};
-    const inst = Test(obj, fn, desc);
+    const inst = new Test(obj, fn, desc);
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
@@ -361,7 +361,7 @@ test('Test({...}, fn, desc)', () => {
 
 test('Test({timeout: 0})', () => {
     const timeout = 0;
-    const inst = Test({timeout});
+    const inst = new Test({timeout});
     assert.ok(inst);
     // assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
@@ -378,7 +378,7 @@ test('Test({timeout: 0})', () => {
 });
 
 test('Test(...).run() no tests', () => {
-    const inst = Test();
+    const inst = new Test();
     return inst.run().then(() => {
         assert.equal(inst.status, Test.PASSED);
         assert.equal(inst.err, null);
@@ -386,7 +386,7 @@ test('Test(...).run() no tests', () => {
 });
 
 test('Test(...).run() passing', () => {
-    const inst = Test(noop);
+    const inst = new Test(noop);
     return inst.run().then(() => {
         assert.equal(inst.status, Test.PASSED);
         assert.equal(inst.err, null);
@@ -394,7 +394,7 @@ test('Test(...).run() passing', () => {
 });
 
 test('Test(...).run() passing async', () => {
-    const inst = Test(() => promised_timeout(10));
+    const inst = new Test(() => promised_timeout(10));
     return inst.run().then(() => {
         assert.equal(inst.status, Test.PASSED);
         assert.equal(inst.err, null);
@@ -403,7 +403,7 @@ test('Test(...).run() passing async', () => {
 
 test('Test(...).run() failing', () => {
     const err = new Error();
-    const inst = Test(() => {
+    const inst = new Test(() => {
         throw err;
     });
     return inst.run().then(() => {
@@ -414,7 +414,7 @@ test('Test(...).run() failing', () => {
 
 test('Test(...).run() failing async', () => {
     const err = new Error();
-    const inst = Test(() => promised_timeout(10, err));
+    const inst = new Test(() => promised_timeout(10, err));
     return inst.run().then(() => {
         assert.equal(inst.status, Test.FAILED);
         assert.equal(inst.err, err);
@@ -422,7 +422,7 @@ test('Test(...).run() failing async', () => {
 });
 
 test('Test(...).run() skip passing', () => {
-    const inst = Test(noop, {skip: true});
+    const inst = new Test(noop, {skip: true});
     return inst.run().then(() => {
         assert.equal(inst.status, Test.SKIPPED);
         assert.equal(inst.err, null);
@@ -430,7 +430,7 @@ test('Test(...).run() skip passing', () => {
 });
 
 test('Test(...).run() skip passing async', () => {
-    const inst = Test(() => promised_timeout(10), {skip: true});
+    const inst = new Test(() => promised_timeout(10), {skip: true});
     return inst.run().then(() => {
         assert.equal(inst.status, Test.SKIPPED);
         assert.equal(inst.err, null);
@@ -439,7 +439,7 @@ test('Test(...).run() skip passing async', () => {
 
 test('Test(...).run() skip failing', () => {
     const err = new Error();
-    const inst = Test(() => {
+    const inst = new Test(() => {
         throw err;
     }, {skip: true});
     return inst.run().then(() => {
@@ -450,7 +450,7 @@ test('Test(...).run() skip failing', () => {
 
 test('Test(...).run() skip failing async', () => {
     const err = new Error();
-    const inst = Test(() => promised_timeout(10, err), {skip: true});
+    const inst = new Test(() => promised_timeout(10, err), {skip: true});
     return inst.run().then(() => {
         assert.equal(inst.status, Test.SKIPPED);
         assert.equal(inst.err, null);
@@ -458,7 +458,7 @@ test('Test(...).run() skip failing async', () => {
 });
 
 test('Test(...).run() sync', () => {
-    const inst = Test(noop, {sync: true});
+    const inst = new Test(noop, {sync: true});
     return inst.run().then(() => {
         assert.equal(inst.status, Test.PASSED);
         assert.equal(inst.err, null);
@@ -466,7 +466,7 @@ test('Test(...).run() sync', () => {
 });
 
 test('Test(...).run() not timed out', () => {
-    const inst = Test(() => promised_timeout(10), {timeout: 100});
+    const inst = new Test(() => promised_timeout(10), {timeout: 100});
     return inst.run().then(() => {
         assert.equal(inst.status, Test.PASSED);
         assert.equal(inst.err, null);
@@ -474,7 +474,7 @@ test('Test(...).run() not timed out', () => {
 });
 
 test('Test(...).run() timed out', () => {
-    const inst = Test(() => promised_timeout(100), {timeout: 10});
+    const inst = new Test(() => promised_timeout(100), {timeout: 10});
     return inst.run().then(() => {
         assert.equal(inst.status, Test.FAILED);
         assert.ok(inst.err);
@@ -484,7 +484,7 @@ test('Test(...).run() timed out', () => {
 });
 
 test('Test(...).run() no timeout', () => {
-    const inst = Test(() => promised_timeout(10), {timeout: 0});
+    const inst = new Test(() => promised_timeout(10), {timeout: 0});
     return inst.run().then(() => {
         assert.equal(inst.status, Test.PASSED);
         assert.equal(inst.err, null);
