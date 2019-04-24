@@ -22,7 +22,7 @@ ghu.task('clean', 'delete build folder', () => {
 
 ghu.task('build:scar', runtime => {
     return read(`${LIB}/index.js`)
-        .then(webpack(webpack.cfg_umd('scar', [LIB]), {showStats: false}))
+        .then(webpack(webpack.cfg_umd('scar', [LIB])))
         .then(wrap(runtime.commentJs))
         .then(write(`${BUILD}/scar-${runtime.pkg.version}.js`, {overwrite: true}))
         .then(write(`${DIST}/scar.js`, {overwrite: true}))
@@ -35,14 +35,14 @@ ghu.task('build:scar', runtime => {
 ghu.task('build:tests', () => {
     return Promise.all([
         read(`${TEST}: index*.js`)
-            .then(webpack(webpack.cfg([LIB, TEST]), {showStats: false}))
+            .then(webpack(webpack.cfg([LIB, TEST])))
             .then(write(mapfn.p(TEST, `${BUILD}/test`), {overwrite: true})),
 
         read(`${TEST}: *.html, *.css`)
             .then(write(mapfn.p(TEST, `${BUILD}/test`), {overwrite: true})),
 
         read(`${ROOT}/node_modules/mocha: mocha.js, mocha.css`)
-            .then(write(mapfn.p(`${ROOT}/node_modules/mocha`, `${BUILD}/test`), {overwrite: true}))
+            .then(write(mapfn.t(`${BUILD}/test/`), {overwrite: true}))
     ]);
 });
 

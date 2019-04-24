@@ -114,7 +114,11 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+/* WEBPACK VAR INJECTION */(function(global) {function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
 
@@ -177,7 +181,7 @@ function () {
   }, {
     key: "run",
     value: function run(options) {
-      options = Object.assign({
+      options = _objectSpread({
         reporter: new Reporter().callback
       }, options);
       return new Suite(this.tests, options).run();
@@ -402,9 +406,8 @@ var as_fn = function as_fn(x) {
 };
 
 var is_plain_obj = function is_plain_obj(x) {
-  return Object.prototype.toString.call(x) === '[object Object]';
-}; // eslint-disable-line prefer-reflect
-
+  return Reflect.apply(Object.prototype.toString, x, []) === '[object Object]';
+};
 
 var run_seq = function run_seq(fns) {
   return fns.reduce(function (p, fn) {
@@ -477,14 +480,6 @@ var _require = __webpack_require__(4),
     run_conc = _require.run_conc;
 
 var Test = __webpack_require__(3);
-
-var is_sync = function is_sync(test) {
-  return !!test.sync;
-};
-
-var is_async = function is_async(test) {
-  return !test.sync;
-};
 
 var Suite =
 /*#__PURE__*/
@@ -570,8 +565,12 @@ function () {
         };
 
         var tests = _this2.filteredTests;
-        var syncTests = _this2.sync ? tests : tests.filter(is_sync);
-        var asyncTests = _this2.sync ? [] : tests.filter(is_async);
+        var syncTests = _this2.sync ? tests : tests.filter(function (t) {
+          return !!t.sync;
+        });
+        var asyncTests = _this2.sync ? [] : tests.filter(function (t) {
+          return !t.sync;
+        });
         var syncFns = syncTests.map(testToFn);
         var asyncFns = asyncTests.map(testToFn);
         return run_seq(syncFns).then(function () {
@@ -620,22 +619,16 @@ var Reporter =
 /*#__PURE__*/
 function () {
   function Reporter() {
-    var _this = this;
-
     _classCallCheck(this, Reporter);
 
-    Object.assign(this, {
-      log: console.log.bind(console),
-      callback: function callback() {
-        return _this.handle.apply(_this, arguments);
-      }
-    });
+    this.log = console.log.bind(console);
+    this.callback = this.handle.bind(this);
   }
 
   _createClass(Reporter, [{
     key: "handle",
     value: function handle(type) {
-      if (['before_all', 'after_test', 'after_all'].indexOf(type) >= 0) {
+      if (['before_all', 'after_test', 'after_all'].includes(type)) {
         for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
           args[_key - 1] = arguments[_key];
         }
@@ -674,14 +667,14 @@ function () {
   }, {
     key: "after_all",
     value: function after_all(suite) {
-      var _this2 = this;
+      var _this = this;
 
       suite.tests.filter(function (test) {
         return test.status === 'FAILED';
       }).forEach(function (test) {
-        var err = Err(test.err);
+        var err = new Err(test.err);
 
-        _this2.log("\n[".concat(test.failedIdx, "] ").concat(test.desc, "\n").concat(err.format()));
+        _this.log("\n[".concat(test.failedIdx, "] ").concat(test.desc, "\n").concat(err.format()));
       });
       var resume = '\n';
 
@@ -709,6 +702,8 @@ module.exports = Reporter;
 /* 8 */
 /***/ (function(module, exports) {
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -716,6 +711,30 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+
+function isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _construct = Reflect.construct; } else { _construct = function _construct(Parent, args, Class) { var a = [null]; a.push.apply(a, args); var Constructor = Function.bind.apply(Parent, a); var instance = new Constructor(); if (Class) _setPrototypeOf(instance, Class.prototype); return instance; }; } return _construct.apply(null, arguments); }
+
+function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[native code]") !== -1; }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var LINE_PATTERNS = [{
   // v8: ' at <method> (<url>:<line>:<col>)'
@@ -795,74 +814,97 @@ var indent = function indent(str, prefix) {
   return prefix + str.replace(/\n/g, '\n' + prefix);
 };
 
-var Err = function Err() {
-  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
+var Err =
+/*#__PURE__*/
+function (_Error) {
+  _inherits(Err, _Error);
 
-  var inst = Object.assign.apply(Object, [Object.create(Err.prototype), {
-    name: 'Err',
-    message: '[no message]',
-    stack: new Error().stack,
-    drop: 0
-  }].concat(_toConsumableArray(args.map(function (arg) {
-    if (typeof arg === 'string') {
-      return {
-        message: arg
-      };
+  function Err() {
+    var _this;
+
+    _classCallCheck(this, Err);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Err).call(this));
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
-    if (typeof arg === 'number') {
-      return {
-        drop: arg
-      };
-    }
-
-    if (arg) {
-      var obj = {
-        error: arg
-      };
-
-      for (var _i2 = 0, _arr = ['name', 'message', 'stack', 'drop'].concat(_toConsumableArray(Object.keys(arg))); _i2 < _arr.length; _i2++) {
-        var prop = _arr[_i2];
-
-        if (arg[prop] !== undefined) {
-          obj[prop] = arg[prop];
-        }
+    Object.assign.apply(Object, [_assertThisInitialized(_this), {
+      name: 'Err',
+      message: '[no message]',
+      drop: 0
+    }].concat(_toConsumableArray(args.map(function (arg) {
+      if (typeof arg === 'string') {
+        return {
+          message: arg
+        };
       }
 
-      return obj;
-    }
+      if (typeof arg === 'number') {
+        return {
+          drop: arg
+        };
+      }
 
-    return null;
-  }))));
-  inst.frames = parse_stack(inst.stack);
-  inst.filteredFrames = filter_frames(inst.frames, inst.drop);
-  return inst;
-};
+      if (arg) {
+        var obj = {
+          error: arg
+        };
 
-Err.prototype = Object.assign(Object.create(Error.prototype), {
-  constructor: Err,
-  format: function format() {
-    var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+        for (var _i2 = 0, _arr = ['name', 'message', 'stack', 'drop'].concat(_toConsumableArray(Object.keys(arg))); _i2 < _arr.length; _i2++) {
+          var prop = _arr[_i2];
 
-    var _short3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+          if (arg[prop] !== undefined) {
+            obj[prop] = arg[prop];
+          }
+        }
 
-    var str = "".concat(this.name, ": ").concat(this.message, "\n");
-    str += indent(format_frames(this.filteredFrames, _short3), '  at ');
-    return indent(str, prefix);
-  },
-  toString: function toString() {
-    return this.format();
+        return obj;
+      }
+
+      return null;
+    }))));
+    _this.frames = parse_stack(_this.stack);
+    _this.filteredFrames = filter_frames(_this.frames, _this.drop);
+    return _this;
   }
-});
+
+  _createClass(Err, [{
+    key: "format",
+    value: function format() {
+      var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+      var _short3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+      var str = "".concat(this.name, ": ").concat(this.message, "\n");
+      str += indent(format_frames(this.filteredFrames, _short3), '  at ');
+      return indent(str, prefix);
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      return this.format();
+    }
+  }]);
+
+  return Err;
+}(_wrapNativeSuper(Error));
+
 module.exports = Err;
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var noop = function noop() {
+/* WEBPACK VAR INJECTION */(function(global) {var ICON_TPL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
+var PRESETS = {
+  RED: ICON_TPL.replace('*', 'Y0VbWlewAAAB1JREFUOMtj/OJs9p+BAsDEQCEYNWDUgFEDBosBABZOAow9yV0y'),
+  GREEN: ICON_TPL.replace('*', 'kM+i8BKgAAAB1JREFUOMtj9Fkf8J+BAsDEQCEYNWDUgFEDBosBAIuhAmqCXURi'),
+  GREY: ICON_TPL.replace('*', 'kjUf48cwAAAB1JREFUOMtjDA0N/c9AAWBioBCMGjBqwKgBg8UAAFduAh79mcom')
+};
+
+var noop = function noop() {
   return null;
 };
 
@@ -871,12 +913,6 @@ var set_title = !doc ? noop : function (title) {
   doc.title = title;
 };
 var set_fav_icon = !doc ? noop : function () {
-  var ICON_TPL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
-  var PRESETS = {
-    RED: ICON_TPL.replace('*', 'Y0VbWlewAAAB1JREFUOMtj/OJs9p+BAsDEQCEYNWDUgFEDBosBABZOAow9yV0y'),
-    GREEN: ICON_TPL.replace('*', 'kM+i8BKgAAAB1JREFUOMtj9Fkf8J+BAsDEQCEYNWDUgFEDBosBAIuhAmqCXURi'),
-    GREY: ICON_TPL.replace('*', 'kjUf48cwAAAB1JREFUOMtjDA0N/c9AAWBioBCMGjBqwKgBg8UAAFduAh79mcom')
-  };
   var head = doc.querySelector('head');
   var rel = 'shortcut icon';
   return function (href) {
@@ -902,7 +938,11 @@ module.exports = {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/* WEBPACK VAR INJECTION */(function(global) {function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
@@ -919,7 +959,7 @@ var create_filter_fn = function create_filter_fn(filters) {
 
   return function (test) {
     return filters.every(function (filter) {
-      return test.desc.indexOf(filter) >= 0;
+      return test.desc.includes(filter);
     });
   };
 };
@@ -930,9 +970,7 @@ function () {
   function Cli() {
     _classCallCheck(this, Cli);
 
-    Object.assign(this, {
-      log: console.log.bind(console)
-    });
+    this.log = console.log.bind(console);
   }
 
   _createClass(Cli, [{
@@ -953,8 +991,8 @@ function () {
     value: function parse_args() {
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get_args();
       return {
-        showHelp: args.indexOf('-h') >= 0,
-        showStats: args.indexOf('-s') >= 0,
+        showHelp: args.includes('-h'),
+        showStats: args.includes('-s'),
         filters: args.filter(function (arg) {
           return arg.length > 0 && arg[0] !== '-';
         })
@@ -973,7 +1011,7 @@ function () {
         } else if (cliopts.showStats) {
           _this.log("\n  ".concat(scar.tests.length, " tests defined\n \n"));
         } else {
-          options = Object.assign({}, options, {
+          options = _objectSpread({}, options, {
             filter: create_filter_fn(cliopts.filters)
           });
           return scar.run(options).then(function (suite) {
@@ -981,7 +1019,7 @@ function () {
               global.process.exit(1);
             }
           })["catch"](function (err) {
-            _this.log("\n".concat(Err(err).format('  '), "\n"));
+            _this.log("\n".concat(new Err(err).format('  '), "\n"));
 
             if (global.process) {
               global.process.exit(2);
@@ -1048,8 +1086,8 @@ var deep_equal = function deep_equal(a, b) {
   return false;
 };
 
-var check_err = function check_err(isError, act, exp, msg) {
-  if (!isError) {
+var check_err = function check_err(is_err, act, exp, msg) {
+  if (!is_err) {
     return {
       act: act,
       exp: exp,
@@ -1095,7 +1133,7 @@ var raise = function raise(props) {
   var drop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
 
   if (props && !props.expr) {
-    throw Err(props.msg, props, drop);
+    throw new Err(props.msg, props, drop);
   }
 };
 

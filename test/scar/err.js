@@ -6,10 +6,9 @@ test('Err is function', () => {
 });
 
 test('Err()', () => {
-    const inst = Err();
+    const inst = new Err();
     assert.ok(inst);
-    // assert.ok(inst instanceof Err);
-    assert.equal(Object.keys(inst).length, 6);
+    assert.ok(inst instanceof Err);
     assert.equal(inst.name, 'Err');
     assert.equal(inst.message, '[no message]');
     assert.equal(typeof inst.stack, 'string');
@@ -24,10 +23,9 @@ test('Err()', () => {
 
 test('Err(message)', () => {
     const message = 'some error message';
-    const inst = Err(message);
+    const inst = new Err(message);
     assert.ok(inst);
-    // assert.ok(inst instanceof Err);
-    assert.equal(Object.keys(inst).length, 6);
+    assert.ok(inst instanceof Err);
     assert.equal(inst.name, 'Err');
     assert.equal(inst.message, message);
     assert.equal(typeof inst.stack, 'string');
@@ -42,10 +40,9 @@ test('Err(message)', () => {
 
 test('Err(drop)', () => {
     const drop = 2;
-    const inst = Err(drop);
+    const inst = new Err(drop);
     assert.ok(inst);
-    // assert.ok(inst instanceof Err);
-    assert.equal(Object.keys(inst).length, 6);
+    assert.ok(inst instanceof Err);
     assert.equal(inst.name, 'Err');
     assert.equal(inst.message, '[no message]');
     assert.equal(typeof inst.stack, 'string');
@@ -64,10 +61,9 @@ test('Err({name, message, stack, drop})', () => {
     const stack = 'some stack';
     const drop = 123;
     const obj = {name, message, stack, drop};
-    const inst = Err(obj);
+    const inst = new Err(obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Err);
-    assert.equal(Object.keys(inst).length, 7);
+    assert.ok(inst instanceof Err);
     assert.equal(inst.name, name);
     assert.equal(inst.message, message);
     assert.equal(inst.stack, stack);
@@ -81,10 +77,9 @@ test('Err({name, message, stack, drop})', () => {
 
 test('Err(Error)', () => {
     const obj = new Error();
-    const inst = Err(obj);
+    const inst = new Err(obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Err);
-    assert.equal(Object.keys(inst).length, 7);
+    assert.ok(inst instanceof Err);
     assert.equal(inst.name, obj.name);
     assert.equal(inst.message, obj.message);
     assert.equal(inst.stack, obj.stack);
@@ -103,10 +98,9 @@ test('Err({name, message, stack, drop})', () => {
     const drop = 123;
     const other = 'some other prop';
     const obj = {name, message, stack, drop, other};
-    const inst = Err(obj);
+    const inst = new Err(obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Err);
-    assert.equal(Object.keys(inst).length, 8);
+    assert.ok(inst instanceof Err);
     assert.equal(inst.name, name);
     assert.equal(inst.message, message);
     assert.equal(inst.stack, stack);
@@ -120,30 +114,30 @@ test('Err({name, message, stack, drop})', () => {
 });
 
 test('Err().format is function', () => {
-    const inst = Err();
+    const inst = new Err();
     assert.equal(typeof inst.format, 'function');
 });
 
 test('Err().format() returns String', () => {
-    const inst = Err();
+    const inst = new Err();
     assert.equal(typeof inst.format(), 'string');
 });
 
 test('Err().format(prefix) returns String', () => {
-    const inst = Err();
+    const inst = new Err();
     assert.equal(typeof inst.format(), 'string');
     assert.equal(inst.format(''), inst.format());
     assert.ok(inst.format(' ') !== inst.format());
 });
 
 test('Err().format(prefix, short) returns String', () => {
-    const inst = Err();
+    const inst = new Err();
     assert.equal(typeof inst.format(), 'string');
     assert.equal(inst.format('', true), inst.format());
 });
 
 test('Err().toString() returns String', () => {
-    const inst = Err();
+    const inst = new Err();
     assert.equal(typeof inst.toString(), 'string');
     assert.equal(inst.toString(), inst.format());
     assert.equal(inst.toString(), inst.format(''));

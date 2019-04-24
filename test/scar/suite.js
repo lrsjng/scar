@@ -8,7 +8,7 @@ test('Suite is function', () => {
 test('Suite()', () => {
     const inst = new Suite();
     assert.ok(inst);
-    // assert.ok(inst instanceof Suite);
+    assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
@@ -25,7 +25,7 @@ test('Suite()', () => {
 test('Suite([], {})', () => {
     const inst = new Suite([], {});
     assert.ok(inst);
-    // assert.ok(inst instanceof Suite);
+    assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
@@ -42,7 +42,7 @@ test('Suite([], {})', () => {
 test('Suite([], {sync})', () => {
     const inst = new Suite([], {sync: true});
     assert.ok(inst);
-    // assert.ok(inst instanceof Suite);
+    assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, true);
     assert.equal(inst.filter, null);
@@ -60,7 +60,7 @@ test('Suite([], {...})', () => {
     const other = {};
     const inst = new Suite([], {other});
     assert.ok(inst);
-    // assert.ok(inst instanceof Suite);
+    assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
@@ -78,7 +78,7 @@ test('Suite([], {...})', () => {
 test('Suite().run()', () => {
     const inst = new Suite();
     assert.ok(inst);
-    // assert.ok(inst instanceof Suite);
+    assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
@@ -108,7 +108,7 @@ test('Suite().run()', () => {
 test('Suite([test]).run()', () => {
     const inst = new Suite([new Test()]);
     assert.ok(inst);
-    // assert.ok(inst instanceof Suite);
+    assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
@@ -144,7 +144,7 @@ test('Suite([...]).run()', () => {
         new Test({skip: true})
     ]);
     assert.ok(inst);
-    // assert.ok(inst instanceof Suite);
+    assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, false);
     assert.equal(inst.filter, null);
@@ -182,7 +182,7 @@ test('Suite([...]).run() rejects if error in reporter', () => {
 test('Suite([test], {sync}).run()', () => {
     const inst = new Suite([new Test()], {sync: true});
     assert.ok(inst);
-    // assert.ok(inst instanceof Suite);
+    assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
     assert.equal(inst.sync, true);
     assert.equal(inst.filter, null);

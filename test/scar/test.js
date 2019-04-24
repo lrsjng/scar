@@ -20,7 +20,7 @@ test('Test()', () => {
 test('Test()', () => {
     const inst = new Test();
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, '[No Description]');
     assert.equal(inst.fn, null);
@@ -38,7 +38,7 @@ test('Test(desc)', () => {
     const desc = 'some desc';
     const inst = new Test(desc);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, null);
@@ -56,7 +56,7 @@ test('Test(fn)', () => {
     const fn = () => null;
     const inst = new Test(fn);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, '[No Description]');
     assert.equal(inst.fn, fn);
@@ -75,7 +75,7 @@ test('Test(desc, fn)', () => {
     const fn = () => null;
     const inst = new Test(desc, fn);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -94,7 +94,7 @@ test('Test(fn, desc)', () => {
     const fn = () => null;
     const inst = new Test(fn, desc);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -111,7 +111,7 @@ test('Test(fn, desc)', () => {
 test('Test({})', () => {
     const inst = new Test({});
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, '[No Description]');
     assert.equal(inst.fn, null);
@@ -130,7 +130,7 @@ test('Test({desc})', () => {
     const obj = {desc};
     const inst = new Test(obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, null);
@@ -149,7 +149,7 @@ test('Test({fn})', () => {
     const obj = {fn};
     const inst = new Test(obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, '[No Description]');
     assert.equal(inst.fn, fn);
@@ -169,7 +169,7 @@ test('Test({desc, fn})', () => {
     const obj = {desc, fn};
     const inst = new Test(obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -190,7 +190,7 @@ test('Test({desc, fn, ...})', () => {
     const obj = {desc, fn, other};
     const inst = new Test(obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -212,7 +212,7 @@ test('Test(desc, fn, {...})', () => {
     const obj = {other};
     const inst = new Test(desc, fn, obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -234,7 +234,7 @@ test('Test(desc, fn, {...}, ...)', () => {
     const obj = {other};
     const inst = new Test(desc, fn, obj, true);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -256,7 +256,7 @@ test('Test(fn, desc, {...})', () => {
     const obj = {other};
     const inst = new Test(fn, desc, obj);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -278,7 +278,7 @@ test('Test(desc, {...}, fn)', () => {
     const obj = {other};
     const inst = new Test(desc, obj, fn);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -300,7 +300,7 @@ test('Test(fn, {...}, desc)', () => {
     const obj = {other};
     const inst = new Test(fn, obj, desc);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -322,7 +322,7 @@ test('Test({...}, desc, fn)', () => {
     const obj = {other};
     const inst = new Test(obj, desc, fn);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -344,7 +344,7 @@ test('Test({...}, fn, desc)', () => {
     const obj = {other};
     const inst = new Test(obj, fn, desc);
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 11);
     assert.equal(inst.desc, desc);
     assert.equal(inst.fn, fn);
@@ -363,7 +363,7 @@ test('Test({timeout: 0})', () => {
     const timeout = 0;
     const inst = new Test({timeout});
     assert.ok(inst);
-    // assert.ok(inst instanceof Test);
+    assert.ok(inst instanceof Test);
     assert.equal(Object.keys(inst).length, 10);
     assert.equal(inst.desc, '[No Description]');
     assert.equal(inst.fn, null);
