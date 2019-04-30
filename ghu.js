@@ -16,11 +16,11 @@ ghu.before(runtime => {
     console.log(runtime.comment);
 });
 
-ghu.task('clean', 'delete build folder', () => {
+ghu.task('clean', () => {
     return remove(`${BUILD}, ${DIST}`);
 });
 
-ghu.task('build:scar', runtime => {
+ghu.task('build:scripts', runtime => {
     return read(`${LIB}/index.js`)
         .then(webpack(webpack.cfg_umd('scar', [LIB])))
         .then(wrap(runtime.commentJs))
@@ -32,8 +32,11 @@ ghu.task('build:scar', runtime => {
         .then(write(`${DIST}/scar.min.js`, {overwrite: true}));
 });
 
-ghu.task('build:tests', () => {
+ghu.task('build:other', () => {
     return Promise.all([
+        read(`${ROOT}/*.md`)
+            .then(write(mapfn.p(ROOT, BUILD), {overwrite: true})),
+
         read(`${TEST}: index*.js`)
             .then(webpack(webpack.cfg([LIB, TEST])))
             .then(write(mapfn.p(TEST, `${BUILD}/test`), {overwrite: true})),
@@ -46,12 +49,7 @@ ghu.task('build:tests', () => {
     ]);
 });
 
-ghu.task('build:copy', () => {
-    return read(`${ROOT}/*.md`)
-        .then(write(mapfn.p(ROOT, BUILD), {overwrite: true}));
-});
-
-ghu.task('build', ['clean', 'build:scar', 'build:tests', 'build:copy']);
+ghu.task('build', ['clean', 'build:scripts', 'build:other']);
 
 ghu.task('zip', ['build'], runtime => {
     return read(`${BUILD}/**`)

@@ -7,7 +7,7 @@ test('test()', () => {
     assert.equal(typeof lib.test, 'function');
     const act = Object.keys(lib.test).sort();
     const exp = ['scar', 'skip', 'sync', 'run', 'cli'].sort();
-    assert.deepEqual(act, exp);
+    assert.deep_equal(act, exp);
     assert.equal(lib.test(), undefined);
 });
 

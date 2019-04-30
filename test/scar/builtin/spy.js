@@ -5,7 +5,7 @@ const spy = lib.spy;
 test('spy()', () => {
     assert.equal(typeof spy, 'function', 'is function');
     assert.equal(typeof spy(), 'function', '() -> function');
-    assert.deepEqual(spy().calls, [], '() ->  {calls: []}');
+    assert.deep_equal(spy().calls, [], '() ->  {calls: []}');
 });
 
 test('spy()() adds call to calls[]', () => {
@@ -24,7 +24,7 @@ test('spy()() adds correct props to call', () => {
     assert.equal(inst.calls.length, 1);
     assert.equal(inst.calls[0].idx, 0);
     assert.equal(inst.calls[0].ctx, undefined);
-    assert.deepEqual(inst.calls[0].args, []);
+    assert.deep_equal(inst.calls[0].args, []);
     assert.equal(inst.calls[0].ret, undefined);
     assert.ok(inst.calls[0].time >= date0);
     assert.ok(inst.calls[0].done <= date1);
@@ -38,7 +38,7 @@ test('spy()(11, 22, 33) adds correct props to call', () => {
     assert.equal(inst.calls.length, 1);
     assert.equal(inst.calls[0].idx, 0);
     assert.equal(inst.calls[0].ctx, undefined);
-    assert.deepEqual(inst.calls[0].args, [11, 22, 33]);
+    assert.deep_equal(inst.calls[0].args, [11, 22, 33]);
     assert.equal(inst.calls[0].ret, undefined);
     assert.ok(inst.calls[0].time >= date0);
     assert.ok(inst.calls[0].done <= date1);
@@ -52,7 +52,7 @@ test('spy(() => 99)(11, 22, 33) adds correct props to call', () => {
     assert.equal(inst.calls.length, 1);
     assert.equal(inst.calls[0].idx, 0);
     assert.equal(inst.calls[0].ctx, undefined);
-    assert.deepEqual(inst.calls[0].args, [11, 22, 33]);
+    assert.deep_equal(inst.calls[0].args, [11, 22, 33]);
     assert.equal(inst.calls[0].ret, 99);
     assert.ok(inst.calls[0].time >= date0);
     assert.ok(inst.calls[0].done <= date1);
@@ -67,7 +67,7 @@ test('spy(() => 99) application adds correct ctx to call', () => {
     assert.equal(inst.calls.length, 1);
     assert.equal(inst.calls[0].idx, 0);
     assert.equal(inst.calls[0].ctx, obj);
-    assert.deepEqual(inst.calls[0].args, [11, 22, 33]);
+    assert.deep_equal(inst.calls[0].args, [11, 22, 33]);
     assert.equal(inst.calls[0].ret, 99);
     assert.ok(inst.calls[0].time >= date0);
     assert.ok(inst.calls[0].done <= date1);

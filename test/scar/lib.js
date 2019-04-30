@@ -6,5 +6,5 @@ test('lib', () => {
 
     const act = Object.keys(lib).sort();
     const exp = ['Scar', 'assert', 'insp', 'spy', 'test', 'uniq'].sort();
-    assert.deepEqual(act, exp);
+    assert.deep_equal(act, exp);
 });

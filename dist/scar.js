@@ -1,4 +1,4 @@
-/*! scar v1.7.0 - https://larsjung.de/scar/ */
+/*! scar v2.0.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -405,6 +405,10 @@ var as_fn = function as_fn(x) {
   };
 };
 
+var is_regexp = function is_regexp(x) {
+  return x instanceof RegExp;
+};
+
 var is_plain_obj = function is_plain_obj(x) {
   return Reflect.apply(Object.prototype.toString, x, []) === '[object Object]';
 };
@@ -458,6 +462,7 @@ module.exports = {
   is_str: is_str,
   is_arr: is_arr,
   is_fn: is_fn,
+  is_regexp: is_regexp,
   is_plain_obj: is_plain_obj,
   as_fn: as_fn,
   run_seq: run_seq,
@@ -512,23 +517,23 @@ function () {
       return Promise.resolve().then(function () {
         return as_fn(_this.reporter)('beforeTest', _this, test);
       }).then(function () {
-        _this.runCount += 1;
-        test.runIdx = _this.runCount;
+        _this.run_count += 1;
+        test.run_idx = _this.run_count;
       }).then(function () {
         return test.run();
       }).then(function () {
-        _this.settledCount += 1;
-        test.settledIdx = _this.settledCount;
+        _this.settled_count += 1;
+        test.settled_idx = _this.settled_count;
 
         if (test.status === Test.PASSED) {
-          _this.passedCount += 1;
-          test.passedIdx = _this.passedCount;
+          _this.passed_count += 1;
+          test.passedIdx = _this.passed_count;
         } else if (test.status === Test.SKIPPED) {
-          _this.skippedCount += 1;
-          test.skippedIdx = _this.skippedCount;
+          _this.skipped_count += 1;
+          test.skipped_idx = _this.skipped_count;
         } else {
-          _this.failedCount += 1;
-          test.failedIdx = _this.failedCount;
+          _this.failed_count += 1;
+          test.failed_idx = _this.failed_count;
         }
       }).then(function () {
         return as_fn(_this.reporter)('after_test', _this, test);
@@ -545,39 +550,39 @@ function () {
         });
 
         _this2.total = _this2.tests.length;
-        _this2.filteredTests = _this2.tests.filter(as_fn(_this2.filter || true));
-        _this2.filteredTotal = _this2.filteredTests.length;
-        _this2.runCount = 0;
-        _this2.settledCount = 0;
-        _this2.passedCount = 0;
-        _this2.failedCount = 0;
-        _this2.skippedCount = 0;
+        _this2.filtered_tests = _this2.tests.filter(as_fn(_this2.filter || true));
+        _this2.filtered_total = _this2.filtered_tests.length;
+        _this2.run_count = 0;
+        _this2.settled_count = 0;
+        _this2.passed_count = 0;
+        _this2.failed_count = 0;
+        _this2.skipped_count = 0;
       }).then(function () {
         return as_fn(_this2.reporter)('before_all', _this2);
       }).then(function () {
         _this2.starttime = Date.now();
         _this2.status = Test.PENDING;
 
-        var testToFn = function testToFn(test) {
+        var test_to_fn = function test_to_fn(test) {
           return function () {
             return _this2.run_test(test);
           };
         };
 
-        var tests = _this2.filteredTests;
-        var syncTests = _this2.sync ? tests : tests.filter(function (t) {
+        var tests = _this2.filtered_tests;
+        var sync_tests = _this2.sync ? tests : tests.filter(function (t) {
           return !!t.sync;
         });
-        var asyncTests = _this2.sync ? [] : tests.filter(function (t) {
+        var async_tests = _this2.sync ? [] : tests.filter(function (t) {
           return !t.sync;
         });
-        var syncFns = syncTests.map(testToFn);
-        var asyncFns = asyncTests.map(testToFn);
-        return run_seq(syncFns).then(function () {
-          return run_conc(asyncFns, _this2.max_conc);
+        var sync_fns = sync_tests.map(test_to_fn);
+        var async_fns = async_tests.map(test_to_fn);
+        return run_seq(sync_fns).then(function () {
+          return run_conc(async_fns, _this2.max_conc);
         });
       }).then(function () {
-        _this2.status = _this2.failedCount ? Test.FAILED : Test.PASSED;
+        _this2.status = _this2.failed_count ? Test.FAILED : Test.PASSED;
         _this2.duration = Date.now() - _this2.starttime;
       }).then(function () {
         return as_fn(_this2.reporter)('after_all', _this2);
@@ -643,13 +648,13 @@ function () {
     value: function before_all(suite) {
       var str = 'running ';
 
-      if (suite.filteredTotal !== suite.total) {
-        str += "".concat(suite.filteredTotal, " of ");
+      if (suite.filtered_total !== suite.total) {
+        str += "".concat(suite.filtered_total, " of ");
       }
 
       str += "".concat(suite.total, " tests\n ");
       this.log(str);
-      set_title("running ".concat(suite.filteredTotal, " tests..."));
+      set_title("running ".concat(suite.filtered_total, " tests..."));
       set_fav_icon('GREY'); // take time to update icon
 
       return new Promise(function (resolve) {
@@ -672,24 +677,24 @@ function () {
       suite.tests.filter(function (test) {
         return test.status === 'FAILED';
       }).forEach(function (test) {
-        var err = new Err(test.err);
+        var str = new Err(test.err).format('  ', true, false);
 
-        _this.log("\n[".concat(test.failedIdx, "] ").concat(test.desc, "\n").concat(err.format()));
+        _this.log("\n[".concat(test.failed_idx, "] ").concat(test.desc, "\n").concat(str));
       });
       var resume = '\n';
 
-      if (suite.failedCount) {
-        resume += "".concat(suite.failedCount, " failed, ");
+      if (suite.failed_count) {
+        resume += "".concat(suite.failed_count, " failed, ");
       }
 
-      if (suite.skippedCount) {
-        resume += "".concat(suite.skippedCount, " skipped, ");
+      if (suite.skipped_count) {
+        resume += "".concat(suite.skipped_count, " skipped, ");
       }
 
-      resume += "".concat(suite.passedCount, " passed (").concat(suite.duration, "ms)");
+      resume += "".concat(suite.passed_count, " passed (").concat(suite.duration, "ms)");
       this.log(resume);
       set_title(resume);
-      set_fav_icon(suite.failedCount ? 'RED' : 'GREEN');
+      set_fav_icon(suite.failed_count ? 'RED' : 'GREEN');
     }
   }]);
 
@@ -700,7 +705,7 @@ module.exports = Reporter;
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -735,6 +740,10 @@ function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[nat
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var _require = __webpack_require__(4),
+    is_str = _require.is_str,
+    is_num = _require.is_num;
 
 var LINE_PATTERNS = [{
   // v8: ' at <method> (<url>:<line>:<col>)'
@@ -771,7 +780,8 @@ var parse_stack_line = function parse_stack_line(line) {
         url: match[pattern.url],
         basename: match[pattern.url].replace(/^.*\//, ''),
         line: parseInt(match[pattern.line], 10),
-        column: parseInt(match[pattern.column], 10)
+        column: parseInt(match[pattern.column], 10),
+        drop: false
       };
     }
   }
@@ -779,29 +789,27 @@ var parse_stack_line = function parse_stack_line(line) {
   return null;
 };
 
-var parse_stack = function parse_stack(sequence) {
+var parse_stack = function parse_stack(sequence, drop) {
+  drop = Number(drop) || 0;
   var lines = sequence.split('\n');
-  return lines.map(function (line) {
+  var frames = lines.map(function (line) {
     return parse_stack_line(line);
   }).filter(function (x) {
     return x;
   });
-};
-
-var filter_frames = function filter_frames(frames, drop) {
-  frames = frames.slice(Number(drop) || 0);
-  var dropFrame = false;
-  return frames.filter(function (frame) {
-    dropFrame = dropFrame || RE_MARKER.test(frame.method);
-    return !dropFrame;
+  var drop_frames = false;
+  frames.forEach(function (frame, idx) {
+    drop_frames = drop_frames || RE_MARKER.test(frame.method);
+    frame.drop = idx < drop || drop_frames;
   });
+  return frames;
 };
 
 var format_frame = function format_frame(frame, _short) {
-  var loc = [_short ? frame.basename : frame.url, frame.line, frame.column].filter(function (x) {
+  var loc = [_short ? frame.basename : frame.url, frame.line].filter(function (x) {
     return x;
-  }).join(':');
-  return frame.method ? "".concat(frame.method, " - ").concat(loc) : loc;
+  }).join('  ');
+  return frame.method ? "".concat(loc, "  (").concat(frame.method, ")") : loc;
 };
 
 var format_frames = function format_frames(frames, _short2) {
@@ -835,13 +843,13 @@ function (_Error) {
       message: '[no message]',
       drop: 0
     }].concat(_toConsumableArray(args.map(function (arg) {
-      if (typeof arg === 'string') {
+      if (is_str(arg)) {
         return {
           message: arg
         };
       }
 
-      if (typeof arg === 'number') {
+      if (is_num(arg)) {
         return {
           drop: arg
         };
@@ -865,8 +873,7 @@ function (_Error) {
 
       return null;
     }))));
-    _this.frames = parse_stack(_this.stack);
-    _this.filteredFrames = filter_frames(_this.frames, _this.drop);
+    _this.frames = parse_stack(_this.stack, _this.drop);
     return _this;
   }
 
@@ -877,8 +884,11 @@ function (_Error) {
 
       var _short3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
+      var full_stack = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
       var str = "".concat(this.name, ": ").concat(this.message, "\n");
-      str += indent(format_frames(this.filteredFrames, _short3), '  at ');
+      str += indent(format_frames(this.frames.filter(function (frame) {
+        return full_stack || !frame.drop;
+      }), _short3), '->  ');
       return indent(str, prefix);
     }
   }, {
@@ -991,8 +1001,8 @@ function () {
     value: function parse_args() {
       var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get_args();
       return {
-        showHelp: args.includes('-h'),
-        showStats: args.includes('-s'),
+        show_help: args.includes('-h'),
+        show_stats: args.includes('-s'),
         filters: args.filter(function (arg) {
           return arg.length > 0 && arg[0] !== '-';
         })
@@ -1004,18 +1014,18 @@ function () {
       var _this = this;
 
       return Promise.resolve().then(function () {
-        var cliopts = _this.parse_args();
+        var cli_opts = _this.parse_args();
 
-        if (cliopts.showHelp) {
+        if (cli_opts.show_help) {
           _this.log(HELP);
-        } else if (cliopts.showStats) {
+        } else if (cli_opts.show_stats) {
           _this.log("\n  ".concat(scar.tests.length, " tests defined\n \n"));
         } else {
           options = _objectSpread({}, options, {
-            filter: create_filter_fn(cliopts.filters)
+            filter: create_filter_fn(cli_opts.filters)
           });
           return scar.run(options).then(function (suite) {
-            if (global.process && suite.failedCount) {
+            if (global.process && suite.failed_count) {
               global.process.exit(1);
             }
           })["catch"](function (err) {
@@ -1044,14 +1054,17 @@ module.exports = Cli;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+var _require = __webpack_require__(4),
+    is_fn = _require.is_fn,
+    is_regexp = _require.is_regexp;
+
 var insp = __webpack_require__(12);
 
 var Err = __webpack_require__(8);
 
 var get_type = function get_type(x) {
-  return Object.prototype.toString.call(x);
-}; // eslint-disable-line prefer-reflect
-
+  return Reflect.apply(Object.prototype.toString, x, []);
+};
 
 var deep_equal = function deep_equal(a, b) {
   if (a === b || Number.isNaN(a) && Number.isNaN(b)) {
@@ -1099,7 +1112,7 @@ var check_err = function check_err(is_err, act, exp, msg) {
     return null;
   }
 
-  if (exp instanceof RegExp) {
+  if (is_regexp(exp)) {
     act = String(act);
 
     if (exp.test(act)) {
@@ -1113,7 +1126,7 @@ var check_err = function check_err(is_err, act, exp, msg) {
     };
   }
 
-  if (typeof exp === 'function') {
+  if (is_fn(exp)) {
     exp(act);
     return null;
   }
@@ -1130,10 +1143,12 @@ var check_err = function check_err(is_err, act, exp, msg) {
 };
 
 var raise = function raise(props) {
-  var drop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
+  var drop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
 
   if (props && !props.expr) {
-    throw new Err(props.msg, props, drop);
+    throw new Err({
+      name: 'AssertionError'
+    }, props.msg, props, drop);
   }
 };
 
@@ -1159,7 +1174,7 @@ assert.ok = function (act) {
   });
 };
 
-assert.notOk = function (act) {
+assert.not_ok = function (act) {
   var msg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "expected ".concat(insp(act), " to be falsy");
   raise({
     expr: !act,
@@ -1167,6 +1182,8 @@ assert.notOk = function (act) {
     msg: msg
   });
 };
+
+assert.notOk = assert.not_ok;
 
 assert.equal = function (act, exp) {
   var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " to equal ").concat(insp(exp));
@@ -1178,7 +1195,7 @@ assert.equal = function (act, exp) {
   });
 };
 
-assert.notEqual = function (act, ref) {
+assert.not_equal = function (act, ref) {
   var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " not to equal ").concat(insp(ref));
   raise({
     expr: act !== ref,
@@ -1188,7 +1205,9 @@ assert.notEqual = function (act, ref) {
   });
 };
 
-assert.deepEqual = function (act, exp) {
+assert.notEqual = assert.not_equal;
+
+assert.deep_equal = function (act, exp) {
   var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " to deeply equal ").concat(insp(exp));
   raise({
     expr: deep_equal(act, exp),
@@ -1198,7 +1217,9 @@ assert.deepEqual = function (act, exp) {
   });
 };
 
-assert.notDeepEqual = function (act, ref) {
+assert.deepEqual = assert.deep_equal;
+
+assert.not_deep_equal = function (act, ref) {
   var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " not to deeply equal ").concat(insp(ref));
   raise({
     expr: !deep_equal(act, ref),
@@ -1208,9 +1229,11 @@ assert.notDeepEqual = function (act, ref) {
   });
 };
 
+assert.notDeepEqual = assert.not_deep_equal;
+
 assert["throws"] = function (fn, exp, msg) {
   raise({
-    expr: typeof fn === 'function',
+    expr: is_fn(fn),
     msg: 'assert.throws(): first arg must be a function'
   });
   var none = {};
@@ -1229,7 +1252,7 @@ assert["throws"] = function (fn, exp, msg) {
 
 assert.rejects = function (promise, exp, msg) {
   raise({
-    expr: promise && typeof promise.then === 'function',
+    expr: promise && is_fn(promise.then),
     msg: 'assert.rejects(): first arg must be a thenable'
   });
   return Promise.resolve(promise).then(function (val) {
@@ -1333,7 +1356,7 @@ var id = function id() {
   return PREFIX + (ZEROPAD + counter).substr(-LENGTH) + SUFFIX;
 };
 
-var isId = function isId(sequence) {
+var is_id = function is_id(sequence) {
   return RE_ID.test(sequence);
 };
 
@@ -1350,7 +1373,8 @@ var path = function path() {
 
 module.exports = {
   id: id,
-  isId: isId,
+  is_id: is_id,
+  isId: is_id,
   obj: obj,
   path: path
 };

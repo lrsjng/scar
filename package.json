@@ -1,6 +1,6 @@
 {
   "name": "scar",
-  "version": "1.7.0",
+  "version": "2.0.0",
   "description": "Test runner for Node.js and the browser.",
   "homepage": "https://larsjung.de/scar/",
   "bugs": "https://github.com/lrsjng/scar/issues",
@@ -16,17 +16,17 @@
     "test:scar": "node test",
     "test": "npm run -s test:mocha && npm run -s test:scar",
     "check": "npm run -s lint && npm run -s test",
-    "cover": "nyc --require @babel/register --reporter html --reporter text node test",
+    "cover": "nyc --require @babel/register --reporter text --reporter html node test",
     "build": "node ghu release",
     "precommit": "npm run -s check && npm run -s build"
   },
-  "main": "dist/scar.min.js",
+  "main": "lib",
   "devDependencies": {
-    "@babel/core": "7.4.3",
-    "@babel/preset-env": "7.4.3",
-    "@babel/register": "7.4.0",
+    "@babel/core": "7.4.4",
+    "@babel/preset-env": "7.4.4",
+    "@babel/register": "7.4.4",
     "eslint": "5.16.0",
-    "ghu": "0.19.0",
+    "ghu": "0.21.0",
     "mocha": "6.1.4",
     "nyc": "14.0.0"
   },

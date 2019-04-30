@@ -108,7 +108,7 @@ describe('assert', function () { // eslint-disable-line func-names
     });
 
 
-    // ok, notOk
+    // ok, not_ok
     it('assert.ok()', () => {
         assert.strictEqual(typeof lib.assert.ok, 'function', 'is function');
 
@@ -123,22 +123,22 @@ describe('assert', function () { // eslint-disable-line func-names
         });
     });
 
-    it('assert.notOk()', () => {
-        assert.strictEqual(typeof lib.assert.notOk, 'function', 'is function');
+    it('assert.not_ok()', () => {
+        assert.strictEqual(typeof lib.assert.not_ok, 'function', 'is function');
 
         FIXTURES.forEach(([arg, truthy], idx) => {
             const msg = `FIX[${idx}]: (${insp(arg)}) expected `;
             if (!truthy) {
-                lib.assert.notOk(arg, msg + 'not to throw');
+                lib.assert.not_ok(arg, msg + 'not to throw');
             } else {
-                assert.throws(() => {lib.assert.notOk(arg);}, /expected .*? to be falsy/i, msg + 'to throw');
-                assert.throws(() => {lib.assert.notOk(arg, MESSAGE);}, MESSAGE_RE);
+                assert.throws(() => {lib.assert.not_ok(arg);}, /expected .*? to be falsy/i, msg + 'to throw');
+                assert.throws(() => {lib.assert.not_ok(arg, MESSAGE);}, MESSAGE_RE);
             }
         });
     });
 
 
-    // equal, notEqual
+    // equal, not_equal
     it('assert.equal()', () => {
         assert.strictEqual(typeof lib.assert.equal, 'function', 'is function');
 
@@ -155,51 +155,51 @@ describe('assert', function () { // eslint-disable-line func-names
         });
     });
 
-    it('assert.notEqual()', () => {
-        assert.strictEqual(typeof lib.assert.notEqual, 'function', 'is function');
+    it('assert.not_equal()', () => {
+        assert.strictEqual(typeof lib.assert.not_equal, 'function', 'is function');
 
         FIXTURES.forEach(([arg1,], idx1) => { // eslint-disable-line comma-dangle,comma-spacing
             FIXTURES.forEach(([arg2,], idx2) => { // eslint-disable-line comma-dangle,comma-spacing
                 const msg = `FIX[${idx1}, ${idx2}]: (${insp(arg1)}, ${insp(arg2)}) expected `;
                 if (arg1 !== arg2) {
-                    lib.assert.notEqual(arg1, arg2, msg + 'not to throw');
+                    lib.assert.not_equal(arg1, arg2, msg + 'not to throw');
                 } else {
-                    assert.throws(() => {lib.assert.notEqual(arg1, arg2);}, /expected .*? not to equal .*?/i, msg + 'to throw');
-                    assert.throws(() => {lib.assert.notEqual(arg1, arg2, MESSAGE);}, MESSAGE_RE);
+                    assert.throws(() => {lib.assert.not_equal(arg1, arg2);}, /expected .*? not to equal .*?/i, msg + 'to throw');
+                    assert.throws(() => {lib.assert.not_equal(arg1, arg2, MESSAGE);}, MESSAGE_RE);
                 }
             });
         });
     });
 
 
-    // deepEqual, notDeepEqual
-    it('assert.deepEqual()', () => {
-        assert.strictEqual(typeof lib.assert.deepEqual, 'function', 'is function');
+    // deep_equal, not_deep_equal
+    it('assert.deep_equal()', () => {
+        assert.strictEqual(typeof lib.assert.deep_equal, 'function', 'is function');
 
         DEEP_EQUAL_FIXTURES.forEach(([arg1, group1], idx1) => {
             DEEP_EQUAL_FIXTURES.forEach(([arg2, group2], idx2) => {
                 const msg = `FIX[${idx1}, ${idx2}]: (${insp(arg1)}, ${insp(arg2)}) expected `;
                 if (group1 === group2) {
-                    lib.assert.deepEqual(arg1, arg2, msg + 'not to throw');
+                    lib.assert.deep_equal(arg1, arg2, msg + 'not to throw');
                 } else {
-                    assert.throws(() => {lib.assert.deepEqual(arg1, arg2);}, /expected .*? to deeply equal .*?/i, msg + 'to throw');
-                    assert.throws(() => {lib.assert.deepEqual(arg1, arg2, MESSAGE);}, MESSAGE_RE);
+                    assert.throws(() => {lib.assert.deep_equal(arg1, arg2);}, /expected .*? to deeply equal .*?/i, msg + 'to throw');
+                    assert.throws(() => {lib.assert.deep_equal(arg1, arg2, MESSAGE);}, MESSAGE_RE);
                 }
             });
         });
     });
 
-    it('assert.notDeepEqual()', () => {
-        assert.strictEqual(typeof lib.assert.notDeepEqual, 'function', 'is function');
+    it('assert.not_deep_equal()', () => {
+        assert.strictEqual(typeof lib.assert.not_deep_equal, 'function', 'is function');
 
         DEEP_EQUAL_FIXTURES.forEach(([arg1, group1], idx1) => {
             DEEP_EQUAL_FIXTURES.forEach(([arg2, group2], idx2) => {
                 const msg = `FIX[${idx1}, ${idx2}]: (${insp(arg1)}, ${insp(arg2)}) expected `;
                 if (group1 !== group2) {
-                    lib.assert.notDeepEqual(arg1, arg2, msg + 'not to throw');
+                    lib.assert.not_deep_equal(arg1, arg2, msg + 'not to throw');
                 } else {
-                    assert.throws(() => {lib.assert.notDeepEqual(arg1, arg2);}, /expected .*? to deeply equal .*?/i, msg + 'to throw');
-                    assert.throws(() => {lib.assert.notDeepEqual(arg1, arg2, MESSAGE);}, MESSAGE_RE);
+                    assert.throws(() => {lib.assert.not_deep_equal(arg1, arg2);}, /expected .*? to deeply equal .*?/i, msg + 'to throw');
+                    assert.throws(() => {lib.assert.not_deep_equal(arg1, arg2, MESSAGE);}, MESSAGE_RE);
                 }
             });
         });

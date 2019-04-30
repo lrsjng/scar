@@ -97,11 +97,11 @@ test('Suite().run()', () => {
         assert.ok(inst.duration >= 0);
         assert.ok(inst.promise instanceof Promise);
         assert.equal(inst.total, 0);
-        assert.equal(inst.runCount, 0);
-        assert.equal(inst.settledCount, 0);
-        assert.equal(inst.passedCount, 0);
-        assert.equal(inst.failedCount, 0);
-        assert.equal(inst.skippedCount, 0);
+        assert.equal(inst.run_count, 0);
+        assert.equal(inst.settled_count, 0);
+        assert.equal(inst.passed_count, 0);
+        assert.equal(inst.failed_count, 0);
+        assert.equal(inst.skipped_count, 0);
     });
 });
 
@@ -127,11 +127,11 @@ test('Suite([test]).run()', () => {
         assert.ok(inst.duration >= 0);
         assert.ok(inst.promise instanceof Promise);
         assert.equal(inst.total, 1);
-        assert.equal(inst.runCount, 1);
-        assert.equal(inst.settledCount, 1);
-        assert.equal(inst.passedCount, 1);
-        assert.equal(inst.failedCount, 0);
-        assert.equal(inst.skippedCount, 0);
+        assert.equal(inst.run_count, 1);
+        assert.equal(inst.settled_count, 1);
+        assert.equal(inst.passed_count, 1);
+        assert.equal(inst.failed_count, 0);
+        assert.equal(inst.skipped_count, 0);
     });
 });
 
@@ -163,11 +163,11 @@ test('Suite([...]).run()', () => {
         assert.ok(inst.duration >= 0);
         assert.ok(inst.promise instanceof Promise);
         assert.equal(inst.total, 3);
-        assert.equal(inst.runCount, 3);
-        assert.equal(inst.settledCount, 3);
-        assert.equal(inst.passedCount, 1);
-        assert.equal(inst.failedCount, 1);
-        assert.equal(inst.skippedCount, 1);
+        assert.equal(inst.run_count, 3);
+        assert.equal(inst.settled_count, 3);
+        assert.equal(inst.passed_count, 1);
+        assert.equal(inst.failed_count, 1);
+        assert.equal(inst.skipped_count, 1);
     });
 });
 
@@ -201,10 +201,10 @@ test('Suite([test], {sync}).run()', () => {
         assert.ok(inst.duration >= 0);
         assert.ok(inst.promise instanceof Promise);
         assert.equal(inst.total, 1);
-        assert.equal(inst.runCount, 1);
-        assert.equal(inst.settledCount, 1);
-        assert.equal(inst.passedCount, 1);
-        assert.equal(inst.failedCount, 0);
-        assert.equal(inst.skippedCount, 0);
+        assert.equal(inst.run_count, 1);
+        assert.equal(inst.settled_count, 1);
+        assert.equal(inst.passed_count, 1);
+        assert.equal(inst.failed_count, 0);
+        assert.equal(inst.skipped_count, 0);
     });
 });

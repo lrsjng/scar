@@ -17,8 +17,6 @@ test('Err()', () => {
     assert.equal(inst.error, undefined);
     assert.ok(Array.isArray(inst.frames));
     assert.ok(inst.frames.length > 0);
-    assert.ok(Array.isArray(inst.filteredFrames));
-    assert.ok(inst.filteredFrames.length <= inst.frames.length);
 });
 
 test('Err(message)', () => {
@@ -34,8 +32,6 @@ test('Err(message)', () => {
     assert.equal(inst.error, undefined);
     assert.ok(Array.isArray(inst.frames));
     assert.ok(inst.frames.length > 0);
-    assert.ok(Array.isArray(inst.filteredFrames));
-    assert.ok(inst.filteredFrames.length <= inst.frames.length);
 });
 
 test('Err(drop)', () => {
@@ -51,8 +47,6 @@ test('Err(drop)', () => {
     assert.equal(inst.error, undefined);
     assert.ok(Array.isArray(inst.frames));
     assert.ok(inst.frames.length > 0);
-    assert.ok(Array.isArray(inst.filteredFrames));
-    assert.ok(inst.filteredFrames.length <= inst.frames.length);
 });
 
 test('Err({name, message, stack, drop})', () => {
@@ -71,8 +65,6 @@ test('Err({name, message, stack, drop})', () => {
     assert.equal(inst.error, obj);
     assert.ok(Array.isArray(inst.frames));
     assert.equal(inst.frames.length, 0);
-    assert.ok(Array.isArray(inst.filteredFrames));
-    assert.equal(inst.filteredFrames.length, 0);
 });
 
 test('Err(Error)', () => {
@@ -87,8 +79,6 @@ test('Err(Error)', () => {
     assert.equal(inst.error, obj);
     assert.ok(Array.isArray(inst.frames));
     assert.ok(inst.frames.length > 0);
-    assert.ok(Array.isArray(inst.filteredFrames));
-    assert.ok(inst.filteredFrames.length <= inst.frames.length);
 });
 
 test('Err({name, message, stack, drop})', () => {
@@ -109,8 +99,6 @@ test('Err({name, message, stack, drop})', () => {
     assert.equal(inst.error, obj);
     assert.ok(Array.isArray(inst.frames));
     assert.equal(inst.frames.length, 0);
-    assert.ok(Array.isArray(inst.filteredFrames));
-    assert.equal(inst.filteredFrames.length, 0);
 });
 
 test('Err().format is function', () => {
