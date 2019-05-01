@@ -75,8 +75,10 @@ test('test.run() no reporter', () => {
 
 test('test.run() error in reporter throws', () => {
     const testfn = (new lib.Scar()).static();
-    const reporter = () => {
-        throw new Error('some error object');
+    const reporter = {
+        before_all() {
+            throw new Error('some error object');
+        }
     };
     testfn('passing', noop);
     return assert.rejects(testfn.run({reporter}), /some error object/);

@@ -1,4 +1,4 @@
-/*! scar v2.0.0 - https://larsjung.de/scar/ */
+/*! scar v2.1.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -104,10 +104,10 @@ var Scar = __webpack_require__(1);
 module.exports = {
   Scar: Scar,
   test: new Scar()["static"](),
-  assert: __webpack_require__(11),
-  insp: __webpack_require__(12),
-  spy: __webpack_require__(13),
-  uniq: __webpack_require__(14)
+  assert: __webpack_require__(9),
+  insp: __webpack_require__(10),
+  spy: __webpack_require__(11),
+  uniq: __webpack_require__(12)
 };
 
 /***/ }),
@@ -136,7 +136,7 @@ var Suite = __webpack_require__(5);
 
 var Reporter = __webpack_require__(6);
 
-var Cli = __webpack_require__(10);
+var Cli = __webpack_require__(8);
 
 var Scar =
 /*#__PURE__*/
@@ -182,7 +182,7 @@ function () {
     key: "run",
     value: function run(options) {
       options = _objectSpread({
-        reporter: new Reporter().callback
+        reporter: new Reporter()
       }, options);
       return new Suite(this.tests, options).run();
     }
@@ -480,6 +480,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var _require = __webpack_require__(4),
+    is_fn = _require.is_fn,
     as_fn = _require.as_fn,
     run_seq = _require.run_seq,
     run_conc = _require.run_conc;
@@ -515,7 +516,7 @@ function () {
       var _this = this;
 
       return Promise.resolve().then(function () {
-        return as_fn(_this.reporter)('beforeTest', _this, test);
+        return _this.reporter && is_fn(_this.reporter.before_test) && _this.reporter.before_test(_this, test);
       }).then(function () {
         _this.run_count += 1;
         test.run_idx = _this.run_count;
@@ -536,7 +537,7 @@ function () {
           test.failed_idx = _this.failed_count;
         }
       }).then(function () {
-        return as_fn(_this.reporter)('after_test', _this, test);
+        return _this.reporter && is_fn(_this.reporter.after_test) && _this.reporter.after_test(_this, test);
       });
     }
   }, {
@@ -558,7 +559,7 @@ function () {
         _this2.failed_count = 0;
         _this2.skipped_count = 0;
       }).then(function () {
-        return as_fn(_this2.reporter)('before_all', _this2);
+        return _this2.reporter && is_fn(_this2.reporter.before_all) && _this2.reporter.before_all(_this2);
       }).then(function () {
         _this2.starttime = Date.now();
         _this2.status = Test.PENDING;
@@ -585,7 +586,7 @@ function () {
         _this2.status = _this2.failed_count ? Test.FAILED : Test.PASSED;
         _this2.duration = Date.now() - _this2.starttime;
       }).then(function () {
-        return as_fn(_this2.reporter)('after_all', _this2);
+        return _this2.reporter && is_fn(_this2.reporter.after_all) && _this2.reporter.after_all(_this2);
       }).then(function () {
         return _this2;
       });
@@ -602,48 +603,58 @@ module.exports = Suite;
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(7);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/* WEBPACK VAR INJECTION */(function(global) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Err = __webpack_require__(8);
+var Err = __webpack_require__(7);
 
-var _require = __webpack_require__(9),
-    set_title = _require.set_title,
-    set_fav_icon = _require.set_fav_icon;
+var Test = __webpack_require__(3);
+
+var DOC = global.window && global.window.document;
+var ICON_TPL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
+var ICON_RED = ICON_TPL.replace('*', 'Y0VbWlewAAAB1JREFUOMtj/OJs9p+BAsDEQCEYNWDUgFEDBosBABZOAow9yV0y');
+var ICON_GREEN = ICON_TPL.replace('*', 'kM+i8BKgAAAB1JREFUOMtj9Fkf8J+BAsDEQCEYNWDUgFEDBosBAIuhAmqCXURi');
+var ICON_GREY = ICON_TPL.replace('*', 'kjUf48cwAAAB1JREFUOMtjDA0N/c9AAWBioBCMGjBqwKgBg8UAAFduAh79mcom');
+
+var log = function log(x) {
+  return console.log(x);
+};
+
+var noop = function noop() {
+  return null;
+};
+
+var set_title = !DOC ? noop : function (title) {
+  DOC.title = title;
+};
+var set_fav_icon = !DOC ? noop : function () {
+  var head = DOC.querySelector('head');
+  var rel = 'shortcut icon';
+  return function (href) {
+    var old_el = head.querySelector("link[rel=\"".concat(rel, "\"]"));
+
+    if (old_el) {
+      head.removeChild(old_el);
+    }
+
+    var el = DOC.createElement('link');
+    el.rel = rel;
+    el.href = href;
+    head.appendChild(el);
+  };
+}();
 
 var Reporter =
 /*#__PURE__*/
 function () {
   function Reporter() {
     _classCallCheck(this, Reporter);
-
-    this.log = console.log.bind(console);
-    this.callback = this.handle.bind(this);
   }
 
   _createClass(Reporter, [{
-    key: "handle",
-    value: function handle(type) {
-      if (['before_all', 'after_test', 'after_all'].includes(type)) {
-        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-          args[_key - 1] = arguments[_key];
-        }
-
-        return this[type].apply(this, args);
-      }
-
-      return null;
-    }
-  }, {
     key: "before_all",
     value: function before_all(suite) {
       var str = 'running ';
@@ -653,9 +664,9 @@ function () {
       }
 
       str += "".concat(suite.total, " tests\n ");
-      this.log(str);
+      log(str);
       set_title("running ".concat(suite.filtered_total, " tests..."));
-      set_fav_icon('GREY'); // take time to update icon
+      set_fav_icon(ICON_GREY); // take time to update icon
 
       return new Promise(function (resolve) {
         return setTimeout(function () {
@@ -664,22 +675,22 @@ function () {
       });
     }
   }, {
+    key: "before_test",
+    value: function before_test() {}
+  }, {
     key: "after_test",
     value: function after_test(suite, test) {
-      var status = test.status === 'PASSED' ? ' ok ' : test.status === 'SKIPPED' ? 'skip' : 'FAIL';
-      this.log(" ".concat(status, " ").concat(test.desc));
+      var status = test.status === Test.PASSED ? ' ok ' : test.status === Test.SKIPPED ? 'skip' : 'FAIL';
+      log(" ".concat(status, " ").concat(test.desc));
     }
   }, {
     key: "after_all",
     value: function after_all(suite) {
-      var _this = this;
-
       suite.tests.filter(function (test) {
-        return test.status === 'FAILED';
+        return test.status === Test.FAILED;
       }).forEach(function (test) {
         var str = new Err(test.err).format('  ', true, false);
-
-        _this.log("\n[".concat(test.failed_idx, "] ").concat(test.desc, "\n").concat(str));
+        log("\n[".concat(test.failed_idx, "] ").concat(test.desc, "\n").concat(str));
       });
       var resume = '\n';
 
@@ -692,9 +703,9 @@ function () {
       }
 
       resume += "".concat(suite.passed_count, " passed (").concat(suite.duration, "ms)");
-      this.log(resume);
+      log(resume);
       set_title(resume);
-      set_fav_icon(suite.failed_count ? 'RED' : 'GREEN');
+      set_fav_icon(suite.failed_count ? ICON_RED : ICON_GREEN);
     }
   }]);
 
@@ -702,9 +713,10 @@ function () {
 }();
 
 module.exports = Reporter;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -904,48 +916,7 @@ function (_Error) {
 module.exports = Err;
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {var ICON_TPL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
-var PRESETS = {
-  RED: ICON_TPL.replace('*', 'Y0VbWlewAAAB1JREFUOMtj/OJs9p+BAsDEQCEYNWDUgFEDBosBABZOAow9yV0y'),
-  GREEN: ICON_TPL.replace('*', 'kM+i8BKgAAAB1JREFUOMtj9Fkf8J+BAsDEQCEYNWDUgFEDBosBAIuhAmqCXURi'),
-  GREY: ICON_TPL.replace('*', 'kjUf48cwAAAB1JREFUOMtjDA0N/c9AAWBioBCMGjBqwKgBg8UAAFduAh79mcom')
-};
-
-var noop = function noop() {
-  return null;
-};
-
-var doc = global.window && global.window.document;
-var set_title = !doc ? noop : function (title) {
-  doc.title = title;
-};
-var set_fav_icon = !doc ? noop : function () {
-  var head = doc.querySelector('head');
-  var rel = 'shortcut icon';
-  return function (href) {
-    var old_el = doc.querySelector("link[rel=\"".concat(rel, "\"]"));
-
-    if (old_el) {
-      head.removeChild(old_el);
-    }
-
-    var el = doc.createElement('link');
-    el.rel = rel;
-    el.href = PRESETS.hasOwnProperty(href) ? PRESETS[href] : href;
-    head.appendChild(el);
-  };
-}();
-module.exports = {
-  set_title: set_title,
-  set_fav_icon: set_fav_icon
-};
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
-
-/***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
@@ -958,7 +929,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Err = __webpack_require__(8);
+var Err = __webpack_require__(7);
 
 var HELP = "\n  scar - a test runner for node and the browser\n\n  Usage:\n    node tests.js [opt...] [arg...]\n    tests.html?opt&...&arg&...\n\n  Options:\n    -h: show this help message\n    -s: show test stats\n\n  Arguments:\n    all arguments are used as test filters\n\n";
 
@@ -1049,7 +1020,7 @@ module.exports = Cli;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 11 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -1058,9 +1029,9 @@ var _require = __webpack_require__(4),
     is_fn = _require.is_fn,
     is_regexp = _require.is_regexp;
 
-var insp = __webpack_require__(12);
+var insp = __webpack_require__(10);
 
-var Err = __webpack_require__(8);
+var Err = __webpack_require__(7);
 
 var get_type = function get_type(x) {
   return Reflect.apply(Object.prototype.toString, x, []);
@@ -1265,7 +1236,7 @@ assert.rejects = function (promise, exp, msg) {
 module.exports = assert;
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _require = __webpack_require__(4),
@@ -1309,7 +1280,7 @@ var insp = function insp(x) {
 module.exports = insp;
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _require = __webpack_require__(4),
@@ -1341,7 +1312,7 @@ var spy = function spy(fn) {
 module.exports = spy;
 
 /***/ }),
-/* 14 */
+/* 12 */
 /***/ (function(module, exports) {
 
 var PREFIX = 'UNIQ-';
