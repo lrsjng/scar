@@ -136,7 +136,7 @@ var Suite = __webpack_require__(5);
 
 var Reporter = __webpack_require__(6);
 
-var Cli = __webpack_require__(8);
+var _cli = __webpack_require__(8);
 
 var Scar =
 /*#__PURE__*/
@@ -197,11 +197,11 @@ function () {
             return resolve();
           });
         }).then(function () {
-          return new Cli().run(_this, options);
+          return _cli(_this, options);
         });
       }
 
-      return new Cli().run(this, options);
+      return _cli(this, options);
     }
   }, {
     key: "static",
@@ -297,19 +297,11 @@ function () {
       sync: false,
       timeout: null
     }].concat(_toConsumableArray(args.map(function (arg) {
-      if (is_str(arg)) {
-        return {
-          desc: arg
-        };
-      }
-
-      if (is_fn(arg)) {
-        return {
-          fn: arg
-        };
-      }
-
-      return arg;
+      return is_str(arg) ? {
+        desc: arg
+      } : is_fn(arg) ? {
+        fn: arg
+      } : arg;
     })), [{
       status: Test.WAITING,
       err: null,
@@ -419,35 +411,32 @@ var run_seq = function run_seq(fns) {
   }, Promise.resolve());
 };
 
-var run_conc = function run_conc(fns, max) {
-  if (!is_num(max) || max < 2) {
+var run_conc = function run_conc(fns) {
+  var max = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1024;
+
+  if (max < 2) {
     return run_seq(fns);
   }
 
   return new Promise(function (resolve) {
-    var total = fns.length;
-    var settled = 0;
+    fns = Array.from(fns);
+    var awaiting = fns.length;
     var pending = 0;
-    var next = 0;
 
     var run_fn = function run_fn(fn) {
-      return Promise.resolve().then(fn)["catch"](function () {
-        return null;
-      }).then(function () {
+      return Promise.resolve().then(fn)["catch"](function () {}).then(function () {
         pending -= 1;
-        settled += 1;
+        awaiting -= 1;
       });
     };
 
     var check = function check() {
-      while (next < total && pending < max) {
-        var fn = fns[next];
-        next += 1;
+      while (fns.length && pending < max) {
+        run_fn(fns.shift()).then(check);
         pending += 1;
-        run_fn(fn).then(check);
       }
 
-      if (settled === total) {
+      if (!awaiting) {
         resolve();
       }
     };
@@ -500,7 +489,7 @@ function () {
       sync: false,
       reporter: null,
       filter: null,
-      max_conc: 100
+      max_conc: 64
     }, options, {
       tests: tests,
       status: Test.WAITING,
@@ -717,17 +706,9 @@ module.exports = Reporter;
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -752,10 +733,6 @@ function _isNativeFunction(fn) { return Function.toString.call(fn).indexOf("[nat
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var _require = __webpack_require__(4),
-    is_str = _require.is_str,
-    is_num = _require.is_num;
 
 var LINE_PATTERNS = [{
   // v8: ' at <method> (<url>:<line>:<col>)'
@@ -839,52 +816,26 @@ var Err =
 function (_Error) {
   _inherits(Err, _Error);
 
-  function Err() {
+  function Err(arg) {
     var _this;
 
     _classCallCheck(this, Err);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Err).call(this));
+    _this.name = 'Err';
+    _this.message = '[no message]';
+    _this.drop = 0;
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    if (arg) {
+      for (var _i2 = 0, _arr = ['name', 'message', 'stack', 'drop']; _i2 < _arr.length; _i2++) {
+        var prop = _arr[_i2];
+
+        if (arg[prop] !== undefined) {
+          _this[prop] = arg[prop];
+        }
+      }
     }
 
-    Object.assign.apply(Object, [_assertThisInitialized(_this), {
-      name: 'Err',
-      message: '[no message]',
-      drop: 0
-    }].concat(_toConsumableArray(args.map(function (arg) {
-      if (is_str(arg)) {
-        return {
-          message: arg
-        };
-      }
-
-      if (is_num(arg)) {
-        return {
-          drop: arg
-        };
-      }
-
-      if (arg) {
-        var obj = {
-          error: arg
-        };
-
-        for (var _i2 = 0, _arr = ['name', 'message', 'stack', 'drop'].concat(_toConsumableArray(Object.keys(arg))); _i2 < _arr.length; _i2++) {
-          var prop = _arr[_i2];
-
-          if (arg[prop] !== undefined) {
-            obj[prop] = arg[prop];
-          }
-        }
-
-        return obj;
-      }
-
-      return null;
-    }))));
     _this.frames = parse_stack(_this.stack, _this.drop);
     return _this;
   }
@@ -923,15 +874,10 @@ module.exports = Err;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 var Err = __webpack_require__(7);
 
 var HELP = "\n  scar - a test runner for node and the browser\n\n  Usage:\n    node tests.js [opt...] [arg...]\n    tests.html?opt&...&arg&...\n\n  Options:\n    -h: show this help message\n    -s: show test stats\n\n  Arguments:\n    all arguments are used as test filters\n\n";
+var log = console.log.bind(console);
 
 var create_filter_fn = function create_filter_fn(filters) {
   if (!filters || !filters.length) {
@@ -945,78 +891,54 @@ var create_filter_fn = function create_filter_fn(filters) {
   };
 };
 
-var Cli =
-/*#__PURE__*/
-function () {
-  function Cli() {
-    _classCallCheck(this, Cli);
+var parse_args = function parse_args() {
+  var args = [];
 
-    this.log = console.log.bind(console);
+  if (global.process) {
+    args = global.process.argv.slice(2);
+  } else if (global.window) {
+    args = global.window.location.href.split(/[\?&]+/).slice(1);
   }
 
-  _createClass(Cli, [{
-    key: "get_args",
-    value: function get_args() {
-      if (global.process) {
-        return global.process.argv.slice(2);
-      }
+  return {
+    show_help: args.includes('-h'),
+    show_stats: args.includes('-s'),
+    filters: args.filter(function (arg) {
+      return arg.length && arg[0] !== '-';
+    })
+  };
+};
 
-      if (global.window) {
-        return global.window.location.href.split(/[\?&]+/).slice(1);
-      }
+var cli = function cli(scar, options) {
+  return Promise.resolve().then(function () {
+    var cli_opts = parse_args();
 
-      return [];
-    }
-  }, {
-    key: "parse_args",
-    value: function parse_args() {
-      var args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.get_args();
-      return {
-        show_help: args.includes('-h'),
-        show_stats: args.includes('-s'),
-        filters: args.filter(function (arg) {
-          return arg.length > 0 && arg[0] !== '-';
-        })
-      };
-    }
-  }, {
-    key: "run",
-    value: function run(scar, options) {
-      var _this = this;
-
-      return Promise.resolve().then(function () {
-        var cli_opts = _this.parse_args();
-
-        if (cli_opts.show_help) {
-          _this.log(HELP);
-        } else if (cli_opts.show_stats) {
-          _this.log("\n  ".concat(scar.tests.length, " tests defined\n \n"));
-        } else {
-          options = _objectSpread({}, options, {
-            filter: create_filter_fn(cli_opts.filters)
-          });
-          return scar.run(options).then(function (suite) {
-            if (global.process && suite.failed_count) {
-              global.process.exit(1);
-            }
-          })["catch"](function (err) {
-            _this.log("\n".concat(new Err(err).format('  '), "\n"));
-
-            if (global.process) {
-              global.process.exit(2);
-            }
-          });
+    if (cli_opts.show_help) {
+      log(HELP);
+    } else if (cli_opts.show_stats) {
+      log("\n  ".concat(scar.tests.length, " tests defined\n \n"));
+    } else {
+      options = _objectSpread({}, options, {
+        filter: create_filter_fn(cli_opts.filters)
+      });
+      return scar.run(options).then(function (suite) {
+        if (global.process && suite.failed_count) {
+          global.process.exit(1);
         }
+      })["catch"](function (err) {
+        log("\n".concat(new Err(err).format('  '), "\n"));
 
-        return null;
+        if (global.process) {
+          global.process.exit(2);
+        }
       });
     }
-  }]);
 
-  return Cli;
-}();
+    return null;
+  });
+};
 
-module.exports = Cli;
+module.exports = cli;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
@@ -1070,166 +992,107 @@ var deep_equal = function deep_equal(a, b) {
   return false;
 };
 
-var check_err = function check_err(is_err, act, exp, msg) {
-  if (!is_err) {
-    return {
-      act: act,
-      exp: exp,
-      msg: msg || "expected error but returned ".concat(act)
-    };
-  }
+var asrt = function asrt(expr, message) {
+  var drop = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
 
+  if (!expr) {
+    throw new Err({
+      name: 'AssertionError',
+      message: message,
+      drop: drop
+    });
+  }
+};
+
+var asrt_err = function asrt_err(err, exp, msg) {
   if (exp === undefined) {
-    return null;
+    return;
   }
 
   if (is_regexp(exp)) {
-    act = String(act);
+    err = String(err);
 
-    if (exp.test(act)) {
-      return null;
+    if (exp.test(err)) {
+      return;
     }
 
-    return {
-      act: act,
-      exp: exp,
-      msg: msg || "expected error ".concat(insp(act), " to be matched by ").concat(insp(exp))
-    };
+    asrt(false, msg || "expected error ".concat(insp(err), " to be matched by ").concat(insp(exp)), 3);
   }
 
   if (is_fn(exp)) {
-    exp(act);
-    return null;
+    exp(err);
+    return;
   }
 
-  if (act === exp) {
-    return null;
+  if (err === exp) {
+    return;
   }
 
-  return {
-    act: act,
-    exp: exp,
-    msg: msg || "expected error ".concat(insp(act), " to be ").concat(insp(exp))
-  };
-};
-
-var raise = function raise(props) {
-  var drop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-
-  if (props && !props.expr) {
-    throw new Err({
-      name: 'AssertionError'
-    }, props.msg, props, drop);
-  }
+  asrt(false, msg || "expected error ".concat(insp(err), " to be ").concat(insp(exp)), 3);
 };
 
 var assert = function assert(expr, msg) {
-  raise({
-    expr: expr,
-    msg: msg
-  });
+  asrt(expr, msg);
 };
 
 assert.fail = function (msg) {
-  raise({
-    msg: msg
-  });
+  asrt(false, msg);
 };
 
-assert.ok = function (act) {
-  var msg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "expected ".concat(insp(act), " to be truthy");
-  raise({
-    expr: !!act,
-    act: act,
-    msg: msg
-  });
+assert.ok = function (act, msg) {
+  asrt(!!act, msg || "expected ".concat(insp(act), " to be truthy"));
 };
 
-assert.not_ok = function (act) {
-  var msg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "expected ".concat(insp(act), " to be falsy");
-  raise({
-    expr: !act,
-    act: act,
-    msg: msg
-  });
+assert.not_ok = function (act, msg) {
+  asrt(!act, msg || "expected ".concat(insp(act), " to be falsy"));
 };
 
 assert.notOk = assert.not_ok;
 
-assert.equal = function (act, exp) {
-  var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " to equal ").concat(insp(exp));
-  raise({
-    expr: act === exp,
-    act: act,
-    exp: exp,
-    msg: msg
-  });
+assert.equal = function (act, exp, msg) {
+  asrt(act === exp, msg || "expected ".concat(insp(act), " to equal ").concat(insp(exp)));
 };
 
-assert.not_equal = function (act, ref) {
-  var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " not to equal ").concat(insp(ref));
-  raise({
-    expr: act !== ref,
-    act: act,
-    ref: ref,
-    msg: msg
-  });
+assert.not_equal = function (act, ref, msg) {
+  asrt(act !== ref, msg || "expected ".concat(insp(act), " not to equal ").concat(insp(ref)));
 };
 
 assert.notEqual = assert.not_equal;
 
-assert.deep_equal = function (act, exp) {
-  var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " to deeply equal ").concat(insp(exp));
-  raise({
-    expr: deep_equal(act, exp),
-    act: act,
-    exp: exp,
-    msg: msg
-  });
+assert.deep_equal = function (act, exp, msg) {
+  asrt(deep_equal(act, exp), msg || "expected ".concat(insp(act), " to deeply equal ").concat(insp(exp)));
 };
 
 assert.deepEqual = assert.deep_equal;
 
-assert.not_deep_equal = function (act, ref) {
-  var msg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "expected ".concat(insp(act), " not to deeply equal ").concat(insp(ref));
-  raise({
-    expr: !deep_equal(act, ref),
-    act: act,
-    ref: ref,
-    msg: msg
-  });
+assert.not_deep_equal = function (act, ref, msg) {
+  asrt(!deep_equal(act, ref), msg || "expected ".concat(insp(act), " not to deeply equal ").concat(insp(ref)));
 };
 
 assert.notDeepEqual = assert.not_deep_equal;
 
 assert["throws"] = function (fn, exp, msg) {
-  raise({
-    expr: is_fn(fn),
-    msg: 'assert.throws(): first arg must be a function'
-  });
+  asrt(is_fn(fn), "expected ".concat(insp(fn), " to be a function"));
   var none = {};
   var val = none;
 
   try {
     val = fn();
   } catch (err) {
-    raise(check_err(true, err, exp, msg));
+    asrt_err(err, exp, msg);
   }
 
   if (val !== none) {
-    raise(check_err(false, val, exp, msg));
+    asrt(false, msg || "expected error but returned ".concat(val));
   }
 };
 
 assert.rejects = function (promise, exp, msg) {
-  raise({
-    expr: promise && is_fn(promise.then),
-    msg: 'assert.rejects(): first arg must be a thenable'
-  });
+  asrt(promise && is_fn(promise.then), "expected ".concat(insp(promise), " to be a thenable"));
   return Promise.resolve(promise).then(function (val) {
-    return raise(check_err(false, val, exp, msg), 2);
+    return asrt(false, msg || "expected error but returned ".concat(val));
   }, function (err) {
-    return raise(check_err(true, err, exp, msg), 2);
+    return asrt_err(err, exp, msg);
   });
 };
 
