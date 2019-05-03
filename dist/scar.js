@@ -702,7 +702,7 @@ var LINE_PATTERNS = [{
 }];
 var RE_MARKER = /__TRACE_MARKER__$|^process\._tickCallback$/;
 
-var parse_stack_line = function parse_stack_line(line) {
+var parse_frame = function parse_frame(line) {
   for (var _i = 0, _LINE_PATTERNS = LINE_PATTERNS; _i < _LINE_PATTERNS.length; _i++) {
     var pattern = _LINE_PATTERNS[_i];
     var match = pattern.re.exec(line);
@@ -722,11 +722,11 @@ var parse_stack_line = function parse_stack_line(line) {
   return null;
 };
 
-var parse_stack = function parse_stack(sequence, drop) {
+var parse_frames = function parse_frames(sequence, drop) {
   drop = Number(drop) || 0;
   var lines = sequence.split('\n');
   var frames = lines.map(function (line) {
-    return parse_stack_line(line);
+    return parse_frame(line);
   }).filter(function (x) {
     return x;
   });
@@ -738,16 +738,12 @@ var parse_stack = function parse_stack(sequence, drop) {
   return frames;
 };
 
-var format_frame = function format_frame(frame, _short) {
-  var loc = [_short ? frame.basename : frame.url, frame.line, frame.column].filter(function (x) {
-    return x;
-  }).join('  ');
-  return frame.method ? "".concat(loc, "  (").concat(frame.method, ")") : loc;
-};
-
-var format_frames = function format_frames(frames, _short2) {
+var format_frames = function format_frames(frames, _short) {
   return frames.map(function (frame) {
-    return format_frame(frame, _short2);
+    var loc = [_short ? frame.basename : frame.url, frame.line, frame.column].filter(function (x) {
+      return x;
+    }).join('  ');
+    return frame.method ? "".concat(loc, "  (").concat(frame.method, ")") : loc;
   }).join('\n');
 };
 
@@ -758,14 +754,14 @@ var indent = function indent(str, prefix) {
 var format_err = function format_err(err) {
   var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
-  var _short3 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var _short2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
   var full_stack = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-  var frames = parse_stack(err.stack, err.drop);
+  var frames = parse_frames(err.stack, err.drop);
   var str = "".concat(err.name, ": ").concat(err.message, "\n");
   str += indent(format_frames(frames.filter(function (frame) {
     return full_stack || !frame.drop;
-  }), _short3), '->  ');
+  }), _short2), '->  ');
   return indent(str, prefix);
 };
 
