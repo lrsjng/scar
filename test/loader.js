@@ -7,8 +7,8 @@ const promised_timeout = (timeout, fail) => {
 module.exports = {
     promised_timeout,
     lib: require('../lib'),
-    Err: require('../lib/err'),
-    Reporter: require('../lib/reporter'),
+    format_err: require('../lib/err'),
+    reporter: require('../lib/reporter'),
     Scar: require('../lib/scar'),
     Suite: require('../lib/suite'),
     Test: require('../lib/test'),

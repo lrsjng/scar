@@ -173,10 +173,8 @@ test('Suite([...]).run()', () => {
 
 test('Suite([...]).run() rejects if error in reporter', () => {
     const inst = new Suite([new Test()]);
-    inst.reporter = {
-        before_all() {
-            throw new Error('some error object');
-        }
+    inst.reporter = () => {
+        throw new Error('some error object');
     };
     return assert.rejects(inst.run(), /some error object/);
 });

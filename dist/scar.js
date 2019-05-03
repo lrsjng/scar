@@ -134,7 +134,7 @@ var Test = __webpack_require__(3);
 
 var Suite = __webpack_require__(5);
 
-var Reporter = __webpack_require__(6);
+var reporter = __webpack_require__(6);
 
 var _cli = __webpack_require__(8);
 
@@ -182,7 +182,7 @@ function () {
     key: "run",
     value: function run(options) {
       options = _objectSpread({
-        reporter: new Reporter()
+        reporter: reporter
       }, options);
       return new Suite(this.tests, options).run();
     }
@@ -272,12 +272,16 @@ var _require = __webpack_require__(4),
     is_fn = _require.is_fn,
     as_fn = _require.as_fn;
 
-var promised_timeout = function promised_timeout(millis) {
-  return new Promise(function (resolve, reject) {
+var timeout = function timeout(promise, millis) {
+  if (!is_num(millis) || millis <= 0) {
+    return promise;
+  }
+
+  return Promise.race([promise, new Promise(function (resolve, reject) {
     setTimeout(function () {
       return reject(new Error("Timeout (".concat(millis, "ms)")));
     }, millis);
-  });
+  })]);
 };
 
 var Test =
@@ -317,41 +321,28 @@ function () {
       return as_fn(this.fn)();
     }
   }, {
-    key: "run_fn",
-    value: function run_fn() {
-      var _this = this;
-
-      var promise = Promise.resolve().then(function () {
-        return _this.__TRACE_MARKER__();
-      });
-
-      if (is_num(this.timeout) && this.timeout > 0) {
-        return Promise.race([promise, promised_timeout(this.timeout)]);
-      }
-
-      return promise;
-    }
-  }, {
     key: "run",
     value: function run() {
-      var _this2 = this;
+      var _this = this;
 
       this.promise = this.promise || Promise.resolve().then(function () {
-        _this2.starttime = Date.now();
-        _this2.status = Test.PENDING;
+        _this.starttime = Date.now();
+        _this.status = Test.PENDING;
 
-        if (!_this2.skip) {
-          return _this2.run_fn();
+        if (_this.skip) {
+          return null;
         }
 
-        return null;
-      }).then(function () {
-        _this2.status = _this2.skip ? Test.SKIPPED : Test.PASSED;
+        var pr = Promise.resolve().then(function () {
+          return _this.__TRACE_MARKER__();
+        });
+        return timeout(pr, _this.timeout);
+      })["finally"](function () {
+        _this.status = _this.skip ? Test.SKIPPED : Test.PASSED;
+        _this.duration = Date.now() - _this.starttime;
       })["catch"](function (err) {
-        _this2.status = Test.FAILED;
-        _this2.err = err;
-      }).then(function () {
-        _this2.duration = Date.now() - _this2.starttime;
+        _this.status = Test.FAILED;
+        _this.err = err;
       });
       return this.promise;
     }
@@ -469,7 +460,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var _require = __webpack_require__(4),
-    is_fn = _require.is_fn,
     as_fn = _require.as_fn,
     run_seq = _require.run_seq,
     run_conc = _require.run_conc;
@@ -505,7 +495,7 @@ function () {
       var _this = this;
 
       return Promise.resolve().then(function () {
-        return _this.reporter && is_fn(_this.reporter.before_test) && _this.reporter.before_test(_this, test);
+        return as_fn(_this.reporter)('before_test', _this, test);
       }).then(function () {
         _this.run_count += 1;
         test.run_idx = _this.run_count;
@@ -526,7 +516,7 @@ function () {
           test.failed_idx = _this.failed_count;
         }
       }).then(function () {
-        return _this.reporter && is_fn(_this.reporter.after_test) && _this.reporter.after_test(_this, test);
+        return as_fn(_this.reporter)('after_test', _this, test);
       });
     }
   }, {
@@ -548,7 +538,7 @@ function () {
         _this2.failed_count = 0;
         _this2.skipped_count = 0;
       }).then(function () {
-        return _this2.reporter && is_fn(_this2.reporter.before_all) && _this2.reporter.before_all(_this2);
+        return as_fn(_this2.reporter)('before_all', _this2);
       }).then(function () {
         _this2.starttime = Date.now();
         _this2.status = Test.PENDING;
@@ -575,7 +565,7 @@ function () {
         _this2.status = _this2.failed_count ? Test.FAILED : Test.PASSED;
         _this2.duration = Date.now() - _this2.starttime;
       }).then(function () {
-        return _this2.reporter && is_fn(_this2.reporter.after_all) && _this2.reporter.after_all(_this2);
+        return as_fn(_this2.reporter)('after_all', _this2);
       }).then(function () {
         return _this2;
       });
@@ -592,13 +582,7 @@ module.exports = Suite;
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var Err = __webpack_require__(7);
+/* WEBPACK VAR INJECTION */(function(global) {var Err = __webpack_require__(7);
 
 var Test = __webpack_require__(3);
 
@@ -636,72 +620,58 @@ var set_fav_icon = !DOC ? noop : function () {
   };
 }();
 
-var Reporter =
-/*#__PURE__*/
-function () {
-  function Reporter() {
-    _classCallCheck(this, Reporter);
+var reporter = function reporter(type, suite, test) {
+  if (type === 'before_all') {
+    var str = 'running ';
+
+    if (suite.filtered_total !== suite.total) {
+      str += "".concat(suite.filtered_total, " of ");
+    }
+
+    str += "".concat(suite.total, " tests\n ");
+    log(str);
+    set_title("running ".concat(suite.filtered_total, " tests..."));
+    set_fav_icon(ICON_GREY); // take time to update icon
+
+    return new Promise(function (resolve) {
+      return setTimeout(function () {
+        return resolve();
+      }, 100);
+    });
   }
 
-  _createClass(Reporter, [{
-    key: "before_all",
-    value: function before_all(suite) {
-      var str = 'running ';
+  if (type === 'after_test') {
+    var status = test.status === Test.PASSED ? ' ok ' : test.status === Test.SKIPPED ? 'skip' : 'FAIL';
+    log(" ".concat(status, " ").concat(test.desc));
+  }
 
-      if (suite.filtered_total !== suite.total) {
-        str += "".concat(suite.filtered_total, " of ");
-      }
+  if (type === 'after_all') {
+    suite.tests.filter(function (t) {
+      return t.status === Test.FAILED;
+    }).forEach(function (t) {
+      var str = new Err(t.err).format('  ');
+      log("\n[".concat(t.failed_idx, "] ").concat(t.desc, "\n").concat(str));
+    });
+    var resume = '\n';
 
-      str += "".concat(suite.total, " tests\n ");
-      log(str);
-      set_title("running ".concat(suite.filtered_total, " tests..."));
-      set_fav_icon(ICON_GREY); // take time to update icon
-
-      return new Promise(function (resolve) {
-        return setTimeout(function () {
-          return resolve();
-        }, 100);
-      });
+    if (suite.failed_count) {
+      resume += "".concat(suite.failed_count, " failed, ");
     }
-  }, {
-    key: "before_test",
-    value: function before_test() {}
-  }, {
-    key: "after_test",
-    value: function after_test(suite, test) {
-      var status = test.status === Test.PASSED ? ' ok ' : test.status === Test.SKIPPED ? 'skip' : 'FAIL';
-      log(" ".concat(status, " ").concat(test.desc));
+
+    if (suite.skipped_count) {
+      resume += "".concat(suite.skipped_count, " skipped, ");
     }
-  }, {
-    key: "after_all",
-    value: function after_all(suite) {
-      suite.tests.filter(function (test) {
-        return test.status === Test.FAILED;
-      }).forEach(function (test) {
-        var str = new Err(test.err).format('  ', true, false);
-        log("\n[".concat(test.failed_idx, "] ").concat(test.desc, "\n").concat(str));
-      });
-      var resume = '\n';
 
-      if (suite.failed_count) {
-        resume += "".concat(suite.failed_count, " failed, ");
-      }
+    resume += "".concat(suite.passed_count, " passed (").concat(suite.duration, "ms)");
+    log(resume);
+    set_title(resume);
+    set_fav_icon(suite.failed_count ? ICON_RED : ICON_GREEN);
+  }
 
-      if (suite.skipped_count) {
-        resume += "".concat(suite.skipped_count, " skipped, ");
-      }
+  return null;
+};
 
-      resume += "".concat(suite.passed_count, " passed (").concat(suite.duration, "ms)");
-      log(resume);
-      set_title(resume);
-      set_fav_icon(suite.failed_count ? ICON_RED : ICON_GREEN);
-    }
-  }]);
-
-  return Reporter;
-}();
-
-module.exports = Reporter;
+module.exports = reporter;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
@@ -795,7 +765,7 @@ var parse_stack = function parse_stack(sequence, drop) {
 };
 
 var format_frame = function format_frame(frame, _short) {
-  var loc = [_short ? frame.basename : frame.url, frame.line].filter(function (x) {
+  var loc = [_short ? frame.basename : frame.url, frame.line, frame.column].filter(function (x) {
     return x;
   }).join('  ');
   return frame.method ? "".concat(loc, "  (").concat(frame.method, ")") : loc;
@@ -845,7 +815,7 @@ function (_Error) {
     value: function format() {
       var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
 
-      var _short3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      var _short3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
       var full_stack = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
       var str = "".concat(this.name, ": ").concat(this.message, "\n");
@@ -926,7 +896,8 @@ var cli = function cli(scar, options) {
           global.process.exit(1);
         }
       })["catch"](function (err) {
-        log("\n".concat(new Err(err).format('  '), "\n"));
+        log("\n".concat(new Err(err).format(), "\n"));
+        log("\n".concat(err.stack, "\n"));
 
         if (global.process) {
           global.process.exit(2);
@@ -952,8 +923,6 @@ var _require = __webpack_require__(4),
     is_regexp = _require.is_regexp;
 
 var insp = __webpack_require__(10);
-
-var Err = __webpack_require__(7);
 
 var get_type = function get_type(x) {
   return Reflect.apply(Object.prototype.toString, x, []);
@@ -992,13 +961,12 @@ var deep_equal = function deep_equal(a, b) {
   return false;
 };
 
-var asrt = function asrt(expr, message) {
+var asrt = function asrt(expr, msg) {
   var drop = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 2;
 
   if (!expr) {
-    throw new Err({
+    throw Object.assign(new Error(msg), {
       name: 'AssertionError',
-      message: message,
       drop: drop
     });
   }
