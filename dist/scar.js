@@ -99,21 +99,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var scar = __webpack_require__(1);
-
-module.exports = {
-  scar: scar,
-  test: scar(),
-  assert: __webpack_require__(9),
-  insp: __webpack_require__(10),
-  spy: __webpack_require__(11),
-  uniq: __webpack_require__(12)
-};
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -124,13 +109,13 @@ function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _co
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var Test = __webpack_require__(2);
+var Test = __webpack_require__(1);
 
-var Suite = __webpack_require__(4);
+var Suite = __webpack_require__(3);
 
-var reporter = __webpack_require__(5);
+var reporter = __webpack_require__(4);
 
-var cli = __webpack_require__(8);
+var cli = __webpack_require__(7);
 
 var scar = function scar() {
   var tests = [];
@@ -179,10 +164,17 @@ var scar = function scar() {
   return test;
 };
 
-module.exports = scar;
+module.exports = {
+  scar: scar,
+  test: scar(),
+  assert: __webpack_require__(8),
+  insp: __webpack_require__(9),
+  spy: __webpack_require__(10),
+  uniq: __webpack_require__(11)
+};
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -191,7 +183,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var _require = __webpack_require__(3),
+var _require = __webpack_require__(2),
     is_str = _require.is_str,
     is_num = _require.is_num,
     is_fn = _require.is_fn,
@@ -287,7 +279,7 @@ Test.SKIPPED = 'SKIPPED';
 module.exports = Test;
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
 var is_bool = function is_bool(x) {
@@ -378,7 +370,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -387,12 +379,12 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var _require = __webpack_require__(3),
+var _require = __webpack_require__(2),
     as_fn = _require.as_fn,
     run_seq = _require.run_seq,
     run_conc = _require.run_conc;
 
-var Test = __webpack_require__(2);
+var Test = __webpack_require__(1);
 
 var Suite =
 /*#__PURE__*/
@@ -502,12 +494,12 @@ function () {
 module.exports = Suite;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var format_err = __webpack_require__(7);
+/* WEBPACK VAR INJECTION */(function(global) {var format_err = __webpack_require__(6);
 
-var Test = __webpack_require__(2);
+var Test = __webpack_require__(1);
 
 var DOC = global.window && global.window.document;
 var ICON_TPL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH3wsZER*AAAAAElFTkSuQmCC';
@@ -587,10 +579,10 @@ module.exports = function (type, suite, test) {
 
   return null;
 };
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 var g;
@@ -616,7 +608,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports) {
 
 var LINE_PATTERNS = [{
@@ -711,7 +703,7 @@ var format_err = function format_err(err) {
 module.exports = format_err;
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
@@ -720,7 +712,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var PROC = global.process;
 var WIN = global.window;
-var HELP = "\n  scar - a test runner for node and the browser\n\n  Usage:\n    node tests.js [opt...] [arg...]\n    tests.html?opt&...&arg&...\n\n  Options:\n    -h: show this help message\n\n  Arguments:\n    all arguments are used as test filters\n\n";
+var HELP = "scar - a test runner for node and the browser\n\nUsage:\n  node tests.js [opt...] [arg...]\n  tests.html?opt&...&arg&...\n\nOptions:\n  -h: show this help message\n\nArguments:\n  all arguments are used as test filters\n";
 var log = console.log.bind(console);
 
 var create_filter_fn = function create_filter_fn(filters) {
@@ -789,19 +781,19 @@ var cli = function cli(run, options) {
 };
 
 module.exports = cli;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var _require = __webpack_require__(3),
+var _require = __webpack_require__(2),
     is_fn = _require.is_fn,
     is_regexp = _require.is_regexp;
 
-var insp = __webpack_require__(10);
+var insp = __webpack_require__(9);
 
 var get_type = function get_type(x) {
   return Reflect.apply(Object.prototype.toString, x, []);
@@ -924,10 +916,10 @@ assert.deepEqual = assert.deep_equal;
 assert.notDeepEqual = assert.not_deep_equal;
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(3),
+var _require = __webpack_require__(2),
     is_str = _require.is_str,
     is_fn = _require.is_fn,
     is_arr = _require.is_arr,
@@ -968,10 +960,10 @@ var insp = function insp(x) {
 module.exports = insp;
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _require = __webpack_require__(3),
+var _require = __webpack_require__(2),
     as_fn = _require.as_fn;
 
 var spy = function spy(fn) {
@@ -1000,7 +992,7 @@ var spy = function spy(fn) {
 module.exports = spy;
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 var PREFIX = 'UNIQ-';

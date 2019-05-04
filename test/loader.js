@@ -9,7 +9,6 @@ module.exports = {
     lib: require('../lib'),
     format_err: require('../lib/err'),
     reporter: require('../lib/reporter'),
-    Scar: require('../lib/scar'),
     Suite: require('../lib/suite'),
     Test: require('../lib/test'),
     util: require('../lib/util')
