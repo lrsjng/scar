@@ -5,7 +5,7 @@ require('./err');
 require('./suite');
 require('./test');
 require('./util');
-require('./static-interface');
+require('./scar');
 
 require('./builtin/assert');
 require('./builtin/insp');
