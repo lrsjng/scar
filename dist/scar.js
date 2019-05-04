@@ -1,4 +1,4 @@
-/*! scar v2.1.0 - https://larsjung.de/scar/ */
+/*! scar v2.2.0 - https://larsjung.de/scar/ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -257,12 +257,13 @@ function () {
           return _this2.__TRACE_MARKER__();
         });
         return timeout(pr, _this2.timeout);
-      })["finally"](function () {
+      }).then(function () {
         _this2.status = _this2.skip ? Test.SKIPPED : Test.PASSED;
-        _this2.duration = Date.now() - _this2.starttime;
       })["catch"](function (err) {
         _this2.status = Test.FAILED;
         _this2.err = err;
+      }).then(function () {
+        _this2.duration = Date.now() - _this2.starttime;
       });
       return this.promise;
     }
