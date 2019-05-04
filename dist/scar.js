@@ -715,14 +715,10 @@ var WIN = global.window;
 var HELP = "scar - a test runner for node and the browser\n\nUsage:\n  node tests.js [opt...] [arg...]\n  tests.html?opt&...&arg&...\n\nOptions:\n  -h: show this help message\n\nArguments:\n  all arguments are used as test filters\n";
 var log = console.log.bind(console);
 
-var create_filter_fn = function create_filter_fn(filters) {
-  if (!filters || !filters.length) {
-    return null;
-  }
-
+var create_filter_fn = function create_filter_fn(strs) {
   return function (test) {
-    return filters.every(function (filter) {
-      return test.desc.includes(filter);
+    return strs.every(function (s) {
+      return test.desc.includes(s);
     });
   };
 };
@@ -746,15 +742,11 @@ var parse_args = function parse_args() {
 
 var cli = function cli(run, options) {
   return Promise.resolve().then(function () {
-    if (WIN) {
-      return new Promise(function (resolve) {
-        WIN.addEventListener('load', function () {
-          return resolve();
-        });
+    return !WIN ? null : new Promise(function (resolve) {
+      WIN.addEventListener('load', function () {
+        return resolve();
       });
-    }
-
-    return null;
+    });
   }).then(function () {
     var cli_opts = parse_args();
 
