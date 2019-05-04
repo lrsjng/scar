@@ -22,8 +22,8 @@ test('Suite()', () => {
     assert.equal(inst.promise, null);
 });
 
-test('Suite([], {})', () => {
-    const inst = new Suite([], {});
+test('Suite({})', () => {
+    const inst = new Suite({});
     assert.ok(inst);
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
@@ -39,8 +39,8 @@ test('Suite([], {})', () => {
     assert.equal(inst.promise, null);
 });
 
-test('Suite([], {sync})', () => {
-    const inst = new Suite([], {sync: true});
+test('Suite({sync})', () => {
+    const inst = new Suite({sync: true});
     assert.ok(inst);
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
@@ -56,9 +56,9 @@ test('Suite([], {sync})', () => {
     assert.equal(inst.promise, null);
 });
 
-test('Suite([], {...})', () => {
+test('Suite({...})', () => {
     const other = {};
-    const inst = new Suite([], {other});
+    const inst = new Suite({other});
     assert.ok(inst);
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 10);
@@ -105,8 +105,8 @@ test('Suite().run()', () => {
     });
 });
 
-test('Suite([test]).run()', () => {
-    const inst = new Suite([new Test()]);
+test('Suite({tests: [test]}).run()', () => {
+    const inst = new Suite({tests: [new Test()]});
     assert.ok(inst);
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
@@ -135,14 +135,14 @@ test('Suite([test]).run()', () => {
     });
 });
 
-test('Suite([...]).run()', () => {
-    const inst = new Suite([
+test('Suite({tests: [...]}).run()', () => {
+    const inst = new Suite({tests: [
         new Test(),
         new Test(() => {
             throw new Error();
         }),
         new Test({skip: true})
-    ]);
+    ]});
     assert.ok(inst);
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
@@ -171,16 +171,16 @@ test('Suite([...]).run()', () => {
     });
 });
 
-test('Suite([...]).run() rejects if error in reporter', () => {
-    const inst = new Suite([new Test()]);
+test('Suite({tests: [...]}).run() rejects if error in reporter', () => {
+    const inst = new Suite({tests: [new Test()]});
     inst.reporter = () => {
         throw new Error('some error object');
     };
     return assert.rejects(inst.run(), /some error object/);
 });
 
-test('Suite([test], {sync}).run()', () => {
-    const inst = new Suite([new Test()], {sync: true});
+test('Suite({tests: [test], sync}).run()', () => {
+    const inst = new Suite({tests: [new Test()], sync: true});
     assert.ok(inst);
     assert.ok(inst instanceof Suite);
     assert.equal(Object.keys(inst).length, 9);
