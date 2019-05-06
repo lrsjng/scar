@@ -74,7 +74,6 @@ const MESSAGE = 'test message';
 const MESSAGE_RE = /test message/;
 
 
-// assert
 test('assert()', () => {
     assert.equal(typeof lib.assert, 'function', 'is function');
 
@@ -90,7 +89,6 @@ test('assert()', () => {
 });
 
 
-// fail
 test('assert.fail()', () => {
     assert.equal(typeof lib.assert.fail, 'function', 'is function');
     assert.throws(() => {lib.assert.fail(MESSAGE);}, MESSAGE_RE, '(msg) expected to throw');
@@ -102,7 +100,6 @@ test('assert.fail()', () => {
 });
 
 
-// ok, not_ok
 test('assert.ok()', () => {
     assert.equal(typeof lib.assert.ok, 'function', 'is function');
 
@@ -116,6 +113,7 @@ test('assert.ok()', () => {
         }
     });
 });
+
 
 test('assert.not_ok()', () => {
     assert.equal(typeof lib.assert.not_ok, 'function', 'is function');
@@ -133,7 +131,6 @@ test('assert.not_ok()', () => {
 });
 
 
-// equal, notEqual
 test('assert.equal()', () => {
     assert.equal(typeof lib.assert.equal, 'function', 'is function');
 
@@ -149,6 +146,7 @@ test('assert.equal()', () => {
         });
     });
 });
+
 
 test('assert.not_equal()', () => {
     assert.equal(typeof lib.assert.not_equal, 'function', 'is function');
@@ -168,7 +166,6 @@ test('assert.not_equal()', () => {
 });
 
 
-// deep_equal, not_deep_equal
 test('assert.deep_equal()', () => {
     assert.equal(typeof lib.assert.deep_equal, 'function', 'is function');
     assert.equal(lib.assert.deep_equal, lib.assert.deepEqual);
@@ -185,6 +182,7 @@ test('assert.deep_equal()', () => {
         });
     });
 });
+
 
 test('assert.not_deep_equal()', () => {
     assert.equal(typeof lib.assert.not_deep_equal, 'function', 'is function');
@@ -204,7 +202,6 @@ test('assert.not_deep_equal()', () => {
 });
 
 
-// throws
 test('assert.throws()', () => {
     assert.equal(typeof lib.assert.throws, 'function', 'is function');
 
@@ -217,48 +214,34 @@ test('assert.throws()', () => {
     lib.assert.throws(() => {throw new Error();}, undefined, '(<throwing fn>) expected not to throw');
 
     ERROR_MATCH_FIXTURES.forEach(([err, exp], idx) => {
-        const msg = `FIX[${idx}]: (fn=>${insp(err)}, ${insp(exp)}) expected not to throw`;
+        const msg = `FIX[0.${idx}]: (fn=>${insp(err)}, ${insp(exp)}) expected not to throw`;
         lib.assert.throws(() => {throw err;}, exp, msg);
         lib.assert.throws(() => {throw err;}, exp, MESSAGE);
     });
 
     ERROR_NO_MATCH_FIXTURES.forEach(([err, exp], idx) => {
-        const msg = `FIX[${idx}]: (fn=>${insp(err)}, ${insp(exp)}) expected to throw`;
+        const msg = `FIX[1.${idx}]: (fn=>${insp(err)}, ${insp(exp)}) expected to throw`;
         assert.throws(() => {lib.assert.throws(() => {throw err;}, exp);}, undefined, msg);
         assert.throws(() => {lib.assert.throws(() => {throw err;}, exp, MESSAGE);});
     });
 });
 
 
-// rejects
 test('assert.rejects()', () => {
     assert.equal(typeof lib.assert.rejects, 'function', 'is function');
-});
 
-test('assert.rejects(Promise.resolve()) rejects', () => {
-    return assert.rejects(lib.assert.rejects(Promise.resolve()));
-});
+    return Promise.all([
+        assert.rejects(lib.assert.rejects(Promise.resolve())),
+        lib.assert.rejects(Promise.reject()),
 
-test('assert.rejects(Promise.reject()) resolves', () => {
-    return lib.assert.rejects(Promise.reject());
-});
+        ...ERROR_MATCH_FIXTURES.map(([err, exp], idx) => {
+            const msg = `FIX[0.${idx}]: assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}) resolves`;
+            return lib.assert.rejects(Promise.reject(err), exp, msg);
+        }),
 
-ERROR_MATCH_FIXTURES.forEach(([err, exp]) => {
-    test(`assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}) resolves`, () => {
-        return lib.assert.rejects(Promise.reject(err), exp);
-    });
-
-    test(`assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}, msg) resolves`, () => {
-        return lib.assert.rejects(Promise.reject(err), exp, MESSAGE);
-    });
-});
-
-ERROR_NO_MATCH_FIXTURES.forEach(([err, exp]) => {
-    test(`assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}) rejects`, () => {
-        return assert.rejects(lib.assert.rejects(Promise.reject(err), exp));
-    });
-
-    test(`assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}, msg) rejects`, () => {
-        return assert.rejects(lib.assert.rejects(Promise.reject(err), exp, MESSAGE));
-    });
+        ...ERROR_NO_MATCH_FIXTURES.map(([err, exp], idx) => {
+            const msg = `FIX[1.${idx}]: assert.rejects(Promise.reject(${insp(err)}), ${insp(exp)}) rejects`;
+            return assert.rejects(lib.assert.rejects(Promise.reject(err), exp), () => true, msg);
+        })
+    ]);
 });

@@ -1,6 +1,6 @@
 {
   "name": "scar",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Test runner for Node.js and the browser.",
   "homepage": "https://larsjung.de/scar/",
   "bugs": "https://github.com/lrsjng/scar/issues",
@@ -26,7 +26,7 @@
     "@babel/preset-env": "7.4.4",
     "@babel/register": "7.4.4",
     "eslint": "5.16.0",
-    "ghu": "0.21.0",
+    "ghu": "0.22.0",
     "mocha": "6.1.4",
     "nyc": "14.1.0"
   },

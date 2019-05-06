@@ -7,7 +7,7 @@ const fnB = (b1, b2) => {};
 function fnC(c1) {}
 const obj = {fnD(d1, d2) {}};
 
-// fixtures for is{Boolean, String, Array, Fn, PlainObject}
+// fixtures for is_{bool, str, arr, fn, plain_obj}
 const FIXTURES = [
     [undefined,     0, 0, 0, 0, 0],
     [null,          0, 0, 0, 0, 0],
