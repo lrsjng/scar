@@ -3,7 +3,6 @@
   "version": "2.3.0",
   "description": "Test runner for Node.js and the browser.",
   "homepage": "https://larsjung.de/scar/",
-  "bugs": "https://github.com/lrsjng/scar/issues",
   "author": "Lars Jung <lrsjng@gmail.com> (https://larsjung.de)",
   "license": "MIT",
   "repository": {
@@ -22,15 +21,12 @@
   },
   "main": "lib",
   "devDependencies": {
-    "@babel/core": "7.5.5",
-    "@babel/preset-env": "7.5.5",
-    "@babel/register": "7.5.5",
-    "eslint": "6.1.0",
-    "ghu": "0.22.0",
-    "mocha": "6.2.0",
-    "nyc": "14.1.1"
-  },
-  "engines": {
-    "node": ">=10.0.0"
+    "@babel/core": "7.10.5",
+    "@babel/preset-env": "7.10.4",
+    "@babel/register": "7.10.5",
+    "eslint": "7.4.0",
+    "ghu": "0.25.0",
+    "mocha": "8.0.1",
+    "nyc": "15.1.0"
   }
 }

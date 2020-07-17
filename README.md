@@ -1,7 +1,7 @@
 # scar
 
 [![license][license-img]][github] [![web][web-img]][web] [![github][github-img]][github] [![npm][npm-img]][npm]  
-[![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm] [![build status][travis-img]][travis]
+[![version][npm-v-img]][npm] [![downloads][npm-dm-img]][npm]
 
 Test runner for Node.js and the browser.
 
@@ -9,7 +9,7 @@ Test runner for Node.js and the browser.
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2019 Lars Jung (https://larsjung.de)
+Copyright (c) 2020 Lars Jung (https://larsjung.de)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,6 @@ THE SOFTWARE.
 [web]: https://larsjung.de/scar/
 [github]: https://github.com/lrsjng/scar
 [npm]: https://www.npmjs.org/package/scar
-[travis]: https://travis-ci.org/lrsjng/scar
 
 [license-img]: https://img.shields.io/badge/license-MIT-a0a060.svg?style=flat-square
 [web-img]: https://img.shields.io/badge/web-larsjung.de/scar-a0a060.svg?style=flat-square
@@ -42,4 +41,3 @@ THE SOFTWARE.
 
 [npm-v-img]: https://img.shields.io/npm/v/scar.svg?style=flat-square
 [npm-dm-img]: https://img.shields.io/npm/dm/scar.svg?style=flat-square
-[travis-img]: https://img.shields.io/travis/lrsjng/scar.svg?style=flat-square
