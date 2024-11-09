@@ -1,6 +1,6 @@
 {
   "name": "scar",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Test runner for Node.js and the browser.",
   "homepage": "https://larsjung.de/scar/",
   "author": "Lars Jung <lrsjng@gmail.com> (https://larsjung.de)",
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test:mocha": "mocha test/index-mocha",
+    "test:mocha": "mocha test/mocha",
     "test:scar": "node test",
     "test": "npm run -s test:mocha && npm run -s test:scar",
     "check": "npm run -s lint && npm run -s test",
@@ -28,7 +28,6 @@
     "ghu": "0.28.5",
     "globals": "15.12.0",
     "mocha": "10.8.2",
-    "node-polyfill-webpack-plugin": "4.0.0",
     "nyc": "17.1.0"
   }
 }
