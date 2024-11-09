@@ -2,14 +2,14 @@
 
 [![license][license-img]][github] [![github][github-img]][github] [![npm][npm-img]][npm]  
 
-Test runner for Node.js and the browser, extensively tested with mocha and itself. Basic assertion functions are included, but it should work fine with any assertion lib that throws and rejects. Supports async tests through #[code Promise]. Lightweight object inspection, unique IDs and function spies included.
+Test runner for Node.js and the browser, extensively tested with mocha and itself. Basic assertion functions are included, but it should work fine with any assertion lib that throws and rejects. Supports async tests through `Promise`. Lightweight object inspection, unique IDs and function spies included.
 
 
 ## Examples
 
 Works fine with Node.js, Webpack+Babel and Browserify+Babel.
 
-```
+```js
 const {test, assert} = require('scar');
 
 test('passing', () =>; {
@@ -25,7 +25,7 @@ test.cli();
 
 Might need additional polyfills for `Promise`, `Object.assign` and `Array.prototype.every` to work in older browsers.
 
-```
+```html
 <script src="scar.js"></script>
 <script>
     var test = window.scar.test;
@@ -64,13 +64,13 @@ Arguments:
 ## API
 
 ### scar
-```
+```js
 const obj = require('scar')  // nodejs
 var obj = window.scar        // browser
 ```
 
 then `obj` is
-```
+```js
 {
     scar,    // factory
     test,    // preconstructed scar()
@@ -82,7 +82,7 @@ then `obj` is
 ```
 
 ### test
-```
+```js
 test(desc, fn, {skip, sync})  // args optional and in any order
 test.skip(desc, fn, {sync})   // like {skip: true}
 test.sync(desc, fn, {skip})   // like {sync: true}
@@ -91,7 +91,7 @@ test.cli()                    // run CLI => Promise()
 ```
 
 ### assert
-```
+```js
 assert(expr, msg)                     // !!expr === true
 assert.fail(msg)
 assert.ok(act, msg)                   // !!act === true
@@ -105,12 +105,12 @@ assert.rejects(thenable, exp, msg)    // => Promise
 ```
 
 ### insp
-```
+```js
 insp(x)  // => string repr of x
 ```
 
 ### uniq
-```
+```js
 uniq.id()       // => 'UNIQ-0007-ID'
 uniq.is_id(x)   // => x matches 'UNIQ-xxxx-ID'
 uniq.obj()      // => {_uniq_id: 'UNIQ-0013-ID'}
@@ -118,13 +118,13 @@ uniq.path(ext)  // => '_uniq_path/UNIQ-0021-ID.ext'
 ```
 
 ### spy
-```
+```js
 spy([fn])  // => spy function, with optional call handler 'fn(call, calls)'
 ```
 
 Example usage:
 
-```
+```js
 const a_spy_fn = spy(() => 42);
 a_spy_fn.calls        // => []
 a_spy_fn(11, 22, 33)  // => 42
