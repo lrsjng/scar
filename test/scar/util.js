@@ -98,7 +98,7 @@ test('util.is_plain_obj()', () => {
 test('util.as_fn()', () => {
     assert.equal(typeof util.as_fn, 'function', 'is function');
 
-    FIXTURES.forEach(([arg,], idx) => { // eslint-disable-line comma-dangle,comma-spacing
+    FIXTURES.forEach(([arg,], idx) => { // eslint-disable-line comma-dangle
         if (typeof arg === 'function') {
             const msg = `FIX[${idx}]: expected (${insp(arg)}) -> ${insp(arg)}`;
             assert.equal(util.as_fn(arg), arg, msg);

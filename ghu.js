@@ -33,12 +33,17 @@ ghu.task('build:scripts', runtime => {
 });
 
 ghu.task('build:other', () => {
+    const cfg = webpack.cfg([LIB, TEST]);
+    const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+    cfg.plugins = [new NodePolyfillPlugin()];
+
     return Promise.all([
         read(`${ROOT}/*.md`)
             .then(write(mapfn.p(ROOT, BUILD), {overwrite: true})),
 
         read(`${TEST}: index*.js`)
-            .then(webpack(webpack.cfg([LIB, TEST])))
+            // .then(webpack(webpack.cfg([LIB, TEST])))
+            .then(webpack(cfg))
             .then(write(mapfn.p(TEST, `${BUILD}/test`), {overwrite: true})),
 
         read(`${TEST}: *.html, *.css`)

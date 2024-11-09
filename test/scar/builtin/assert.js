@@ -134,8 +134,8 @@ test('assert.not_ok()', () => {
 test('assert.equal()', () => {
     assert.equal(typeof lib.assert.equal, 'function', 'is function');
 
-    FIXTURES.forEach(([arg1,], idx1) => { // eslint-disable-line comma-dangle,comma-spacing
-        FIXTURES.forEach(([arg2,], idx2) => { // eslint-disable-line comma-dangle,comma-spacing
+    FIXTURES.forEach(([arg1,], idx1) => { // eslint-disable-line comma-dangle
+        FIXTURES.forEach(([arg2,], idx2) => { // eslint-disable-line comma-dangle
             const msg = `FIX[${idx1}, ${idx2}]: (${insp(arg1)}, ${insp(arg2)}) expected `;
             if (arg1 === arg2) {
                 lib.assert.equal(arg1, arg2, msg + 'not to throw');
@@ -152,8 +152,8 @@ test('assert.not_equal()', () => {
     assert.equal(typeof lib.assert.not_equal, 'function', 'is function');
     assert.equal(lib.assert.not_equal, lib.assert.notEqual);
 
-    FIXTURES.forEach(([arg1,], idx1) => { // eslint-disable-line comma-dangle,comma-spacing
-        FIXTURES.forEach(([arg2,], idx2) => { // eslint-disable-line comma-dangle,comma-spacing
+    FIXTURES.forEach(([arg1,], idx1) => { // eslint-disable-line comma-dangle
+        FIXTURES.forEach(([arg2,], idx2) => { // eslint-disable-line comma-dangle
             const msg = `FIX[${idx1}, ${idx2}]: (${insp(arg1)}, ${insp(arg2)}) expected `;
             if (arg1 !== arg2) {
                 lib.assert.not_equal(arg1, arg2, msg + 'not to throw');
